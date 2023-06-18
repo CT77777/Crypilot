@@ -10,31 +10,37 @@ body {
   height: 100%;
 }
 
-.home-container {
+.content-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #212529;
-  color: aliceblue;
   height: 100%;
 }
 
-.home-container-header {
+.content-container-header {
   font-size: 70px;
   margin-bottom: auto;
+  color: aliceblue;
 }
 
-.home-container-main {
+.content-container-header a {
+  text-decoration: none;
+  color: aliceblue;
+}
+
+.content-container-main {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-img {
+.content-container-main img {
   width: 360px;
   height: 360px;
 }
 
-.home-container-footer {
+.content-container-footer {
   margin-top: auto;
+  color: aliceblue;
 }
