@@ -43,12 +43,7 @@ export async function signIn(req: Request, res: Response) {
       email
     );
     if (passwordInput === password) {
-      res.status(200).json({
-        message: "signIn successfully",
-        name: name,
-        picture: picture,
-        public_address: `0x${public_address}`,
-      });
+      res.status(200).redirect(`/user/profile?email=${email}`);
     } else {
       throw new Error("password not correct");
     }
@@ -56,4 +51,16 @@ export async function signIn(req: Request, res: Response) {
     console.log(error);
     res.status(500).json({ error: "signIn failed" });
   }
+}
+
+export async function renderUserProfilePage(req: Request, res: Response) {
+  const email = `${req.query.email}`;
+  const { name, picture, public_address } = await searchUserByEmail(email);
+  const data = {
+    name: name,
+    picture: picture,
+    public_address: `0x${public_address}`,
+  };
+  console.log(data);
+  res.status(200).render("profile", data);
 }

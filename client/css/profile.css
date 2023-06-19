@@ -1,0 +1,62 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #212529;
+  height: 100%;
+}
+
+.content-container-header {
+  font-size: 70px;
+  margin-bottom: auto;
+  color: aliceblue;
+}
+
+.content-container-header a {
+  text-decoration: none;
+  color: aliceblue;
+}
+
+.content-container-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content-container-main h3 {
+  color: aliceblue;
+}
+
+.content-container-main img {
+  width: 240px;
+  height: 240px;
+}
+
+.markets {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.markets .market-ft,
+.markets .market-nft {
+  width: 100px;
+  height: 50px;
+}
+
+.content-container-footer {
+  margin-top: auto;
+  color: aliceblue;
+}
