@@ -7,7 +7,17 @@ interface Coin {
   id: number;
   name: string;
   symbol: string;
-  quote: Record<string, { price: number }>;
+  quote: Record<
+    string,
+    {
+      price: number;
+      volume_24h: number;
+      percent_change_24h: number;
+      percent_change_7d: number;
+      percent_change_30d: number;
+      market_cap: number;
+    }
+  >;
 }
 
 interface FTListResultsData {
@@ -26,6 +36,11 @@ type FTList = {
   symbol: string;
   price: number;
   logo: string;
+  volume_24h: number;
+  percent_change_24h: number;
+  percent_change_7d: number;
+  percent_change_30d: number;
+  market_cap: number;
 };
 
 export async function fetchFTList() {
@@ -46,6 +61,11 @@ export async function fetchFTList() {
         symbol: element.symbol,
         price: element.quote[`USD`].price,
         logo: "",
+        volume_24h: element.quote[`USD`].volume_24h,
+        percent_change_24h: element.quote[`USD`].percent_change_24h,
+        percent_change_7d: element.quote[`USD`].percent_change_7d,
+        percent_change_30d: element.quote[`USD`].percent_change_30d,
+        market_cap: element.quote[`USD`].market_cap,
       };
       ftList[`${element.id}`] = ft;
     });

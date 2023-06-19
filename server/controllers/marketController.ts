@@ -4,7 +4,7 @@ import { fetchFTList, fetchFTLogo } from "../models/marketModel.js";
 
 dotenv.config();
 
-export async function renderMarketFTPage(req: Request, res: Response) {
+export async function getMarketFTList(req: Request, res: Response) {
   try {
     const { ftIds, ftList } = await fetchFTList();
     const logoList = await fetchFTLogo(ftIds);
@@ -17,4 +17,8 @@ export async function renderMarketFTPage(req: Request, res: Response) {
     console.log(error);
     res.status(500).json({ error: "fetch failed" });
   }
+}
+
+export async function renderMarketFTPage(req: Request, res: Response) {
+  res.status(200).render("ftMarket");
 }
