@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   renderUserPage,
   register,
-  signIn,
+  logIn,
   renderUserProfilePage,
 } from "../controllers/userController.js";
 
@@ -15,7 +15,7 @@ router.route("/user").get(renderUserPage);
 router.route("/user/register").post(register);
 
 // signIn API
-router.route("/user/login").post(signIn);
+router.route("/user/login").post(logIn);
 
 // render user profile page
 router.route("/user/profile").get(renderUserProfilePage);

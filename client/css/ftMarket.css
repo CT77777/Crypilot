@@ -35,8 +35,19 @@ body {
   align-items: center;
 }
 
+.content-container-main .table-selections {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
 .content-container-main h3 {
   color: aliceblue;
+  cursor: pointer;
+}
+
+.content-container-main h3[data-state="true"] {
+  text-decoration: underline;
 }
 
 .content-container-main .logo {
