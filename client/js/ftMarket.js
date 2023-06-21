@@ -1,4 +1,5 @@
 const ftMarketLists = document.querySelector(".market-lists");
+const ftMarketListTitle = document.querySelector(".market-lists-title");
 
 async function getMarketFTList() {
   const response = await fetch("/market/ft/list");
@@ -13,6 +14,21 @@ async function getMarketFTList() {
   const ftTracingIds = resultsTracing.ftTracingIds;
   console.log(ftTracingIds);
 
+  ftMarketListTitle.innerHTML = `
+  <tr>
+      <th scope="col"></th>
+      <th scope="col">Logo</th>
+      <th scope="col">Name</th>
+      <th scope="col">Symbol</th>
+      <th scope="col">Price(USD)</th>
+      <th scope="col">24h%</th>
+      <th scope="col">7d%</th>
+      <th scope="col">30d%</th>
+      <th scope="col">Market Cap</th>
+      <th scope="col">Volume(24h)</th>
+  </tr>
+  `;
+
   let ftListHTML = "";
 
   for (let id in ftList) {
@@ -20,7 +36,7 @@ async function getMarketFTList() {
 
     if (ftTracingIds.indexOf(parseInt(id)) !== -1) {
       const ftHTMLTrue = `
-      <tr>
+      <tr class="tracing">
           <td><img class="favorite" data-state="true" data-cmc_id=${id} src="../images/star-fill.png"></td>
           <td><img class="logo" src="${ft.logo}"></td>
           <td>${ft.name}</td>
@@ -56,8 +72,6 @@ async function getMarketFTList() {
   ftMarketLists.innerHTML = ftListHTML;
 }
 
-getMarketFTList();
-
 async function getTracingListFT() {
   const responseTracing = await fetch("/market/ft/list/tracing");
   const resultsTracing = await responseTracing.json();
@@ -73,6 +87,21 @@ async function getTracingListFT() {
   const ftTracingIds = resultsTracing.ftTracingIds;
   console.log(ftTracingIds);
 
+  ftMarketListTitle.innerHTML = `
+  <tr>
+      <th scope="col"></th>
+      <th scope="col">Logo</th>
+      <th scope="col">Name</th>
+      <th scope="col">Symbol</th>
+      <th scope="col">Price(USD)</th>
+      <th scope="col">24h%</th>
+      <th scope="col">7d%</th>
+      <th scope="col">30d%</th>
+      <th scope="col">Market Cap</th>
+      <th scope="col">Volume(24h)</th>
+  </tr>
+  `;
+
   let ftListHTML = "";
 
   for (let id in ftList) {
@@ -80,7 +109,7 @@ async function getTracingListFT() {
 
     if (ftTracingIds.indexOf(parseInt(id)) !== -1) {
       const ftHTMLTrue = `
-      <tr>
+      <tr class="tracing">
           <td><img class="favorite" data-state="true" data-cmc_id=${id} src="../images/star-fill.png"></td>
           <td><img class="logo" src="${ft.logo}"></td>
           <td>${ft.name}</td>
@@ -123,9 +152,6 @@ ftMarketLists.addEventListener("click", async (event) => {
     target.getAttribute("class") === "favorite" &&
     target.getAttribute("data-state") === "false"
   ) {
-    target.setAttribute("src", "../images/star-fill.png");
-    target.setAttribute("data-state", "true");
-
     const jwt = Cookies.get("JWT");
     const cmc_id = target.getAttribute("data-cmc_id");
 
@@ -142,14 +168,14 @@ ftMarketLists.addEventListener("click", async (event) => {
 
     if (response.status === 200) {
       alert("add tracing FT successfully");
+      target.setAttribute("src", "../images/star-fill.png");
+      target.setAttribute("data-state", "true");
+      target.parentNode.parentNode.setAttribute("class", "tracing");
     }
   } else if (
     target.getAttribute("class") === "favorite" &&
     target.getAttribute("data-state") === "true"
   ) {
-    target.setAttribute("src", "../images/star-empty.png");
-    target.setAttribute("data-state", "false");
-
     const jwt = Cookies.get("JWT");
     const cmc_id = target.getAttribute("data-cmc_id");
 
@@ -166,6 +192,9 @@ ftMarketLists.addEventListener("click", async (event) => {
 
     if (response.status === 200) {
       alert("remove tracing FT successfully");
+      target.setAttribute("src", "../images/star-empty.png");
+      target.setAttribute("data-state", "false");
+      target.parentNode.parentNode.removeAttribute("class");
     }
   }
 });
@@ -187,7 +216,15 @@ const tableTracing = document.querySelector(".table-tracing");
 
 tableMarket.addEventListener("click", () => {
   getMarketFTList();
+  clearInterval(intervalGet);
+  intervalGet = setInterval(getMarketFTList, 10000);
 });
 tableTracing.addEventListener("click", () => {
   getTracingListFT();
+  clearInterval(intervalGet);
+  intervalGet = setInterval(getTracingListFT, 10000);
 });
+
+getMarketFTList();
+
+let intervalGet = setInterval(getMarketFTList, 10000);
