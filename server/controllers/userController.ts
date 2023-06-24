@@ -16,9 +16,6 @@ export function renderUserPage(req: Request, res: Response) {
 export async function register(req: Request, res: Response) {
   try {
     console.log(req.body);
-    // const email = req.body.email;
-    // const password = req.body.password;
-    // const username = req.body.username;
     const { email, password, username } = req.body;
     const picture = "https://cdn-icons-png.flaticon.com/128/6774/6774978.png";
     const provider = "native";
@@ -67,8 +64,6 @@ export async function register(req: Request, res: Response) {
 export async function logIn(req: Request, res: Response) {
   try {
     console.log(req.body);
-    // const email = req.body.email;
-    // const passwordInput = req.body.password;
     const { email: email, password: passwordInput } = req.body;
     const { id, password, name, picture, public_address } =
       await searchUserByEmail(email);
