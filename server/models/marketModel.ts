@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
 import fetch from "node-fetch";
+import dbPool from "./dbPool.js";
+import { OkPacket, RowDataPacket, FieldPacket } from "mysql2";
 
 dotenv.config();
 
@@ -7,17 +9,28 @@ interface Coin {
   id: number;
   name: string;
   symbol: string;
-  quote: Record<string, { price: number }>;
+  platform: { token_address: string };
+  quote: Record<
+    string,
+    {
+      price: number;
+      volume_24h: number;
+      percent_change_24h: number;
+      percent_change_7d: number;
+      percent_change_30d: number;
+      market_cap: number;
+    }
+  >;
 }
 
-interface FTListResultsData {
+interface FTsResultsData {
   status: object;
-  data: { coins: Coin[] };
+  data: Record<string, Coin>;
 }
 
 interface LogoResultsData {
   status: object;
-  data: Record<string, { logo: string; id: number }>;
+  data: Record<string, { id: number; logo: string }>;
 }
 
 type FTList = {
@@ -26,29 +39,59 @@ type FTList = {
   symbol: string;
   price: number;
   logo: string;
+  volume_24h: number;
+  percent_change_24h: number;
+  percent_change_7d: number;
+  percent_change_30d: number;
+  market_cap: number;
 };
 
-export async function fetchFTList() {
+// 1027,3717,4943,825,3408,8104,7278,5692,7083,6758
+export async function fetchFTList(ft_ids: number[]) {
   try {
+    const ftIdsConcat = ft_ids.join(",");
     const response = await fetch(
-      `https://pro-api.coinmarketcap.com/v1/cryptocurrency/category?id=618c0beeb7dd913155b462f9&start=1&limit=10&CMC_PRO_API_KEY=${process.env.COINMARKETCAP_API_KEY}`
+      `https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=${ftIdsConcat}&CMC_PRO_API_KEY=${process.env.COINMARKETCAP_API_KEY}`
     );
-    const results = (await response.json()) as FTListResultsData;
-    const fts = results.data.coins;
+    const results = (await response.json()) as FTsResultsData;
+    const fts = results.data;
     const ftIds: number[] = [];
     const ftList: Record<string, FTList> = {};
 
-    fts.forEach((element) => {
-      ftIds.push(element.id);
+    for (let id in fts) {
+      const ftInfo = fts[id];
+      ftIds.push(ftInfo.id);
       const ft = {
-        id: element.id,
-        name: element.name,
-        symbol: element.symbol,
-        price: element.quote[`USD`].price,
+        id: ftInfo.id,
+        name: ftInfo.name,
+        symbol: ftInfo.symbol,
+        price: ftInfo.quote[`USD`].price,
         logo: "",
+        volume_24h: ftInfo.quote[`USD`].volume_24h,
+        percent_change_24h: ftInfo.quote[`USD`].percent_change_24h,
+        percent_change_7d: ftInfo.quote[`USD`].percent_change_7d,
+        percent_change_30d: ftInfo.quote[`USD`].percent_change_30d,
+        market_cap: ftInfo.quote[`USD`].market_cap,
       };
-      ftList[`${element.id}`] = ft;
-    });
+      ftList[`${ftInfo.id}`] = ft;
+    }
+
+    // fts.forEach((element) => {
+    //   ftIds.push(element.id);
+    //   const ft = {
+    //     id: element.id,
+    //     name: element.name,
+    //     symbol: element.symbol,
+    //     price: element.quote[`USD`].price,
+    //     logo: "",
+    //     volume_24h: element.quote[`USD`].volume_24h,
+    //     percent_change_24h: element.quote[`USD`].percent_change_24h,
+    //     percent_change_7d: element.quote[`USD`].percent_change_7d,
+    //     percent_change_30d: element.quote[`USD`].percent_change_30d,
+    //     market_cap: element.quote[`USD`].market_cap,
+    //   };
+    //   ftList[`${element.id}`] = ft;
+    // });
 
     return { ftIds, ftList };
   } catch (error) {
@@ -75,5 +118,60 @@ export async function fetchFTLogo(ft_ids: number[]) {
   } catch (error) {
     console.log(error);
     return {};
+  }
+}
+
+export async function insertFavoriteFT(user_id: number, cmc_id: number) {
+  try {
+    await dbPool.query(
+      `
+      INSERT INTO user_favorite_fts (user_id, ft_cmc_id)
+      VALUES (?, ?)
+    `,
+      [user_id, cmc_id]
+    );
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+export async function removeFavoriteFT(user_id: number, cmc_id: number) {
+  try {
+    await dbPool.query(
+      `
+      DELETE FROM user_favorite_fts
+      WHERE user_id = ? AND ft_cmc_id = ?
+    `,
+      [user_id, cmc_id]
+    );
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+export async function getFavoriteListFT(user_id: number) {
+  try {
+    const results: [RowDataPacket[], FieldPacket[]] = await dbPool.query(
+      `
+      SELECT ft_cmc_id FROM user_favorite_fts
+      WHERE user_id = ?
+    `,
+      [user_id]
+    );
+
+    const ftTracingIds: number[] = [];
+
+    results[0].forEach((element) => {
+      ftTracingIds.push(element.ft_cmc_id);
+    });
+
+    return ftTracingIds;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 }
