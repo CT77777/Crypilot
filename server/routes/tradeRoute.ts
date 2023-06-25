@@ -35,5 +35,6 @@ router
   ]);
 
 // swap specified FT to ETH
+router.route("/trade/swapBack").post();
 
 export default router;

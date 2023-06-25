@@ -37,7 +37,8 @@ CREATE TABLE fts (
     `name` VARCHAR(50),
     symbol VARCHAR(50),
     contract_address VARCHAR(40) UNIQUE,
-    cmc_id BIGINT UNSIGNED NOT NULL UNIQUE
+    cmc_id BIGINT UNSIGNED NOT NULL UNIQUE,
+    logo VARCHAR(255)
 );
 
 CREATE TABLE nfts (
@@ -65,11 +66,11 @@ CREATE TABLE user_favorite_nfts (
 
 CREATE TABLE user_inventory_fts (
     user_id BIGINT UNSIGNED NOT NULL,
-    ft_id BIGINT UNSIGNED NOT NULL,
+    ft_cmc_id BIGINT UNSIGNED NOT NULL,
     balance BIGINT UNSIGNED NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (ft_id) REFERENCES fts(id),
-    PRIMARY KEY (user_id, ft_id)
+    FOREIGN KEY (ft_cmc_id) REFERENCES fts(cmc_id),
+    PRIMARY KEY (user_id, ft_cmc_id)
 );
 
 CREATE TABLE user_inventory_nfts (
@@ -126,3 +127,16 @@ VALUES
 ("Aave", "AAVE", "7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9", 7278),
 ("1inch Network", "1INCH", "111111111117dc0aa78b770fa6a738034120c302", 8104);
 
+UPDATE fts
+SET logo = CASE
+    WHEN cmc_id = 8104 THEN "https://s2.coinmarketcap.com/static/img/coins/64x64/8104.png"
+    WHEN cmc_id = 825 THEN "https://s2.coinmarketcap.com/static/img/coins/64x64/825.png"
+    WHEN cmc_id = 1027 THEN "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png"
+    WHEN cmc_id = 3408 THEN "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png"
+    WHEN cmc_id = 3717 THEN "https://s2.coinmarketcap.com/static/img/coins/64x64/3717.png"
+    WHEN cmc_id = 4943 THEN "https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png"
+    WHEN cmc_id = 5692 THEN "https://s2.coinmarketcap.com/static/img/coins/64x64/5692.png"
+    WHEN cmc_id = 6758 THEN "https://s2.coinmarketcap.com/static/img/coins/64x64/6758.png"
+    WHEN cmc_id = 7083 THEN "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png"
+    WHEN cmc_id = 7278 THEN "https://s2.coinmarketcap.com/static/img/coins/64x64/7278.png"
+END;

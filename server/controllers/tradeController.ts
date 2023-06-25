@@ -3,6 +3,7 @@ import {
   sendETH,
   swapEthToToken,
   getPrivateKey,
+  insertInventoryFt,
 } from "../models/tradeModel.js";
 import { JWTPayload } from "jose";
 import { decrypt } from "../utils/createWallet.js";
@@ -17,10 +18,11 @@ export function renderTradePage(req: Request, res: Response) {
 
 export async function buyETH(req: RequestWithPayload, res: Response) {
   try {
-    const { public_address: userWalletAddress } = req.payload;
+    const { public_address: userWalletAddress, id: userId } = req.payload;
     const { ethAmount } = req.body;
     const isSent = await sendETH(userWalletAddress as string, ethAmount);
-    res.status(200).json({ isSent });
+    await insertInventoryFt("", userId as number);
+    res.status(200).json({ isSent, ethAmount });
   } catch (error) {
     console.log(error);
     res
@@ -32,7 +34,7 @@ export async function buyETH(req: RequestWithPayload, res: Response) {
 export async function swapEth(req: RequestWithPayload, res: Response) {
   try {
     const { tokenAddress, tokenAmount } = req.body;
-    const { public_address: userWalletAddress } = req.payload;
+    const { public_address: userWalletAddress, id: userId } = req.payload;
     console.log(userWalletAddress);
 
     //get encrypted private key from DB
@@ -44,6 +46,7 @@ export async function swapEth(req: RequestWithPayload, res: Response) {
     const private_key = decrypt(encryptedPrivateKey);
 
     await swapEthToToken(tokenAddress, tokenAmount, private_key);
+    await insertInventoryFt(tokenAddress.slice(2), userId as number);
     res.status(200).json({ tokenAddress, tokenAmount });
   } catch (error) {
     console.log(error);

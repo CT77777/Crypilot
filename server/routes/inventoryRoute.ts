@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import {
   renderInventoryPage,
-  getEHTBalance,
+  getInventoryFts,
 } from "../controllers/inventoryController.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import { JWTPayload } from "jose";
@@ -22,7 +22,7 @@ router
     (req: Request, res: Response, next: NextFunction) =>
       authenticate(req as RequestWithPayload, res, next),
     (req: Request, res: Response) =>
-      getEHTBalance(req as RequestWithPayload, res),
+      getInventoryFts(req as RequestWithPayload, res),
   ]);
 
 export default router;

@@ -1,17 +1,16 @@
 const inventoryListTitles = document.querySelector(".inventory-list-titles");
 const inventoryLists = document.querySelector(".inventory-lists");
 
-async function getETHBalance() {
+async function getInventoryFts() {
   const response = await fetch("/inventory/wallet");
   const results = await response.json();
-  const { ethBalance } = results;
+  const { userFtsBalance } = results;
 
-  return ethBalance;
+  return userFtsBalance;
 }
 
 async function renderInventory() {
-  const ethBalance = await getETHBalance();
-  console.log(ethBalance);
+  const userFtsBalance = await getInventoryFts();
 
   inventoryListTitles.innerHTML = `
   <tr>
@@ -22,14 +21,23 @@ async function renderInventory() {
   </tr>
   `;
 
-  inventoryLists.innerHTML = `
-  <tr class="tracing">
-    <td><img class="logo" src="${"https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png"}"></td>
-    <td>${"Ethereum"}</td>
-    <td>${"ETH"}</td>
-    <td>$${parseFloat(ethBalance).toFixed(2)}</td>
-  </tr>
-  `;
+  let inventoryListsHTMLs = "";
+
+  userFtsBalance.forEach((element) => {
+    const inventoryListsHTML = `
+    <tr class="tracing">
+      <td><img class="logo" src="https://s2.coinmarketcap.com/static/img/coins/64x64/${
+        element.ft_cmc_id
+      }.png"></td>
+      <td>${element.name}</td>
+      <td>${element.symbol}</td>
+      <td>$${parseFloat(element.balance).toFixed(2)}</td>
+    </tr>
+    `;
+    inventoryListsHTMLs += inventoryListsHTML;
+  });
+
+  inventoryLists.innerHTML = inventoryListsHTMLs;
 }
 
 renderInventory();

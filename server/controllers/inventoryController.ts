@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { getEthBalance } from "../models/inventoryModel.js";
+import {
+  getUserEthBalance,
+  getUserFts,
+  getUserFtsBalance,
+} from "../models/inventoryModel.js";
 import { JWTPayload } from "jose";
 
 interface RequestWithPayload extends Request {
@@ -10,8 +14,14 @@ export function renderInventoryPage(req: Request, res: Response) {
   res.status(200).render("inventory");
 }
 
-export async function getEHTBalance(req: RequestWithPayload, res: Response) {
-  const { public_address: userWalletAddress } = req.payload;
-  const ethBalance = await getEthBalance(userWalletAddress as string);
-  res.status(200).json({ ethBalance });
+export async function getInventoryFts(req: RequestWithPayload, res: Response) {
+  const { public_address: userWalletAddress, id: userId } = req.payload;
+  const userFts = await getUserFts(userId as number);
+  const userFtsBalance = await getUserFtsBalance(
+    userWalletAddress as string,
+    userFts
+  );
+  console.log(userFtsBalance);
+
+  res.status(200).json({ userFtsBalance });
 }

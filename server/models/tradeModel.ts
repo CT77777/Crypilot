@@ -93,3 +93,37 @@ export async function getPrivateKey(public_address: string) {
   console.log(results[0][0]);
   return results[0][0];
 }
+
+// insert user's swapping FT(ERC20)
+export async function insertInventoryFt(
+  contract_address: string,
+  user_id: number
+) {
+  const cmcIdResults: [RowDataPacket[], FieldPacket[]] = await dbPool.query(
+    `
+    SELECT cmc_id FROM fts WHERE contract_address = ?
+  `,
+    [contract_address]
+  );
+
+  const { cmc_id: ft_cmc_id } = cmcIdResults[0][0];
+
+  const inventoryResults: [RowDataPacket[], FieldPacket[]] = await dbPool.query(
+    `
+    SELECT EXISTS (SELECT 1 FROM user_inventory_fts WHERE user_id = ? && ft_cmc_id = ?) AS isInventoryExist
+  `,
+    [user_id, ft_cmc_id]
+  );
+
+  const { isInventoryExist } = inventoryResults[0][0];
+
+  if (isInventoryExist === 0) {
+    await dbPool.query(
+      `
+      INSERT INTO user_inventory_fts (user_id, ft_cmc_id)
+      VALUES (?, ?)
+    `,
+      [user_id, ft_cmc_id]
+    );
+  }
+}
