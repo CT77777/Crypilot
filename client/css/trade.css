@@ -35,12 +35,39 @@ body {
   align-items: center;
 }
 
+.content-container-main .table-selections {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.content-container-main h3 {
+  color: aliceblue;
+  cursor: pointer;
+}
+
+.content-container-main h3[data-state="true"] {
+  text-decoration: underline;
+}
+
 .content-container-main .form-floating {
   width: 350px;
 }
 
-.content-container-main input[type="number"] {
+.content-container-main input[name="ethAmount"] {
   margin-bottom: 20px;
+}
+
+.content-container-main input[name="tokenAddress"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.content-container-main input[name="tokenAmount"] {
+  margin-bottom: 20px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .content-container-main .toggle {

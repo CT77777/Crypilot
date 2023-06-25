@@ -45,7 +45,7 @@ contract SimpleSwap {
   /// @param amountOut The exact amount of WETH9 to receive from the swap.
   /// @param amountInMaximum The amount of DAI we are willing to spend to receive the specified amount of WETH9.
   /// @return amountIn The amount of DAI actually spent in the swap.
-  function swapExactOutputSingle(uint256 amountOut, uint256 amountInMaximum) external returns (uint256 amountIn) {
+  function swapExactOutputSingle(address tokenAddressOut, uint256 amountOut, uint256 amountInMaximum) external returns (uint256 amountIn) {
       // Transfer the specified amount of DAI to this contract.
       TransferHelper.safeTransferFrom(WETH9, msg.sender, address(this), amountInMaximum);
 
@@ -56,7 +56,7 @@ contract SimpleSwap {
       ISwapRouter.ExactOutputSingleParams memory params =
           ISwapRouter.ExactOutputSingleParams({
               tokenIn: WETH9,
-              tokenOut: DAI,
+              tokenOut: tokenAddressOut,
               fee: feeTier,
               recipient: msg.sender,
               deadline: block.timestamp,

@@ -1,5 +1,9 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { renderTradePage, buyETH } from "../controllers/tradeController.js";
+import {
+  renderTradePage,
+  buyETH,
+  swapEth,
+} from "../controllers/tradeController.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import { JWTPayload } from "jose";
 
@@ -22,6 +26,13 @@ router
   ]);
 
 // swap ETH to specified FT
+router
+  .route("/trade/swap")
+  .post([
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticate(req as RequestWithPayload, res, next),
+    (req: Request, res: Response) => swapEth(req as RequestWithPayload, res),
+  ]);
 
 // swap specified FT to ETH
 
