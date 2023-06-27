@@ -17,8 +17,9 @@ const treasuryWallet = new ethers.Wallet(
 const WETH_ADDRESS = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
 const DAI_ADDRESS = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
 const DAI_DECIMALS = 18;
-const SwapRouterAddress = "0xE592427A0AEce92De3Edee1F18E0157C05861564";
+const SwapRouterV3Address = "0xE592427A0AEce92De3Edee1F18E0157C05861564";
 const SimpSwapAddress = process.env.SIMPLE_SWAP_ADDRESS;
+const feeTier = 3000;
 
 const erc20Abi = [
   // Read-Only Functions
@@ -27,10 +28,12 @@ const erc20Abi = [
   "function transfer(address to, uint amount) returns (bool)",
   "function deposit() public payable",
   "function approve(address spender, uint256 amount) returns (bool)",
+  "function withdraw(uint256 wad) public",
 ];
 
 const simpleSwapAbi = [
-  "function swapExactOutputSingle(address tokenAddressOut, uint256 amountOut, uint256 amountInMaximum) external returns (uint256 amountIn)",
+  "function swapExactOutputSingle(address tokenAddressOut, uint256 amountOut, uint256 amountInMaximum, uint24 feeTier) external returns (uint256 amountIn)",
+  "function swapExactInputSingle(address tokenAddressIn, uint256 amountIn, uint24 feeTier) external returns (uint256 amountOut)",
 ];
 
 // send ETH to user from treasury wallet
@@ -49,7 +52,8 @@ export async function sendETH(user_wallet_address: string, eth_amount: string) {
 export async function swapEthToToken(
   token_address: string,
   token_amount: string,
-  user_private_key: string
+  user_private_key: string,
+  user_public_address: string
 ) {
   const userPrivateKey = user_private_key;
   const userProvider = new ethers.providers.JsonRpcProvider(
@@ -57,11 +61,18 @@ export async function swapEthToToken(
   );
   const userWallet = new ethers.Wallet(userPrivateKey, userProvider);
 
+  // const ethBalance = userProvider.getBalance(user_public_address);
+
   const weth = new ethers.Contract(WETH_ADDRESS, erc20Abi, userWallet);
   const deposit = await weth.deposit({ value: ethers.utils.parseEther("10") });
   await deposit.wait();
 
-  await weth.approve(SimpSwapAddress, ethers.utils.parseEther("10"));
+  // approve SimpleSwap contract to transfer user's WETH
+  const approve = await weth.approve(
+    SimpSwapAddress,
+    ethers.utils.parseEther("10")
+  );
+  await approve.wait();
 
   const simpleSwap = new ethers.Contract(
     SimpSwapAddress as string,
@@ -74,10 +85,61 @@ export async function swapEthToToken(
   const swap = await simpleSwap.swapExactOutputSingle(
     token_address,
     amountOut,
-    amountInMaximum
+    amountInMaximum,
+    feeTier
   );
   await swap.wait();
-  console.log(swap);
+
+  const wethBalance = await weth.balanceOf(user_public_address);
+  if (wethBalance > 0) {
+    const withdraw = await weth.withdraw(wethBalance);
+    await withdraw.wait();
+  }
+}
+
+// swap exact ERC20 token amount to ETH
+export async function swapTokenToEth(
+  token_address: string,
+  token_amount: string,
+  user_private_key: string,
+  user_public_address: string
+) {
+  console.log(token_address);
+  console.log(token_amount);
+  const userPrivateKey = user_private_key;
+  const userProvider = new ethers.providers.JsonRpcProvider(
+    "http://localhost:8545"
+  );
+  const userWallet = new ethers.Wallet(userPrivateKey, userProvider);
+
+  // approve SimpleSwap contract to transfer user's ERC20 token
+  const er20 = new ethers.Contract(token_address, erc20Abi, userWallet);
+  const approve = await er20.approve(
+    SimpSwapAddress,
+    ethers.utils.parseEther(token_amount)
+  );
+  await approve.wait();
+
+  const simpleSwap = new ethers.Contract(
+    SimpSwapAddress as string,
+    simpleSwapAbi,
+    userWallet
+  );
+
+  const amountIn = ethers.utils.parseEther(token_amount);
+  const swap = await simpleSwap.swapExactInputSingle(
+    token_address,
+    amountIn,
+    feeTier
+  );
+  await swap.wait();
+
+  const weth = new ethers.Contract(WETH_ADDRESS, erc20Abi, userWallet);
+  const wethBalance = await weth.balanceOf(user_public_address);
+  if (wethBalance > 0) {
+    const withdraw = await weth.withdraw(wethBalance);
+    await withdraw.wait();
+  }
 }
 
 // get user private key

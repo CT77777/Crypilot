@@ -2,7 +2,8 @@ import { Router, Request, Response, NextFunction } from "express";
 import {
   renderTradePage,
   buyETH,
-  swapEth,
+  swapEthToErc20,
+  swapErc20ToEth,
 } from "../controllers/tradeController.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import { JWTPayload } from "jose";
@@ -25,16 +26,24 @@ router
     (req: Request, res: Response) => buyETH(req as RequestWithPayload, res),
   ]);
 
-// swap ETH to specified FT
+// swap ETH to ERC20 token
 router
-  .route("/trade/swap")
+  .route("/trade/swap/buy")
   .post([
     (req: Request, res: Response, next: NextFunction) =>
       authenticate(req as RequestWithPayload, res, next),
-    (req: Request, res: Response) => swapEth(req as RequestWithPayload, res),
+    (req: Request, res: Response) =>
+      swapEthToErc20(req as RequestWithPayload, res),
   ]);
 
-// swap specified FT to ETH
-router.route("/trade/swapBack").post();
+// swap ERC20 token to ETH
+router
+  .route("/trade/swap/sell")
+  .post([
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticate(req as RequestWithPayload, res, next),
+    (req: Request, res: Response) =>
+      swapErc20ToEth(req as RequestWithPayload, res),
+  ]);
 
 export default router;

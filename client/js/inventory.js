@@ -31,7 +31,7 @@ async function renderInventory() {
       }.png"></td>
       <td>${element.name}</td>
       <td>${element.symbol}</td>
-      <td>$${parseFloat(element.balance).toFixed(2)}</td>
+      <td>${parseFloat(element.balance).toFixed(2)}</td>
     </tr>
     `;
     inventoryListsHTMLs += inventoryListsHTML;

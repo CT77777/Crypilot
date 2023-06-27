@@ -66,8 +66,23 @@ body {
 
 .content-container-main input[name="tokenAmount"] {
   margin-bottom: 20px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+}
+
+.buy-form .btn-group,
+.swap-form .btn-group {
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.currency-logo {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+}
+
+.btn-sell {
+  margin-top: 10px;
 }
 
 .content-container-main .toggle {
