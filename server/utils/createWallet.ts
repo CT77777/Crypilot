@@ -44,3 +44,20 @@ export function encrypt(private_key: string) {
 
   return encrypted;
 }
+
+export function decrypt(encrypted_private_key: string) {
+  // use SHA3 to getting secret key for AES encrypt
+  const secretPhrase = `${process.env.TEST_SECRET_PHRASE}`;
+  const hash = CryptoJS.SHA3(secretPhrase, { outputLength: 256 });
+  const hashHex = hash.toString(CryptoJS.enc.Hex);
+
+  const encryptedPrivateKey = encrypted_private_key;
+  const secretKey = hashHex;
+
+  const decrypted = CryptoJS.AES.decrypt(encryptedPrivateKey, secretKey);
+  const originalText = decrypted.toString(CryptoJS.enc.Utf8);
+
+  console.log("decrypted data: ", originalText);
+
+  return originalText;
+}

@@ -10,26 +10,26 @@ contract SimpleSwap {
     address public constant DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
     address public constant WETH9 = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
     address public constant USDC = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
-    uint24 public constant feeTier = 3000;
+    // uint24 public constant feeTier = 3000;
 
    constructor(ISwapRouter _swapRouter) {
         swapRouter = _swapRouter;
     }
 
-  function swapWETHForDAI(uint amountIn) external returns (uint256 amountOut) {
+  function swapExactInputSingle(address tokenAddressIn, uint256 amountIn, uint24 feeTier) external returns (uint256 amountOut) {
     // Transfer the specified amount of WETH9 to this contract.
-    TransferHelper.safeTransferFrom(WETH9, msg.sender, address(this), amountIn);
+    TransferHelper.safeTransferFrom(tokenAddressIn, msg.sender, address(this), amountIn);
 
     // Approve the router to spend WETH9.
-    TransferHelper.safeApprove(WETH9, address(swapRouter), amountIn);  
+    TransferHelper.safeApprove(tokenAddressIn, address(swapRouter), amountIn);  
 
     ISwapRouter.ExactInputSingleParams memory params =
       ISwapRouter.ExactInputSingleParams({
-          tokenIn: WETH9,
-          tokenOut: DAI,
+          tokenIn: tokenAddressIn,
+          tokenOut: WETH9,
           fee: feeTier,
           recipient: msg.sender,
-          deadline: block.timestamp,
+          deadline: block.timestamp + 45 seconds,
           amountIn: amountIn,
           amountOutMinimum: 0,
           sqrtPriceLimitX96: 0
@@ -39,27 +39,21 @@ contract SimpleSwap {
       return amountOut; 
   }
 
-  /// @notice swapExactOutputSingle swaps a minimum possible amount of DAI for a fixed amount of WETH.
-  /// @dev The calling address must approve this contract to spend its DAI for this function to succeed. As the amount of input DAI is variable,
-  /// the calling address will need to approve for a slightly higher amount, anticipating some variance.
-  /// @param amountOut The exact amount of WETH9 to receive from the swap.
-  /// @param amountInMaximum The amount of DAI we are willing to spend to receive the specified amount of WETH9.
-  /// @return amountIn The amount of DAI actually spent in the swap.
-  function swapExactOutputSingle(uint256 amountOut, uint256 amountInMaximum) external returns (uint256 amountIn) {
-      // Transfer the specified amount of DAI to this contract.
+  function swapExactOutputSingle(address tokenAddressOut, uint256 amountOut, uint256 amountInMaximum, uint24 feeTier) external returns (uint256 amountIn) {
+      // Transfer the specified `amountInMaximum` of WETH to this contract.
       TransferHelper.safeTransferFrom(WETH9, msg.sender, address(this), amountInMaximum);
 
-      // Approve the router to spend the specifed `amountInMaximum` of DAI.
+      // Approve the router to spend the specifed `amountInMaximum` of WETH.
       // In production, you should choose the maximum amount to spend based on oracles or other data sources to acheive a better swap.
       TransferHelper.safeApprove(WETH9, address(swapRouter), amountInMaximum);
 
       ISwapRouter.ExactOutputSingleParams memory params =
           ISwapRouter.ExactOutputSingleParams({
               tokenIn: WETH9,
-              tokenOut: DAI,
+              tokenOut: tokenAddressOut,
               fee: feeTier,
               recipient: msg.sender,
-              deadline: block.timestamp,
+              deadline: block.timestamp + 45 seconds,
               amountOut: amountOut,
               amountInMaximum: amountInMaximum,
               sqrtPriceLimitX96: 0
@@ -74,5 +68,7 @@ contract SimpleSwap {
           TransferHelper.safeApprove(WETH9, address(swapRouter), 0);
           TransferHelper.safeTransfer(WETH9, msg.sender, amountInMaximum - amountIn);
       }
+
+      return amountIn;
   }
 }

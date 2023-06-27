@@ -61,19 +61,36 @@ export async function fetchFTList(ft_ids: number[]) {
     for (let id in fts) {
       const ftInfo = fts[id];
       ftIds.push(ftInfo.id);
-      const ft = {
-        id: ftInfo.id,
-        name: ftInfo.name,
-        symbol: ftInfo.symbol,
-        price: ftInfo.quote[`USD`].price,
-        logo: "",
-        volume_24h: ftInfo.quote[`USD`].volume_24h,
-        percent_change_24h: ftInfo.quote[`USD`].percent_change_24h,
-        percent_change_7d: ftInfo.quote[`USD`].percent_change_7d,
-        percent_change_30d: ftInfo.quote[`USD`].percent_change_30d,
-        market_cap: ftInfo.quote[`USD`].market_cap,
-      };
-      ftList[`${ftInfo.id}`] = ft;
+      if (ftInfo.symbol !== "ETH") {
+        const ft = {
+          id: ftInfo.id,
+          name: ftInfo.name,
+          symbol: ftInfo.symbol,
+          price: ftInfo.quote[`USD`].price,
+          logo: "",
+          token_address: ftInfo.platform.token_address,
+          volume_24h: ftInfo.quote[`USD`].volume_24h,
+          percent_change_24h: ftInfo.quote[`USD`].percent_change_24h,
+          percent_change_7d: ftInfo.quote[`USD`].percent_change_7d,
+          percent_change_30d: ftInfo.quote[`USD`].percent_change_30d,
+          market_cap: ftInfo.quote[`USD`].market_cap,
+        };
+        ftList[`${ftInfo.id}`] = ft;
+      } else {
+        const ft = {
+          id: ftInfo.id,
+          name: ftInfo.name,
+          symbol: ftInfo.symbol,
+          price: ftInfo.quote[`USD`].price,
+          logo: "",
+          volume_24h: ftInfo.quote[`USD`].volume_24h,
+          percent_change_24h: ftInfo.quote[`USD`].percent_change_24h,
+          percent_change_7d: ftInfo.quote[`USD`].percent_change_7d,
+          percent_change_30d: ftInfo.quote[`USD`].percent_change_30d,
+          market_cap: ftInfo.quote[`USD`].market_cap,
+        };
+        ftList[`${ftInfo.id}`] = ft;
+      }
     }
 
     // fts.forEach((element) => {
