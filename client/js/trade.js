@@ -68,12 +68,38 @@ function renderBuyForm() {
             placeholder="ETH amount" required>
         <label for="floatingEthAmount">Amount</label>
     </div>
-    <button class="btn btn-primary w-100 py-2" type="submit">Buy</button>
+    <button class="btn btn-primary w-100 py-2 buy-fiat-btn" type="button">Buy</button>
   </form>
     `;
   contentContainerMain.insertAdjacentHTML("beforeend", buyFormHTML);
 
   addCurrencySelection();
+
+  const buyByFiatBtn = document.querySelector(".buy-fiat-btn");
+  buyByFiatBtn.addEventListener("click", async () => {
+    const jwt = Cookies.get("JWT");
+    const tokenAddress = document.querySelector(".contract-address").value;
+    const ethAmount = document.querySelector(".form-control").value;
+    const modalDialog = document.querySelector(".modal");
+    const modalDialogContent = document.querySelector(".modal-body");
+    const triggerBtn = document.querySelector(".trigger-btn");
+
+    const response = await fetch("/trade/buy", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authentication: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({
+        tokenAddress: tokenAddress,
+        ethAmount: ethAmount,
+      }),
+    });
+    const result = await response.json();
+    modalDialogContent.textContent = `Buy successfully! ETH amount ${result.ethAmount}`;
+    // modalDialog.setAttribute("aria-hidden", "false");
+    triggerBtn.click();
+  });
 }
 
 async function renderSwapForm() {

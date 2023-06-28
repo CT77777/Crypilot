@@ -40,6 +40,7 @@ export async function register(req: Request, res: Response) {
       await insetProvider(user_id, provider);
       await insertWallet(user_id, publicAddress.slice(2), encryptedPrivateKey);
 
+      console.log(publicAddress);
       const { jwt, access_expired } = await createJWT(
         provider,
         user_id,
@@ -77,13 +78,14 @@ export async function logIn(req: Request, res: Response) {
       });
 
       if (compare) {
+        const publicAddress = `0x${public_address}`;
         const { jwt, access_expired } = await createJWT(
           "native",
           id,
           email,
           name,
           picture,
-          public_address
+          publicAddress
         );
         res.cookie("JWT", jwt);
         res.status(200).redirect(`/user/profile?email=${email}`);

@@ -30,6 +30,7 @@ export async function getMarketFTList(req: Request, res: Response) {
     }
 
     const ft_ids = ids || ft_cmc_ids;
+    console.log(ft_ids);
     const { ftIds, ftList } = await fetchFTList(ft_ids);
     const logoList = await fetchFTLogo(ftIds);
 
