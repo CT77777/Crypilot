@@ -20,6 +20,7 @@ const ft_cmc_ids = [1027, 3717, 4943, 825, 3408, 8104, 7278, 5692, 7083, 6758];
 
 export async function getMarketFTList(req: Request, res: Response) {
   try {
+    console.log(req.query.ids);
     // get tracing FTs
     let ids;
     if (req.query.ids) {
@@ -30,6 +31,7 @@ export async function getMarketFTList(req: Request, res: Response) {
     }
 
     const ft_ids = ids || ft_cmc_ids;
+    console.log(ft_ids);
     const { ftIds, ftList } = await fetchFTList(ft_ids);
     const logoList = await fetchFTLogo(ftIds);
 

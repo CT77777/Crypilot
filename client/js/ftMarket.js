@@ -82,17 +82,23 @@ async function getMarketFTList() {
 async function getTracingListFT() {
   const responseTracing = await fetch("/market/ft/list/tracing");
   const resultsTracing = await responseTracing.json();
-  console.log(resultsTracing);
-
-  const resultsTracingString = resultsTracing.ftTracingIds.join(",");
-
-  const response = await fetch(`/market/ft/list?ids=${resultsTracingString}`);
-  const results = await response.json();
-  console.log(results);
-
-  const ftList = results.ftList;
-  const ftTracingIds = resultsTracing.ftTracingIds;
+  const { ftTracingIds } = resultsTracing;
   console.log(ftTracingIds);
+
+  if (ftTracingIds.length === 0) {
+    ftMarketLists.innerHTML = ``;
+    return;
+  }
+
+  const resultsTracingString = ftTracingIds.join(",");
+
+  const responseMarketByTracing = await fetch(
+    `/market/ft/list?ids=${resultsTracingString}`
+  );
+  const resultsMarketByTracing = await responseMarketByTracing.json();
+  console.log(resultsMarketByTracing);
+
+  const { ftList } = resultsMarketByTracing;
 
   ftMarketListTitle.innerHTML = `
   <tr>
