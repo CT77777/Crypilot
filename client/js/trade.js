@@ -148,15 +148,59 @@ async function renderSwapForm() {
   const buyButton = document.querySelector(".btn-buy");
   const sellButton = document.querySelector(".btn-sell");
 
-  buyButton.addEventListener("click", () => {
-    const swapForm = document.querySelector(".swap-form");
-    swapForm.setAttribute("action", "/trade/swap/buy");
-    swapForm.submit();
+  buyButton.addEventListener("click", async () => {
+    // const swapForm = document.querySelector(".swap-form");
+    // swapForm.setAttribute("action", "/trade/swap/buy");
+    // swapForm.submit();
+
+    const jwt = Cookies.get("JWT");
+    const tokenAddress = document.querySelector(".contract-address").value;
+    const tokenAmount = document.querySelector(".form-control").value;
+    const modalDialogContent = document.querySelector(".modal-body");
+    const triggerBtn = document.querySelector(".trigger-btn");
+
+    const response = await fetch("/trade/swap/buy", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authentication: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({
+        tokenAddress: tokenAddress,
+        tokenAmount: tokenAmount,
+      }),
+    });
+    const result = await response.json();
+    modalDialogContent.textContent = `Buy successfully! token amount ${result.tokenAmount}`;
+
+    triggerBtn.click();
   });
-  sellButton.addEventListener("click", () => {
-    const swapForm = document.querySelector(".swap-form");
-    swapForm.setAttribute("action", "/trade/swap/sell");
-    swapForm.submit();
+  sellButton.addEventListener("click", async () => {
+    // const swapForm = document.querySelector(".swap-form");
+    // swapForm.setAttribute("action", "/trade/swap/sell");
+    // swapForm.submit();
+
+    const jwt = Cookies.get("JWT");
+    const tokenAddress = document.querySelector(".contract-address").value;
+    const tokenAmount = document.querySelector(".form-control").value;
+    const modalDialogContent = document.querySelector(".modal-body");
+    const triggerBtn = document.querySelector(".trigger-btn");
+
+    const response = await fetch("/trade/swap/sell", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authentication: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({
+        tokenAddress: tokenAddress,
+        tokenAmount: tokenAmount,
+      }),
+    });
+    const result = await response.json();
+    modalDialogContent.textContent = `Sell successfully! token amount ${result.tokenAmount}`;
+
+    triggerBtn.click();
   });
 }
 
@@ -193,3 +237,29 @@ function addCurrencySelection() {
 }
 
 addCurrencySelection();
+
+const buyByFiatBtn = document.querySelector(".buy-fiat-btn");
+buyByFiatBtn.addEventListener("click", async () => {
+  const jwt = Cookies.get("JWT");
+  const tokenAddress = document.querySelector(".contract-address").value;
+  const ethAmount = document.querySelector(".form-control").value;
+  const modalDialog = document.querySelector(".modal");
+  const modalDialogContent = document.querySelector(".modal-body");
+  const triggerBtn = document.querySelector(".trigger-btn");
+
+  const response = await fetch("/trade/buy", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authentication: `Bearer ${jwt}`,
+    },
+    body: JSON.stringify({
+      tokenAddress: tokenAddress,
+      ethAmount: ethAmount,
+    }),
+  });
+  const result = await response.json();
+  modalDialogContent.textContent = `Buy successfully! ETH amount ${result.ethAmount}`;
+  // modalDialog.setAttribute("aria-hidden", "false");
+  triggerBtn.click();
+});

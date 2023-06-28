@@ -18,7 +18,7 @@
         </header>
         <main class="content-container-main">
             <div class="table-selections">
-                <h3 class="table-selection table-buy" data-state="true">Buy ETH</h3>
+                <h3 class="table-selection table-buy" data-state="true">Buy Currency</h3>
                 <h3 class="table-selection table-swap">Swap ETH</h3>
             </div>
             <form class="buy-form" action="/trade/buy" method="POST">
@@ -65,13 +65,36 @@
                         placeholder="ETH amount" required>
                     <label for="floatingEthAmount">Amount</label>
                 </div>
-                <button class="btn btn-primary w-100 py-2" type="submit">Buy</button>
+                <button class="btn btn-primary w-100 py-2 buy-fiat-btn" type="button">Buy</button>
             </form>
         </main>
         <footer class="content-container-footer">
             <p>&copy;AppWorks School Batch#20 Back-End CT 2023</p>
         </footer>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Swap Result</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary trigger-btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
+        style="display: none;">
+        Launch demo modal
+    </button>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
