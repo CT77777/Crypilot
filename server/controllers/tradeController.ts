@@ -37,11 +37,11 @@ export async function swapEthToErc20(req: RequestWithPayload, res: Response) {
   try {
     const { tokenAddress, tokenAmount } = req.body;
     const { public_address: userWalletAddress, id: userId } = req.payload;
-    console.log(userWalletAddress);
+    console.log("wallet", userWalletAddress);
 
     //get encrypted private key from DB
     const { private_key: encryptedPrivateKey } = await getPrivateKey(
-      userWalletAddress as string
+      (userWalletAddress as string).slice(2)
     );
 
     //decrypt
@@ -72,7 +72,7 @@ export async function swapErc20ToEth(req: RequestWithPayload, res: Response) {
 
     //get encrypted private key from DB
     const { private_key: encryptedPrivateKey } = await getPrivateKey(
-      userWalletAddress as string
+      (userWalletAddress as string).slice(2)
     );
 
     //decrypt
