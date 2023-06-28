@@ -26,6 +26,7 @@ async function getMarketFTList() {
       <th scope="col">30d%</th>
       <th scope="col">Market Cap</th>
       <th scope="col">Volume(24h)</th>
+      <th scope="col">Introduction</th>
   </tr>
   `;
 
@@ -47,6 +48,9 @@ async function getMarketFTList() {
           <td>${ft.percent_change_30d.toFixed(2)}%</td>
           <td>$${ft.market_cap.toFixed(0)}</td>
           <td>$${ft.volume_24h.toFixed(0)}</td>
+          <td><button type="button" class="intro-btn btn btn-info" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1rem;" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-symbol=${
+            ft.symbol
+          }>Read</button></td>
       </tr>
       `;
       ftListHTML += ftHTMLTrue;
@@ -63,6 +67,9 @@ async function getMarketFTList() {
           <td>${ft.percent_change_30d.toFixed(2)}%</td>
           <td>$${ft.market_cap.toFixed(0)}</td>
           <td>$${ft.volume_24h.toFixed(0)}</td>
+          <td><button type="button" class="intro-btn btn btn-info" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1rem;" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-symbol=${
+            ft.symbol
+          }>Read</button></td>
       </tr>
       `;
       ftListHTML += ftHTMLFalse;
@@ -99,6 +106,7 @@ async function getTracingListFT() {
       <th scope="col">30d%</th>
       <th scope="col">Market Cap</th>
       <th scope="col">Volume(24h)</th>
+      <th scope="col">Introduction</th>
   </tr>
   `;
 
@@ -120,6 +128,9 @@ async function getTracingListFT() {
           <td>${ft.percent_change_30d.toFixed(2)}%</td>
           <td>$${ft.market_cap.toFixed(0)}</td>
           <td>$${ft.volume_24h.toFixed(0)}</td>
+          <td><button type="button" class="intro-btn btn btn-info" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1rem;" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-symbol=${
+            ft.symbol
+          }>Read</button></td>
       </tr>
       `;
       ftListHTML += ftHTMLTrue;
@@ -136,6 +147,9 @@ async function getTracingListFT() {
           <td>${ft.percent_change_30d.toFixed(2)}%</td>
           <td>$${ft.market_cap.toFixed(0)}</td>
           <td>$${ft.volume_24h.toFixed(0)}</td>
+          <td><button type="button" class="intro-btn btn btn-info" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1rem;" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-symbol=${
+            ft.symbol
+          }>Read</button></td>
       </tr>
       `;
       ftListHTML += ftHTMLFalse;
@@ -144,9 +158,13 @@ async function getTracingListFT() {
   ftMarketLists.innerHTML = ftListHTML;
 }
 
-// add/remove tracing ft
+// add or remove tracing ft
 ftMarketLists.addEventListener("click", async (event) => {
   const target = event.target;
+  const triggerTracingModalBtn = document.querySelector(".btn-tracing");
+  const tracingModalDialogContent = document.querySelector(
+    ".modal-body-tracing"
+  );
 
   if (
     target.getAttribute("class") === "favorite" &&
@@ -167,7 +185,9 @@ ftMarketLists.addEventListener("click", async (event) => {
     });
 
     if (response.status === 200) {
-      alert("add tracing FT successfully");
+      // alert("add tracing FT successfully");
+      tracingModalDialogContent.textContent = "Add tracing FT successfully";
+      triggerTracingModalBtn.click();
       target.setAttribute("src", "../images/star-fill.png");
       target.setAttribute("data-state", "true");
       target.parentNode.parentNode.setAttribute("class", "tracing");
@@ -191,7 +211,9 @@ ftMarketLists.addEventListener("click", async (event) => {
     });
 
     if (response.status === 200) {
-      alert("remove tracing FT successfully");
+      // alert("remove tracing FT successfully");
+      tracingModalDialogContent.textContent = "Remove tracing FT successfully";
+      triggerTracingModalBtn.click();
       target.setAttribute("src", "../images/star-empty.png");
       target.setAttribute("data-state", "false");
       target.parentNode.parentNode.removeAttribute("class");
@@ -214,17 +236,56 @@ tableSelections.addEventListener("click", (event) => {
 const tableMarket = document.querySelector(".table-market");
 const tableTracing = document.querySelector(".table-tracing");
 
-tableMarket.addEventListener("click", () => {
-  getMarketFTList();
+let intervalGet;
+
+tableMarket.addEventListener("click", async () => {
+  await getMarketFTList();
+  addEventListenerIntroBtn();
   clearInterval(intervalGet);
-  intervalGet = setInterval(getMarketFTList, 10000);
+  intervalGet = setInterval(getMarketFTList, 60000);
 });
-tableTracing.addEventListener("click", () => {
-  getTracingListFT();
+tableTracing.addEventListener("click", async () => {
+  await getTracingListFT();
+  addEventListenerIntroBtn();
   clearInterval(intervalGet);
-  intervalGet = setInterval(getTracingListFT, 10000);
+  intervalGet = setInterval(getTracingListFT, 60000);
 });
 
-getMarketFTList();
+function addEventListenerIntroBtn() {
+  console.log(1);
+  const introCryptoButton = document.querySelectorAll(".intro-btn");
+  const modalDialogBody = document.querySelector(".modal-body");
 
-let intervalGet = setInterval(getMarketFTList, 10000);
+  introCryptoButton.forEach((element) => {
+    console.log(2);
+
+    element.addEventListener("click", async () => {
+      const symbol = element.getAttribute("data-symbol");
+      const jwt = Cookies.get("JWT");
+
+      console.log(3);
+
+      const response = await fetch("/gpt/start", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authentication: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify({ symbol: symbol }),
+      });
+
+      const result = await response.json();
+
+      console.log(result);
+      modalDialogBody.textContent = result;
+    });
+  });
+}
+
+async function main() {
+  await getMarketFTList();
+  addEventListenerIntroBtn();
+  intervalGet = setInterval(getMarketFTList, 60000);
+}
+
+main();

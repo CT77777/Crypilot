@@ -61,6 +61,18 @@ body {
   cursor: pointer;
 }
 
+.intro-btn {
+  border-radius: 10px;
+  height: 30px;
+  text-align: center;
+  color: whitesmoke;
+}
+
+td,
+th {
+  text-align: center;
+}
+
 .tracing {
   font-weight: bold;
 }

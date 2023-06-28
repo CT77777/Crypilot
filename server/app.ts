@@ -4,6 +4,7 @@ import userRouter from "./routes/userRoute.js";
 import marketRouter from "./routes/marketRoute.js";
 import tradeRouter from "./routes/tradeRoute.js";
 import inventoryRouter from "./routes/inventoryRoute.js";
+import gptRouter from "./routes/gptRoute.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -24,6 +25,7 @@ app.use("/", [
   marketRouter,
   tradeRouter,
   inventoryRouter,
+  gptRouter,
 ]);
 
 app.listen(port, () => {
