@@ -34,15 +34,17 @@ export async function authenticate(
       next();
     } catch (error) {
       console.log(error);
-      res.status(403).json({
-        message: "authenticate failed",
-        error: (error as Error).message,
-      });
+      res.redirect("/");
+      // res.status(403).json({
+      //   message: "authenticate failed",
+      //   error: (error as Error).message,
+      // });
     }
   } else {
     const errorMessage = new Error("Haven't logged in");
-    res
-      .status(401)
-      .json({ message: "authenticate failed", error: errorMessage.message });
+    res.redirect("/");
+    // res
+    //   .status(401)
+    //   .json({ message: "authenticate failed", error: errorMessage.message });
   }
 }

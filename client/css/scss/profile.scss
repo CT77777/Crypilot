@@ -1,0 +1,29 @@
+@import "./modules/universal.scss";
+@import "./modules/framework.scss";
+@import "./modules/sideBar.scss";
+@import "./modules/verticalDivider.scss";
+@import "./modules/contentContainer.scss";
+@import "./modules/header.scss";
+@import "./modules/footer.scss";
+@import "./modules/RWD.scss";
+
+.container-main {
+  display: flex;
+  justify-content: center;
+  main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    span {
+      color: aliceblue;
+    }
+
+    img {
+      width: 240px;
+      height: 240px;
+      margin: 20px 0;
+    }
+  }
+}

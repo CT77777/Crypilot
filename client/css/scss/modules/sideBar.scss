@@ -1,0 +1,23 @@
+.sidebar {
+  background-color: #2e3343 !important;
+  width: 240px !important;
+
+  .sidebar-name {
+    margin-left: 10px;
+  }
+
+  .sidebar-logo {
+    width: 64px;
+    height: 64px;
+  }
+
+  .sidebar-list {
+    li {
+      margin-bottom: 20px;
+    }
+  }
+
+  .dropdown-item {
+    cursor: pointer;
+  }
+}

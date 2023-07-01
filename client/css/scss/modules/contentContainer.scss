@@ -1,0 +1,19 @@
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #212529;
+  height: 100vh;
+  width: 100%;
+  flex: 1;
+
+  .container-main {
+    background: linear-gradient(180deg, #373e51, rgba(55, 62, 81, 0));
+    flex: 1;
+  }
+
+  .container {
+    max-width: 100%;
+    margin: 0;
+  }
+}

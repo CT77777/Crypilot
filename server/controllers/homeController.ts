@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
 
 export function renderHomePage(req: Request, res: Response) {
-  res.render("home");
+  if (req.cookies.JWT) {
+    res.redirect("/user/profile");
+  } else {
+    res.render("home");
+  }
 }
