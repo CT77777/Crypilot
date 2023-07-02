@@ -13,8 +13,8 @@ interface RequestWithPayload extends Request {
   payload: JWTPayload;
 }
 
-export function renderTradePage(req: Request, res: Response) {
-  res.status(200).render("trade");
+export function renderBuyPage(req: Request, res: Response) {
+  res.status(200).render("buy");
 }
 
 export async function buyETH(req: RequestWithPayload, res: Response) {

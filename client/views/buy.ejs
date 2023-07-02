@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <%- include("modules/head") %>
+        <link rel="stylesheet" href="../css/dist/buy.css">
+</head>
+
+<body>
+    <!-- BS icons image -->
+    <%- include("modules/icons") %>
+
+        <!-- BS layout -->
+        <div class="d-flex flex-nowrap">
+
+            <!-- BS sidebar-->
+            <%- include("modules/sidebarUser") %>
+
+                <!-- BS vertical divider-->
+                <%- include("modules/verticalDivider") %>
+
+                    <div class="content-container">
+
+                        <!-- BS header-->
+                        <%- include("modules/headerUser") %>
+
+                            <!-- personal main -->
+                            <div class="container container-main">
+                                <main class="">
+                                    <form class="buy-form" action="/trade/buy" method="POST">
+                                        <div class="btn-group dropend">
+                                            <button class="btn btn-secondary btn-lg selected-currency" type="button">
+                                                Select a currency
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <span class="visually-hidden">Toggle Dropdown</span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li class="currency">
+                                                    <a class="dropdown-item" href="#" data-contract="">
+                                                        <img class="currency-logo"
+                                                            src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png">ETH
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li class="currency">
+                                                    <a class="dropdown-item disabled" href="#"
+                                                        data-contract="0x6b175474e89094c44da98b954eedeac495271d0f">
+                                                        <img class="currency-logo"
+                                                            src="https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png">DAI
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li class="currency">
+                                                    <a class="dropdown-item disabled" href="#"
+                                                        data-contract="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48">
+                                                        <img class="currency-logo"
+                                                            src="https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png">USDC
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="form-floating">
+                                            <input class="contract-address" type="text" name="contract-address"
+                                                style="display: none">
+                                            <input type="number" step="0.01" name="ethAmount"
+                                                class="form-control form-control-dark amount-buy" id="floatingAmount"
+                                                placeholder="Amount" required>
+                                            <label for="floatingAmount">Amount</label>
+                                        </div>
+                                        <button class="btn btn-warning w-100 py-2 buy-fiat-btn"
+                                            type="button">Buy</button>
+                                    </form>
+                                </main>
+
+                            </div>
+
+                            <!-- BS footer-->
+                            <%- include("modules/footer") %>
+
+                    </div>
+
+        </div>
+
+        <!-- buying status Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Swap Result</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button trigger buying status modal -->
+        <button type="button" class="btn btn-primary trigger-btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            style="display: none;">
+            trigger buying status modal
+        </button>
+
+        <!-- BS login modal -->
+        <%- include("modules/logInModal") %>
+
+            <!-- BS v5.3 CDN JS-->
+            <%- include("modules/bsJsCDN.ejs") %>
+
+                <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                <script type="module" src="../js/buy.js"></script>
+</body>
+
+</html>

@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import {
-  renderTradePage,
+  renderBuyPage,
   buyETH,
   swapEthToErc20,
   swapErc20ToEth,
@@ -15,7 +15,7 @@ interface RequestWithPayload extends Request {
 const router = Router();
 
 // render buying ETH by fiat currency page
-router.route("/trade").get(renderTradePage);
+router.route("/trade/buy").get(renderBuyPage);
 
 // buy ETH by fiat currency
 router
@@ -25,6 +25,9 @@ router
       authenticate(req as RequestWithPayload, res, next),
     (req: Request, res: Response) => buyETH(req as RequestWithPayload, res),
   ]);
+
+// render swapping ETH page
+router.route("/trade/swap").get();
 
 // swap ETH to ERC20 token
 router
