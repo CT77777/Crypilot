@@ -2,9 +2,10 @@ import { Router, Request, Response, NextFunction } from "express";
 import {
   renderMarketFTPage,
   getMarketFTList,
+  renderTracingPage,
+  getTracingListFT,
   addTracingFT,
   removeTracingFT,
-  getTracingListFT,
 } from "../controllers/marketController.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import { JWTPayload } from "jose";
@@ -18,6 +19,8 @@ const router = Router();
 router.route("/market/ft").get(renderMarketFTPage);
 
 router.route("/market/ft/list").get(getMarketFTList);
+
+router.route("/market/tracing").get(renderTracingPage);
 
 router
   .route("/market/ft/list/tracing")
