@@ -11,7 +11,7 @@ interface RequestWithPayload extends Request {
 }
 
 export function renderInventoryPage(req: Request, res: Response) {
-  res.status(200).render("inventory");
+  res.status(200).render("wallet");
 }
 
 export async function getInventoryFts(req: RequestWithPayload, res: Response) {
