@@ -45,7 +45,7 @@ export async function getMarketFTList(req: Request, res: Response) {
 }
 
 export async function renderMarketFTPage(req: Request, res: Response) {
-  res.status(200).render("ftMarket");
+  res.status(200).render("marketFT");
 }
 
 export async function addTracingFT(req: RequestWithPayload, res: Response) {

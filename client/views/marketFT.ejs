@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <%- include("modules/head") %>
+        <link rel="stylesheet" href="../css/dist/marketFT.css">
+</head>
+
+<body>
+    <!-- BS icons image -->
+    <%- include("modules/icons") %>
+
+        <!-- BS layout -->
+        <div class="d-flex flex-nowrap">
+
+            <!-- BS sidebar-->
+            <%- include("modules/sidebarUser") %>
+
+                <!-- BS vertical divider-->
+                <%- include("modules/verticalDivider") %>
+
+                    <div class="content-container">
+
+                        <!-- BS header-->
+                        <%- include("modules/headerUser") %>
+
+                            <!-- personal main -->
+                            <div class="container container-main">
+                                <main class="">
+                                    <div class="table-responsive small">
+                                        <table class="table table-borderless table-hover align-middle">
+                                            <thead class="market-lists-title">
+                                            </thead>
+                                            <tbody class="market-lists table-group-divider">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </main>
+                            </div>
+
+                            <!-- BS footer-->
+                            <%- include("modules/footer") %>
+
+                    </div>
+
+        </div>
+
+        <!-- Modal ChatGPT-->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">ChatGPT</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Waiting for ChatGPT response...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Tracing-->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body modal-body-tracing">
+                        wait for response...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary btn-tracing" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            style="display: none;">
+            trigger tracing modal
+        </button>
+
+        <!-- BS login modal -->
+        <%- include("modules/logInModal") %>
+
+            <!-- BS v5.3 CDN JS-->
+            <%- include("modules/bsJsCDN.ejs") %>
+
+                <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                <script type="module" src="../js/marketFT.js"></script>
+</body>
+
+</html>
