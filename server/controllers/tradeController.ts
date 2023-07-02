@@ -32,6 +32,10 @@ export async function buyETH(req: RequestWithPayload, res: Response) {
   }
 }
 
+export function renderSwapPage(req: Request, res: Response) {
+  res.status(200).render("swap");
+}
+
 // swap ETH to ERC20 token
 export async function swapEthToErc20(req: RequestWithPayload, res: Response) {
   try {

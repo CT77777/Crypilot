@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import {
   renderBuyPage,
   buyETH,
+  renderSwapPage,
   swapEthToErc20,
   swapErc20ToEth,
 } from "../controllers/tradeController.js";
@@ -27,7 +28,7 @@ router
   ]);
 
 // render swapping ETH page
-router.route("/trade/swap").get();
+router.route("/trade/swap").get(renderSwapPage);
 
 // swap ETH to ERC20 token
 router
