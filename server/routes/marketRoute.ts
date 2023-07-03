@@ -16,12 +16,16 @@ interface RequestWithPayload extends Request {
 
 const router = Router();
 
+// render market FT page
 router.route("/market/ft").get(renderMarketFTPage);
 
+// get market FT list
 router.route("/market/ft/list").get(getMarketFTList);
 
+// render user's tracing FT page
 router.route("/market/tracing").get(renderTracingPage);
 
+// get user's tracing FT list
 router
   .route("/market/ft/list/tracing")
   .get([
@@ -31,6 +35,7 @@ router
       getTracingListFT(req as RequestWithPayload, res),
   ]);
 
+// add tracing FT
 router
   .route("/market/ft/tracing/add")
   .post([
@@ -40,6 +45,7 @@ router
       addTracingFT(req as RequestWithPayload, res),
   ]);
 
+// remove tracing FT
 router
   .route("/market/ft/tracing/remove")
   .post([
@@ -48,7 +54,5 @@ router
     (req: Request, res: Response) =>
       removeTracingFT(req as RequestWithPayload, res),
   ]);
-
-router.route("/market/nft").get();
 
 export default router;

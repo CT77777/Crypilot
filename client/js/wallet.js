@@ -7,7 +7,7 @@ const inventoryListTitles = document.querySelector(".inventory-list-titles");
 const inventoryLists = document.querySelector(".inventory-lists");
 
 async function getInventoryFts() {
-  const response = await fetch("/inventory/wallet");
+  const response = await fetch("/wallet/fts");
   const results = await response.json();
   const { userFtsBalance } = results;
 

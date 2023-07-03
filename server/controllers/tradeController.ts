@@ -13,10 +13,12 @@ interface RequestWithPayload extends Request {
   payload: JWTPayload;
 }
 
+// render buy ETH by fiat currency page
 export function renderBuyPage(req: Request, res: Response) {
   res.status(200).render("buy");
 }
 
+// buy ETH by fiat currency
 export async function buyETH(req: RequestWithPayload, res: Response) {
   try {
     const { public_address: userWalletAddress, id: userId } = req.payload;
@@ -32,6 +34,7 @@ export async function buyETH(req: RequestWithPayload, res: Response) {
   }
 }
 
+// render swap ETH page
 export function renderSwapPage(req: Request, res: Response) {
   res.status(200).render("swap");
 }

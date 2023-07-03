@@ -13,13 +13,10 @@ interface RequestWithPayload extends Request {
 
 const router = Router();
 
-// render user register/signIn page
-// router.route("/user").get(renderUserPage);
-
-// register API
+// user register
 router.route("/user/register").post(register);
 
-// signIn API
+// user log in
 router.route("/user/login").post(logIn);
 
 // render user profile page

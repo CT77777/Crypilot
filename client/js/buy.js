@@ -3,13 +3,44 @@ import * as logOut from "./modules/logOut.js";
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Buy";
 
-function addCurrencySelection() {
-  const currency = document.querySelectorAll(".currency");
-  const selectedCurrency = document.querySelector(".selected-currency");
+function addFiatCurrencySelection() {
+  const fiatCurrency = document.querySelectorAll(".fiat-currency");
+  const selectedFiatCurrency = document.querySelector(
+    ".selected-fiat-currency"
+  );
+
+  fiatCurrency.forEach((element) => {
+    element.addEventListener("click", (event) => {
+      const dropdownItemAttributes =
+        element.querySelector(".dropdown-item").classList;
+      if (dropdownItemAttributes.contains("disabled")) {
+        return;
+      }
+
+      const logo = element.querySelector(".currency-logo").getAttribute("src");
+      const symbol = element.querySelector(".dropdown-item").textContent;
+
+      const currencyHtml = `<img class="currency-logo" src="${logo}">${symbol}`;
+      selectedFiatCurrency.innerHTML = currencyHtml;
+    });
+  });
+}
+
+function addTokenCurrencySelection() {
+  const tokenCurrency = document.querySelectorAll(".token-currency");
+  const selectedTokenCurrency = document.querySelector(
+    ".selected-token-currency"
+  );
   const contractAddress = document.querySelector(".contract-address");
 
-  currency.forEach((element) => {
+  tokenCurrency.forEach((element) => {
     element.addEventListener("click", (event) => {
+      const dropdownItemAttributes =
+        element.querySelector(".dropdown-item").classList;
+      if (dropdownItemAttributes.contains("disabled")) {
+        return;
+      }
+
       const logo = element.querySelector(".currency-logo").getAttribute("src");
       const symbol = element.querySelector(".dropdown-item").textContent;
       const contract = element
@@ -18,18 +49,18 @@ function addCurrencySelection() {
 
       const currencyHtml = `<img class="currency-logo" src="${logo}">${symbol}`;
       contractAddress.value = contract;
-      selectedCurrency.innerHTML = currencyHtml;
+      selectedTokenCurrency.innerHTML = currencyHtml;
       console.log(contractAddress.value);
     });
   });
 }
 
-const buyByFiatBtn = document.querySelector(".buy-fiat-btn");
+const buyByFiatBtn = document.querySelector(".buy-token-btn");
 function addBuyingFunction() {
   buyByFiatBtn.addEventListener("click", async () => {
     const jwt = Cookies.get("JWT");
     const tokenAddress = document.querySelector(".contract-address").value;
-    const ethAmount = document.querySelector(".amount-buy").value;
+    const ethAmount = document.querySelector(".amount-token").value;
 
     const modalDialogContent = document.querySelector(".modal-body");
     const triggerBtn = document.querySelector(".trigger-btn");
@@ -52,9 +83,34 @@ function addBuyingFunction() {
   });
 }
 
+const fiatInput = document.querySelector(".amount-fiat");
+const tokenInput = document.querySelector(".amount-token");
+function addFiatConvert() {
+  fiatInput.addEventListener("input", (event) => {
+    const tokenPrice = 1980 * 30;
+    const fiatValue = event.target.value;
+    const tokenValue = fiatValue / tokenPrice;
+
+    tokenInput.value = tokenValue;
+  });
+}
+
+function addTokenConvert() {
+  tokenInput.addEventListener("input", (event) => {
+    const tokenPrice = 1980 * 30;
+    const tokenValue = event.target.value;
+    const fiatValue = tokenValue * tokenPrice;
+
+    fiatInput.value = fiatValue;
+  });
+}
+
 function main() {
-  addCurrencySelection();
+  addFiatCurrencySelection();
+  addTokenCurrencySelection();
   addBuyingFunction();
+  addFiatConvert();
+  addTokenConvert();
 }
 
 main();

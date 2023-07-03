@@ -3,18 +3,29 @@ import {
   getUserEthBalance,
   getUserFts,
   getUserFtsBalance,
-} from "../models/inventoryModel.js";
+} from "../models/walletModel.js";
 import { JWTPayload } from "jose";
 
 interface RequestWithPayload extends Request {
   payload: JWTPayload;
 }
 
-export function renderInventoryPage(req: Request, res: Response) {
+// render wallet page
+export function renderWalletPage(req: Request, res: Response) {
   res.status(200).render("wallet");
 }
 
-export async function getInventoryFts(req: RequestWithPayload, res: Response) {
+// get ETH balance of user's wallet
+export async function getWalletETH(req: RequestWithPayload, res: Response) {
+  const { public_address: userWalletAddress } = req.payload;
+  const userEthBalance = await getUserEthBalance(userWalletAddress as string);
+  console.log(userEthBalance);
+
+  res.status(200).json({ userEthBalance });
+}
+
+// get FTs of user's wallet
+export async function getWalletFts(req: RequestWithPayload, res: Response) {
   const { public_address: userWalletAddress, id: userId } = req.payload;
   const userFts = await getUserFts(userId as number);
   const userFtsBalance = await getUserFtsBalance(
