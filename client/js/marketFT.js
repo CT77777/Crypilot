@@ -1,4 +1,6 @@
 import * as logOut from "./modules/logOut.js";
+import { renderHeaderWalletAddress } from "./modules/getWallet.js";
+renderHeaderWalletAddress();
 
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Market";
