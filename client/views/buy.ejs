@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <%- include("modules/head") %>
+        <link rel="stylesheet" href="../css/dist/buy.css">
+</head>
+
+<body>
+    <!-- BS icons image -->
+    <%- include("modules/icons") %>
+
+        <!-- BS layout -->
+        <div class="d-flex flex-nowrap">
+
+            <!-- BS sidebar-->
+            <%- include("modules/sidebarUser") %>
+
+                <!-- BS vertical divider-->
+                <%- include("modules/verticalDivider") %>
+
+                    <div class="content-container">
+
+                        <!-- BS header-->
+                        <%- include("modules/headerUser") %>
+
+                            <!-- personal main -->
+                            <div class="container container-main">
+                                <main class="">
+                                    <form class="buy-form" action="/trade/buy" method="POST">
+
+                                        <div class="container-currency">
+                                            <label>I want to spend</label>
+                                            <div class="form-floating currency-form">
+                                                <input type="number" step="0.01" name="fiatAmount"
+                                                    class="form-control form-control-dark amount-fiat"
+                                                    id="floatingFiatAmount" placeholder="Amount" required>
+                                                <label for="floatingFiatAmount">Amount</label>
+                                                <div class="dropdown dropend currency-menu">
+                                                    <button
+                                                        class="btn btn-secondary dropdown-toggle selected-fiat-currency"
+                                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Select a currency
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li class="fiat-currency">
+                                                            <a class="dropdown-item" href="#" data-contract="">
+                                                                <img class="currency-logo"
+                                                                    src="https://static.moonpay.com/widget/currencies/twd.svg">TWD
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <hr class="dropdown-divider">
+                                                        </li>
+                                                        <li class="fiat-currency">
+                                                            <a class="dropdown-item disabled" href="#"
+                                                                data-contract="0x6b175474e89094c44da98b954eedeac495271d0f">
+                                                                <img class="currency-logo"
+                                                                    src="https://static.moonpay.com/widget/currencies/usd.svg">USD
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <hr class="dropdown-divider">
+                                                        </li>
+                                                        <li class="fiat-currency">
+                                                            <a class="dropdown-item disabled" href="#"
+                                                                data-contract="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48">
+                                                                <img class="currency-logo"
+                                                                    src="https://static.moonpay.com/widget/currencies/jpy.svg">JPY
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="container-currency">
+                                            <label>I want to buy</label>
+                                            <div class="form-floating currency-form">
+                                                <input class="contract-address" type="text" name="contract-address"
+                                                    style="display: none">
+                                                <input type="number" step="0.01" name="tokenAmount"
+                                                    class="form-control form-control-dark amount-token"
+                                                    id="floatingtTokenAmount" placeholder="Amount" required>
+                                                <label for="floatingtTokenAmount">Amount</label>
+                                                <div class="dropdown dropend currency-menu">
+                                                    <button
+                                                        class="btn btn-secondary dropdown-toggle selected-token-currency"
+                                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Select a currency
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li class="token-currency">
+                                                            <a class="dropdown-item" href="#" data-contract="">
+                                                                <img class="currency-logo"
+                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png">ETH
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <hr class="dropdown-divider">
+                                                        </li>
+                                                        <li class="token-currency">
+                                                            <a class="dropdown-item disabled" href="#"
+                                                                data-contract="0x6b175474e89094c44da98b954eedeac495271d0f">
+                                                                <img class="currency-logo"
+                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png">DAI
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <hr class="dropdown-divider">
+                                                        </li>
+                                                        <li class="token-currency">
+                                                            <a class="dropdown-item disabled" href="#"
+                                                                data-contract="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48">
+                                                                <img class="currency-logo"
+                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png">USDC
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button class="btn btn-warning w-100 py-2 buy-token-btn rounded-5"
+                                            type="button">Buy</button>
+
+                                    </form>
+                                </main>
+
+                            </div>
+
+                            <!-- BS footer-->
+                            <%- include("modules/footer") %>
+
+                    </div>
+
+        </div>
+
+        <!-- buying status Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Swap Result</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button trigger buying status modal -->
+        <button type="button" class="btn btn-primary trigger-btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            style="display: none;">
+            trigger buying status modal
+        </button>
+
+        <!-- BS login modal -->
+        <%- include("modules/logInModal") %>
+
+            <!-- BS v5.3 CDN JS-->
+            <%- include("modules/bsJsCDN.ejs") %>
+
+                <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                <script type="module" src="../js/buy.js"></script>
+</body>
+
+</html>

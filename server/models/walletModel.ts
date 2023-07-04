@@ -5,6 +5,7 @@ import { RowDataPacket, FieldPacket } from "mysql2";
 
 dotenv.config();
 
+// ERC20 interface
 const erc20Abi = [
   // Read-Only Functions
   "function balanceOf(address owner) view returns (uint256)",
@@ -14,13 +15,8 @@ const erc20Abi = [
   "function approve(address spender, uint256 amount) returns (bool)",
 ];
 
-const treasuryPrivateKey = process.env.TREASURY_PRIVATE_KEY;
 const treasuryProvider = new ethers.providers.JsonRpcProvider(
   "http://localhost:8545"
-);
-const treasuryWallet = new ethers.Wallet(
-  treasuryPrivateKey as string,
-  treasuryProvider
 );
 
 // get ETH balance from blockchain

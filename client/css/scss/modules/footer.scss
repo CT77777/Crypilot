@@ -1,0 +1,35 @@
+.container-footer {
+  footer {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+
+    .footer-left {
+      padding-left: 30px;
+      width: 450px;
+
+      .footer-logo {
+        width: 48px;
+        height: 48px;
+      }
+
+      .footer-copyright {
+        font-size: 13px;
+      }
+    }
+
+    .footer-right {
+      padding-right: 30px;
+      width: 450px;
+
+      span {
+        font-size: 13px;
+      }
+
+      ul {
+        width: 300px;
+      }
+    }
+  }
+}

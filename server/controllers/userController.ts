@@ -5,14 +5,17 @@ import {
   insertWallet,
   searchUserByEmail,
 } from "../models/userModel.js";
+import { getUserEthBalance } from "../models/walletModel.js";
 import bcrypt from "bcrypt";
 import { createJWT } from "../utils/createJWT.js";
 import { createWallet, encrypt } from "../utils/createWallet.js";
+import { JWTPayload } from "jose";
 
-export function renderUserPage(req: Request, res: Response) {
-  res.render("user");
+interface RequestWithPayload extends Request {
+  payload: JWTPayload;
 }
 
+// user register
 export async function register(req: Request, res: Response) {
   try {
     console.log(req.body);
@@ -62,6 +65,7 @@ export async function register(req: Request, res: Response) {
   }
 }
 
+// user log in
 export async function logIn(req: Request, res: Response) {
   try {
     console.log(req.body);
@@ -101,14 +105,22 @@ export async function logIn(req: Request, res: Response) {
   }
 }
 
-export async function renderUserProfilePage(req: Request, res: Response) {
-  const email = `${req.query.email}`;
-  const { name, picture, public_address } = await searchUserByEmail(email);
+// render user profile page
+export async function renderUserProfilePage(
+  req: RequestWithPayload,
+  res: Response
+) {
+  const { name, picture, public_address } = req.payload;
+
+  const userEthBalance = await getUserEthBalance(public_address as string);
+
   const data = {
     name: name,
-    picture: picture,
-    public_address: `0x${public_address}`,
+    picture: "../images/hacker.png",
+    public_address: public_address,
+    userEthBalance: parseFloat(userEthBalance).toFixed(2),
   };
   console.log(data);
+
   res.status(200).render("profile", data);
 }

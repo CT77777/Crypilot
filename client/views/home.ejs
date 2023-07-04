@@ -1,34 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypilot</title>
-    <link rel="icon" type="image/png" href="../images/wallet_small.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/home.css">
+    <%- include("modules/head") %>
+        <link rel="stylesheet" href="../css/dist/home.css">
 </head>
 
 <body>
-    <div class="content-container">
-        <header class="content-container-header">
-            <a href="/">Crypilot</a>
-        </header>
-        <main class="content-container-main">
-            <h3>Custodial wallet for Web3 beginner</h3>
-            <img src="../images/wallet_large.png">
-            <a href="/user" class="btn btn-lg btn-light fw-bold border-white bg-white">Explore</a>
-        </main>
-        <footer class="content-container-footer">
-            <p>&copy;AppWorks School Batch#20 Back-End CT 2023</p>
-        </footer>
-    </div>
+    <!-- BS icons image -->
+    <%- include("modules/icons") %>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-        crossorigin="anonymous"></script>
+        <!-- BS layout -->
+        <div class="d-flex flex-nowrap">
+
+            <!-- BS sidebar-->
+            <%- include("modules/sidebarGuest") %>
+
+                <!-- BS vertical divider-->
+                <%- include("modules/verticalDivider") %>
+
+                    <div class="content-container">
+
+                        <!-- BS header-->
+                        <%- include("modules/headerGuest") %>
+
+                            <!-- personal main -->
+                            <div class="container container-main">
+                                <main class="">
+                                    <div>
+                                        <div class="fs-1 fw-bold">The Web3 Wallet</div>
+                                        <div class="fs-5 fw-lighter ">Pilot every web3 beginner</div>
+                                        <a href="/user" class="btn btn-lg btn-light border-white bg-white"
+                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop-login">Log in to
+                                            start</a>
+                                    </div>
+                                    <img src="../images/wallet_new_large.png">
+                                </main>
+                            </div>
+
+                            <!-- BS footer-->
+                            <%- include("modules/footer") %>
+
+                    </div>
+
+        </div>
+
+        <!-- BS sign-up modal -->
+        <%- include("modules/signUpModal") %>
+
+            <!-- BS login modal -->
+            <%- include("modules/logInModal") %>
+
+                <!-- BS v5.3 CDN JS-->
+                <%- include("modules/bsJsCDN.ejs") %>
 </body>
 
 </html>

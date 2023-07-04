@@ -18,6 +18,10 @@ interface RequestWithPayload extends Request {
 // cmc id of ft
 const ft_cmc_ids = [1027, 3717, 4943, 825, 3408, 8104, 7278, 5692, 7083, 6758];
 
+export function renderMarketFTPage(req: Request, res: Response) {
+  res.status(200).render("marketFT");
+}
+
 export async function getMarketFTList(req: Request, res: Response) {
   try {
     // get tracing FTs
@@ -44,8 +48,8 @@ export async function getMarketFTList(req: Request, res: Response) {
   }
 }
 
-export async function renderMarketFTPage(req: Request, res: Response) {
-  res.status(200).render("ftMarket");
+export function renderTracingPage(req: Request, res: Response) {
+  res.status(200).render("tracingFT");
 }
 
 export async function addTracingFT(req: RequestWithPayload, res: Response) {

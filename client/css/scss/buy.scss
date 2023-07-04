@@ -1,0 +1,92 @@
+@import "./modules/universal.scss";
+@import "./modules/framework.scss";
+@import "./modules/sideBar.scss";
+@import "./modules/verticalDivider.scss";
+@import "./modules/contentContainer.scss";
+@import "./modules/header.scss";
+@import "./modules/footer.scss";
+@import "./modules/RWD.scss";
+
+.container-main {
+  display: flex;
+  justify-content: center;
+
+  main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 0.35;
+
+    .container-currency {
+      margin-top: 30px;
+
+      label {
+        margin-bottom: 10px;
+      }
+
+      .currency-form {
+        .currency-menu {
+          position: absolute;
+          top: 1px;
+          bottom: 1px;
+          right: 1px;
+          z-index: 2;
+          height: 56px;
+          width: 165px;
+
+          .currency-logo {
+            width: 32px;
+            height: 32px;
+            margin-right: 10px;
+          }
+
+          button {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            height: 100%;
+            width: 100%;
+          }
+          .dropdown-menu {
+            --bs-dropdown-link-active-bg: #343a40;
+            position: fixed !important;
+          }
+        }
+      }
+    }
+
+    input[name="ethAmount"] {
+      margin-bottom: 20px;
+    }
+
+    input[name="tokenAddress"] {
+      margin-bottom: -1px;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    input[name="tokenAmount"] {
+      margin-bottom: 20px;
+    }
+
+    .btn-group {
+      width: 100%;
+      margin-top: 20px;
+      margin-bottom: 10px;
+
+      .currency-logo {
+        width: 32px;
+        height: 32px;
+        margin-right: 10px;
+      }
+
+      .dropdown-menu {
+        --bs-dropdown-link-active-bg: #343a40;
+        position: fixed !important;
+      }
+    }
+
+    .btn-warning {
+      margin-top: 30px;
+    }
+  }
+}

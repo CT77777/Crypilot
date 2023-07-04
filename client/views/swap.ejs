@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <%- include("modules/head") %>
+        <link rel="stylesheet" href="../css/dist/swap.css">
+</head>
+
+<body>
+    <!-- BS icons image -->
+    <%- include("modules/icons") %>
+
+        <!-- BS layout -->
+        <div class="d-flex flex-nowrap">
+
+            <!-- BS sidebar-->
+            <%- include("modules/sidebarUser") %>
+
+                <!-- BS vertical divider-->
+                <%- include("modules/verticalDivider") %>
+
+                    <div class="content-container">
+
+                        <!-- BS header-->
+                        <%- include("modules/headerUser") %>
+
+                            <!-- personal main -->
+                            <div class="container container-main">
+                                <main class="">
+                                    <form class="swap-form" action="/trade/swap/buy" method="POST">
+
+                                        <div class="container-currency-in">
+                                            <div class="form-floating token-currency-form">
+                                                <input class="contract-address contract-address-token-currency"
+                                                    type="text" name="contract-address" style="display: none">
+                                                <input type="number" step="0.01" name="tokenAmount"
+                                                    class="form-control form-control-dark amount-token"
+                                                    id="floatingtTokenCurrencyAmount" placeholder="Amount" required>
+                                                <label for="floatingtTokenCurrencyAmount">Amount</label>
+                                                <div class="dropdown dropend currency-menu">
+                                                    <button
+                                                        class="btn btn-secondary dropdown-toggle selected-token-currency"
+                                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Select a currency
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li class="token-currency">
+                                                            <a class="dropdown-item" href="#" data-contract="">
+                                                                <img class="currency-logo"
+                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png">ETH
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <hr class="dropdown-divider">
+                                                        </li>
+                                                        <li class="token-currency">
+                                                            <a class="dropdown-item disabled" href="#"
+                                                                data-contract="0x6b175474e89094c44da98b954eedeac495271d0f">
+                                                                <img class="currency-logo"
+                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png">DAI
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <hr class="dropdown-divider">
+                                                        </li>
+                                                        <li class="token-currency">
+                                                            <a class="dropdown-item disabled" href="#"
+                                                                data-contract="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48">
+                                                                <img class="currency-logo"
+                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png">USDC
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="container-switch">
+                                            <div class="container-switch-hover">
+                                                <svg class="bi switch-btn switch-btn-default" width="36" height="36">
+                                                    <use xlink:href="#switch"></use>
+                                                </svg>
+                                                <svg class="bi switch-btn switch-btn-hover" width="36" height="36">
+                                                    <use xlink:href="#switch-hover"></use>
+                                                </svg>
+                                            </div>
+                                        </div>
+
+                                        <div class="container-currency-out">
+                                            <div class="form-floating tokens-form">
+                                                <input class="contract-address contract-address-tokens" type="text"
+                                                    name="contract-address" style="display: none">
+                                                <input type="number" step="0.01" name="tokenAmount"
+                                                    class="form-control form-control-dark amount-token"
+                                                    id="floatingtTokensAmount" placeholder="Amount" required>
+                                                <label for="floatingtTokensAmount">Amount</label>
+                                                <div class="dropdown dropend currency-menu">
+                                                    <button class="btn btn-secondary dropdown-toggle selected-tokens"
+                                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Select a currency
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-tokens">
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="container-btn-swap">
+                                            <button class="btn btn-warning w-100 py-2  rounded-5 btn-swap"
+                                                type="button">Swap</button>
+                                        </div>
+
+
+                                    </form>
+                                </main>
+                            </div>
+
+                            <!-- BS footer-->
+                            <%- include("modules/footer") %>
+
+                    </div>
+
+        </div>
+
+        <!-- swapping status Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Swap Result</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button trigger swapping status modal -->
+        <button type="button" class="btn btn-primary trigger-btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            style="display: none;">
+            trigger swapping status modal
+        </button>
+
+        <!-- BS login modal -->
+        <%- include("modules/logInModal") %>
+
+            <!-- BS v5.3 CDN JS-->
+            <%- include("modules/bsJsCDN.ejs") %>
+
+                <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                <script type="module" src="../js/swap.js"></script>
+</body>
+
+</html>

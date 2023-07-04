@@ -1,0 +1,28 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary sidebar" style="width: 280px;">
+    <%- include("sidebarNav") %>
+
+        <!-- user -->
+        <div class="dropdown dropdown-user">
+            <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="../../images/hacker.png" width="32" height="32" class="rounded-circle me-2">
+                <strong>CT</strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow">
+                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop-login" href="#">Log
+                        in another account <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#login-another"></use>
+                        </svg></a></li>
+                <li><a class="dropdown-item" href="#">Settings <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#settings"></use>
+                        </svg></a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item sidebar-logout" href="#">Log out <svg class="bi pe-none me-2" width="16"
+                            height="16">
+                            <use xlink:href="#logout"></use>
+                        </svg></a></li>
+            </ul>
+        </div>
+</div>
