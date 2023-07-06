@@ -6,6 +6,12 @@ pageName.textContent = "Market";
 const ftMarketLists = document.querySelector(".market-lists");
 const ftMarketListTitle = document.querySelector(".market-lists-title");
 
+const socket = io("ws://localhost:8080");
+
+socket.on("connect", () => {
+  console.log("browser client connect to socket server...");
+});
+
 async function getMarketFTList() {
   const response = await fetch("/market/ft/list");
   const results = await response.json();
@@ -152,7 +158,9 @@ ftMarketLists.addEventListener("click", async (event) => {
 
 function addEventListenerIntroBtn() {
   const introCryptoButton = document.querySelectorAll(".intro-btn");
-  const modalDialogBody = document.querySelector(".modal-body");
+  const modalDialogBody = document.querySelector(".modal-body-gpt");
+  const modalDialogBodyImage = modalDialogBody.querySelector(".image");
+  const modalDialogBodyText = modalDialogBody.querySelector(".text");
 
   introCryptoButton.forEach((element) => {
     element.addEventListener("click", async () => {
@@ -160,6 +168,20 @@ function addEventListenerIntroBtn() {
       const jwt = Cookies.get("JWT");
 
       console.log("fetching GPT...");
+
+      let isStart = true;
+
+      socket.on("streaming", (content) => {
+        if (isStart) {
+          modalDialogBodyImage.style.display = "block";
+          modalDialogBodyText.textContent = `: ${content}`;
+          console.log(content);
+          isStart = false;
+        } else {
+          modalDialogBodyText.textContent += content;
+          console.log(content);
+        }
+      });
 
       const response = await fetch("/gpt/start", {
         method: "POST",
@@ -173,7 +195,6 @@ function addEventListenerIntroBtn() {
       const result = await response.json();
 
       console.log(result);
-      modalDialogBody.textContent = result;
     });
   });
 }

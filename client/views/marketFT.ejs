@@ -46,20 +46,26 @@
         </div>
 
         <!-- Modal ChatGPT-->
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade modal-gpt" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">ChatGPT</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        Waiting for ChatGPT response...
+                    <div class="modal-body modal-body-gpt">
+                        <div class="image-container">
+                            <img class="image" src="../images/bot.png" style="display: none;">
+                        </div>
+                        <span class="text">Waiting...</span>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control form-control-dark" placeholder="Send a message..."
+                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-warning" type="button" id="button-addon2">Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,6 +101,7 @@
             <%- include("modules/bsJsCDN.ejs") %>
 
                 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
                 <script type="module" src="../js/marketFT.js"></script>
 </body>
 

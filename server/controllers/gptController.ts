@@ -6,8 +6,8 @@ export async function startChat(req: Request, res: Response) {
     const { symbol } = req.body;
 
     const message = await startChatWithGPT(symbol);
-    console.log(message);
-    res.json(message?.content);
+
+    res.json({ message });
   } catch (error) {
     console.log(error);
     res.json({ message: "error", error: (error as Error).message });
