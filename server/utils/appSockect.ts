@@ -1,18 +1,18 @@
 import express from "express";
 import https from "https";
-import http from "http";
 import fs from "fs";
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 import cors from "cors";
 
 const app = express();
-const server = http.createServer(
-  //   {
-  //     key: fs.readFileSync("../../ctceth_ssl/private.key"),
-  //     cert: fs.readFileSync("../../ctceth_ssl/certificate.crt"),
-  //   },
+const server = https.createServer(
+  {
+    key: fs.readFileSync("../../ctceth_ssl/private.key"),
+    cert: fs.readFileSync("../../ctceth_ssl/server_bundle.crt"),
+  },
   app
 );
+
 export const io = new Server(server, {
   cors: {
     origin: "*",

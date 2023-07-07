@@ -8,8 +8,7 @@ import gptRouter from "./routes/gptRoute.js";
 import cookieParser from "cookie-parser";
 import { io } from "socket.io-client";
 import { redisClient } from "./utils/cache.js";
-
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+import fs from "fs";
 
 const app = express();
 const port = 3000;
@@ -32,7 +31,9 @@ app.use("/", [
   gptRouter,
 ]);
 
-export const socket = io("ws://localhost:8080");
+export const socket = io("wss://localhost:8080", {
+  rejectUnauthorized: false,
+});
 
 socket.on("connect", function () {
   console.log("Express connect to socket server...");

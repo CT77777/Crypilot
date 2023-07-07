@@ -169,7 +169,7 @@ function addEventListenerStartChatBtn() {
 
       const userId = Cookies.get("user_id");
 
-      const socket = io("ws://localhost:8080");
+      const socket = io("wss://localhost:8080");
       socket.on("connect", () => {
         console.log("browser client connect to socket server...");
         sockets.push(socket);
@@ -254,7 +254,7 @@ function addEventListenerContinueChatBtn() {
 
     const userId = Cookies.get("user_id");
 
-    const socket = io("ws://localhost:8080");
+    const socket = io("wss://localhost:8080");
     socket.on("connect", () => {
       console.log("browser client connect to socket server...");
       sockets.push(socket);
