@@ -30,8 +30,6 @@ export async function createJWT(
     .setExpirationTime("2h")
     .sign(secret);
 
-  console.log("JWT:", jwt);
-
   const access_expired = 7200;
 
   return { jwt, access_expired };

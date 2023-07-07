@@ -8,6 +8,9 @@ pageName.textContent = "Market";
 const ftMarketLists = document.querySelector(".market-lists");
 const ftMarketListTitle = document.querySelector(".market-lists-title");
 
+const sockets = [];
+
+// render Market FT
 async function getMarketFTList() {
   const response = await fetch("/market/ft/list");
   const results = await response.json();
@@ -19,7 +22,6 @@ async function getMarketFTList() {
 
   const ftList = results.ftList;
   const ftTracingIds = resultsTracing.ftTracingIds;
-  console.log(ftTracingIds);
 
   ftMarketListTitle.innerHTML = `
   <tr>
@@ -33,7 +35,7 @@ async function getMarketFTList() {
       <th scope="col">30d%</th>
       <th scope="col">Market Cap</th>
       <th scope="col">Volume(24h)</th>
-      <th scope="col">Introduction</th>
+      <th scope="col">AI Intro.</th>
   </tr>
   `;
 
@@ -57,7 +59,7 @@ async function getMarketFTList() {
           <td>$${ft.volume_24h.toFixed(0)}</td>
           <td><button type="button" class="intro-btn btn btn-warning" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1rem;" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-symbol=${
             ft.symbol
-          }>Read</button></td>
+          }>Chat</button></td>
       </tr>
       `;
       ftListHTML += ftHTMLTrue;
@@ -76,7 +78,7 @@ async function getMarketFTList() {
           <td>$${ft.volume_24h.toFixed(0)}</td>
           <td><button type="button" class="intro-btn btn btn-warning" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1rem;" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-symbol=${
             ft.symbol
-          }>Read</button></td>
+          }>Chat</button></td>
       </tr>
       `;
       ftListHTML += ftHTMLFalse;
@@ -84,9 +86,11 @@ async function getMarketFTList() {
   }
 
   ftMarketLists.innerHTML = ftListHTML;
+
+  addEventListenerStartChatBtn();
 }
 
-// add or remove tracing ft
+// add or remove tracing FT
 ftMarketLists.addEventListener("click", async (event) => {
   const target = event.target;
   const triggerTracingModalBtn = document.querySelector(".btn-tracing");
@@ -152,16 +156,41 @@ ftMarketLists.addEventListener("click", async (event) => {
   }
 });
 
-function addEventListenerIntroBtn() {
+// start chatting with openAI
+function addEventListenerStartChatBtn() {
   const introCryptoButton = document.querySelectorAll(".intro-btn");
-  const modalDialogBody = document.querySelector(".modal-body");
+  const modalDialogBody = document.querySelector(".modal-body-gpt");
+  const modalDialogBodyImage = modalDialogBody.querySelector(".image");
+  const modalDialogBodyText = modalDialogBody.querySelector(".text");
 
   introCryptoButton.forEach((element) => {
     element.addEventListener("click", async () => {
+      console.log("fetching GPT...");
+
+      const userId = Cookies.get("user_id");
+
+      const socket = io("ws://localhost:8080");
+      socket.on("connect", () => {
+        console.log("browser client connect to socket server...");
+        sockets.push(socket);
+      });
+      socket.emit("join room", userId);
+
       const symbol = element.getAttribute("data-symbol");
       const jwt = Cookies.get("JWT");
 
-      console.log("fetching GPT...");
+      let isStart = true;
+
+      socket.on("streaming", (content) => {
+        if (isStart) {
+          modalDialogBodyImage.style.display = "block";
+          modalDialogBodyText.textContent = `: ${content}`;
+
+          isStart = false;
+        } else {
+          modalDialogBodyText.textContent += content;
+        }
+      });
 
       const response = await fetch("/gpt/start", {
         method: "POST",
@@ -174,15 +203,149 @@ function addEventListenerIntroBtn() {
 
       const result = await response.json();
 
+      socket.disconnect();
+      sockets.length = 0;
+
       console.log(result);
-      modalDialogBody.textContent = result;
     });
+  });
+}
+
+// continue chatting with openAI
+function addEventListenerContinueChatBtn() {
+  const continueGptBtn = document.querySelector(".continue-gpt-btn");
+
+  continueGptBtn.addEventListener("click", async () => {
+    if (document.querySelector(".continue-gpt-input").value === "") {
+      return;
+    }
+
+    const lastModalBodyContinueText = document
+      .querySelector(".modal-content-gpt")
+      .children[
+        document.querySelector(".modal-content-gpt").children.length - 2
+      ].querySelector(".text");
+
+    console.log(lastModalBodyContinueText);
+    console.log(
+      document.querySelector(".modal-content-gpt").children[
+        document.querySelector(".modal-content-gpt").children.length - 2
+      ]
+    );
+
+    if (lastModalBodyContinueText.textContent === "Waiting...") {
+      document
+        .querySelector(".modal-content-gpt")
+        .removeChild(
+          document.querySelector(".modal-content-gpt").children[
+            document.querySelector(".modal-content-gpt").children.length - 2
+          ]
+        );
+
+      if (sockets.length !== 0) {
+        sockets.forEach((element) => {
+          element.disconnect();
+        });
+        sockets.length = 0;
+      }
+    }
+
+    console.log("fetching GPT continue...");
+
+    const userId = Cookies.get("user_id");
+
+    const socket = io("ws://localhost:8080");
+    socket.on("connect", () => {
+      console.log("browser client connect to socket server...");
+      sockets.push(socket);
+    });
+    socket.emit("join room", userId);
+
+    const jwt = Cookies.get("JWT");
+    const inputText = document.querySelector(".continue-gpt-input").value;
+    document.querySelector(".continue-gpt-input").value = "";
+    const modalFooter = document.querySelector(".modal-footer-gpt");
+
+    const modalBody = `
+    <div class="modal-body modal-body-gpt-continue">
+      <div class="image-container">
+          <img class="image" src="../images/bot.png">
+      </div>
+      <span class="text">Waiting...</span>
+    </div>
+    `;
+
+    modalFooter.insertAdjacentHTML("beforebegin", modalBody);
+
+    let modalDialogBodyContinueText = document
+      .querySelector(".modal-content-gpt")
+      .children[
+        document.querySelector(".modal-content-gpt").children.length - 2
+      ].querySelector(".text");
+
+    let isStart = true;
+
+    socket.on("streamingContinue", (content) => {
+      if (isStart) {
+        modalDialogBodyContinueText.textContent = `: ${content}`;
+        isStart = false;
+      } else {
+        modalDialogBodyContinueText.textContent += content;
+      }
+    });
+
+    const response = await fetch("/gpt/continue", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authentication: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({ inputText }),
+    });
+
+    const result = await response.json();
+
+    socket.disconnect();
+    sockets.length = 0;
+
+    console.log(result);
+  });
+}
+
+// clear record after closing the ChatGPT dialog
+function addEventListenerCloseChatBtn() {
+  const closeGptBtn = document.querySelector(".btn-close-gpt");
+
+  closeGptBtn.addEventListener("click", () => {
+    const modalContent = document.querySelector(".modal-content-gpt");
+    const modalBodyStart = document.querySelector(".modal-body-gpt");
+    const modalBodyContinues = document.querySelectorAll(
+      ".modal-body-gpt-continue"
+    );
+
+    if (modalBodyStart !== undefined) {
+      modalBodyStart.querySelector(".text").textContent = `Waiting...`;
+    }
+
+    if (modalBodyContinues.length !== 0) {
+      modalBodyContinues.forEach((element) => {
+        modalContent.removeChild(element);
+      });
+    }
+
+    if (sockets.length !== 0) {
+      sockets.forEach((element) => {
+        element.disconnect();
+      });
+      sockets.length = 0;
+    }
   });
 }
 
 async function main() {
   await getMarketFTList();
-  addEventListenerIntroBtn();
+  addEventListenerContinueChatBtn();
+  addEventListenerCloseChatBtn();
   setInterval(getMarketFTList, 60000);
 }
 

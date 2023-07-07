@@ -6,6 +6,10 @@ import tradeRouter from "./routes/tradeRoute.js";
 import walletRouter from "./routes/walletRoute.js";
 import gptRouter from "./routes/gptRoute.js";
 import cookieParser from "cookie-parser";
+import { io } from "socket.io-client";
+import { redisClient } from "./utils/cache.js";
+
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const app = express();
 const port = 3000;
@@ -27,6 +31,18 @@ app.use("/", [
   walletRouter,
   gptRouter,
 ]);
+
+export const socket = io("ws://localhost:8080");
+
+socket.on("connect", function () {
+  console.log("Express connect to socket server...");
+});
+
+socket.on("connect_error", function (err) {
+  console.log(err);
+});
+
+redisClient.connect();
 
 app.listen(port, () => {
   console.log("Server is listening on port:3000...");
