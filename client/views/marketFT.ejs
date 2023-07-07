@@ -48,11 +48,12 @@
         <!-- Modal ChatGPT-->
         <div class="modal fade modal-gpt" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content modal-content-gpt">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">ChatGPT</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-gpt" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body modal-body-gpt">
                         <div class="image-container">
@@ -60,11 +61,13 @@
                         </div>
                         <span class="text">Waiting...</span>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer modal-footer-gpt">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control form-control-dark" placeholder="Send a message..."
-                                aria-label="Recipient's username" aria-describedby="button-addon2">
-                            <button class="btn btn-warning" type="button" id="button-addon2">Submit</button>
+                            <input type="text" class="form-control form-control-dark continue-gpt-input"
+                                placeholder="Send a message..." aria-label="Recipient's username"
+                                aria-describedby="button-addon2">
+                            <button class="btn btn-warning continue-gpt-btn" type="button"
+                                id="button-addon2">Submit</button>
                         </div>
                     </div>
                 </div>

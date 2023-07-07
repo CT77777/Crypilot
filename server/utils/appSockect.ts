@@ -40,10 +40,20 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("streaming", (content) => {
+  socket.on("streaming", (content, room) => {
     try {
       console.log(content);
-      socket.broadcast.emit("streaming", content); // send a message to specified room, room name must be the same type
+      socket.broadcast.to(room.toString()).emit("streaming", content); // send a message to specified room, room name must be the same type
+    } catch (error: any) {
+      const errorMessage = error.message;
+      console.log(errorMessage);
+    }
+  });
+
+  socket.on("streamingContinue", (content, room) => {
+    try {
+      console.log(content);
+      socket.broadcast.to(room.toString()).emit("streamingContinue", content); // send a message to specified room, room name must be the same type
     } catch (error: any) {
       const errorMessage = error.message;
       console.log(errorMessage);
@@ -61,5 +71,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(8080, () => {
-  console.log("Socket server is listening on port:8080");
+  console.log("Socket server is listening on port:8080...");
 });

@@ -53,6 +53,7 @@ export async function register(req: Request, res: Response) {
         publicAddress
       );
       res.cookie("JWT", jwt);
+      res.cookie("user_id", user_id);
       res.status(200).redirect(`/user/profile?email=${email}`);
     } else {
       throw new Error("This email has already been registered!");
@@ -92,6 +93,7 @@ export async function logIn(req: Request, res: Response) {
           publicAddress
         );
         res.cookie("JWT", jwt);
+        res.cookie("user_id", id);
         res.status(200).redirect(`/user/profile?email=${email}`);
       } else {
         throw new Error("password not correct");
