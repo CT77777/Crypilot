@@ -18,7 +18,7 @@ app.set("views", "../client/views");
 
 app.use(express.static("../client"));
 
-app.use(express.urlencoded({ extended: true })); // resolve form data into req.body
+app.use(express.urlencoded({ extended: true })); // resolve form data & body of request into req.body
 app.use(express.json());
 app.use(cookieParser());
 
