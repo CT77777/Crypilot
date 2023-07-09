@@ -57,7 +57,5 @@ export function decrypt(encrypted_private_key: string) {
   const decrypted = CryptoJS.AES.decrypt(encryptedPrivateKey, secretKey);
   const originalText = decrypted.toString(CryptoJS.enc.Utf8);
 
-  console.log("decrypted data: ", originalText);
-
   return originalText;
 }

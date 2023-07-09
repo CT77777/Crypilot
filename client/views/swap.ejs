@@ -4,6 +4,7 @@
 <head>
     <%- include("modules/head") %>
         <link rel="stylesheet" href="../css/dist/swap.css">
+        <link rel="stylesheet" href="../node_modules/izitoast/dist/css/iziToast.min.css">
 </head>
 
 <body>
@@ -33,6 +34,8 @@
                                             <div class="form-floating token-currency-form">
                                                 <input class="contract-address contract-address-token-currency"
                                                     type="text" name="contract-address" style="display: none">
+                                                <input class="cmc-id-token-currency cmc-id" type="text" name="cmc-id"
+                                                    style="display: none">
                                                 <input type="number" step="0.01" name="tokenAmount"
                                                     class="form-control form-control-dark amount-token"
                                                     id="floatingtTokenCurrencyAmount" placeholder="Amount" required>
@@ -90,6 +93,8 @@
                                             <div class="form-floating tokens-form">
                                                 <input class="contract-address contract-address-tokens" type="text"
                                                     name="contract-address" style="display: none">
+                                                <input class="cmc-id-tokens cmc-id" type="text" name="cmc-id"
+                                                    style="display: none">
                                                 <input type="number" step="0.01" name="tokenAmount"
                                                     class="form-control form-control-dark amount-token"
                                                     id="floatingtTokensAmount" placeholder="Amount" required>
@@ -109,7 +114,6 @@
                                             <button class="btn btn-warning w-100 py-2  rounded-5 btn-swap"
                                                 type="button">Swap</button>
                                         </div>
-
 
                                     </form>
                                 </main>
@@ -152,6 +156,8 @@
             <%- include("modules/bsJsCDN.ejs") %>
 
                 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+                <script src="../node_modules/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
                 <script type="module" src="../js/swap.js"></script>
 </body>
 

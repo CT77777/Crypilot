@@ -8,6 +8,7 @@ import {
 } from "../models/tradeModel.js";
 import { JWTPayload } from "jose";
 import { decrypt } from "../utils/createWallet.js";
+import { channel } from "../utils/producer.js";
 
 interface RequestWithPayload extends Request {
   payload: JWTPayload;
@@ -19,18 +20,19 @@ export function renderBuyPage(req: Request, res: Response) {
 }
 
 // buy ETH by fiat currency
-export async function buyETH(req: RequestWithPayload, res: Response) {
+export async function buyEth(req: RequestWithPayload, res: Response) {
   try {
     const { public_address: userWalletAddress, id: userId } = req.payload;
     const { ethAmount } = req.body;
-    const isSent = await sendETH(userWalletAddress as string, ethAmount);
-    await insertInventoryFt("", userId as number);
-    res.status(200).json({ isSent, ethAmount });
+
+    const task = { data: { userId, userWalletAddress, ethAmount } };
+
+    channel.sendToQueue("buyEth_Queue", Buffer.from(JSON.stringify(task)));
+
+    res.status(200).json({ txSending: true });
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .json({ message: "buy ETH failed", error: (error as Error).message });
+    res.status(500).json({ txSending: false, error: (error as Error).message });
   }
 }
 
@@ -42,60 +44,61 @@ export function renderSwapPage(req: Request, res: Response) {
 // swap ETH to ERC20 token
 export async function swapEthToErc20(req: RequestWithPayload, res: Response) {
   try {
-    const { tokenAddress, tokenAmount } = req.body;
+    const { tokenAddress, tokenAmount, tokenSymbol, tokenCmcId } = req.body;
     const { public_address: userWalletAddress, id: userId } = req.payload;
-    console.log("wallet", userWalletAddress);
 
-    //get encrypted private key from DB
-    const { private_key: encryptedPrivateKey } = await getPrivateKey(
-      (userWalletAddress as string).slice(2)
+    const task = {
+      data: {
+        userId,
+        userWalletAddress,
+        tokenAddress,
+        tokenAmount,
+        tokenSymbol,
+        tokenCmcId,
+      },
+    };
+
+    channel.sendToQueue(
+      "swapEthToErc20_Queue",
+      Buffer.from(JSON.stringify(task))
     );
 
-    //decrypt
-    const private_key = decrypt(encryptedPrivateKey);
-
-    await swapEthToToken(
-      tokenAddress,
-      tokenAmount,
-      private_key,
-      userWalletAddress as string
-    );
-    await insertInventoryFt(tokenAddress.slice(2), userId as number);
-    res.status(200).json({ tokenAddress, tokenAmount });
+    res.status(200).json({ txSending: true });
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .json({ message: "swap ETH failed", error: (error as Error).message });
+
+    res.status(500).json({ txSending: false, error: (error as Error).message });
   }
 }
 
 // swap ERC20 token to ETH
 export async function swapErc20ToEth(req: RequestWithPayload, res: Response) {
   try {
-    const { tokenAddress, tokenAmount } = req.body;
-    const { public_address: userWalletAddress } = req.payload;
-    console.log(userWalletAddress);
+    const { tokenAddress, tokenAmount, tokenSymbol, tokenCmcId } = req.body;
+    const { public_address: userWalletAddress, id: userId } = req.payload;
 
-    //get encrypted private key from DB
-    const { private_key: encryptedPrivateKey } = await getPrivateKey(
-      (userWalletAddress as string).slice(2)
+    const task = {
+      data: {
+        userId,
+        userWalletAddress,
+        tokenAddress,
+        tokenAmount,
+        tokenSymbol,
+        tokenCmcId,
+      },
+    };
+
+    console.log(task);
+
+    channel.sendToQueue(
+      "swapErc20ToEth_Queue",
+      Buffer.from(JSON.stringify(task))
     );
 
-    //decrypt
-    const private_key = decrypt(encryptedPrivateKey);
-
-    await swapTokenToEth(
-      tokenAddress,
-      tokenAmount,
-      private_key,
-      userWalletAddress as string
-    );
-    res.status(200).json({ tokenAddress, tokenAmount });
+    res.status(200).json({ txSending: true });
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .json({ message: "swap ETH failed", error: (error as Error).message });
+
+    res.status(500).json({ txSending: false, error: (error as Error).message });
   }
 }

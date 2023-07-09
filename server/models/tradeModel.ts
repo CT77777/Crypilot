@@ -1,6 +1,6 @@
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import dbPool from "./dbPool.js";
-import { OkPacket, RowDataPacket, FieldPacket } from "mysql2";
+import { RowDataPacket, FieldPacket } from "mysql2";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -15,9 +15,6 @@ const treasuryWallet = new ethers.Wallet(
 );
 
 const WETH_ADDRESS = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
-const DAI_ADDRESS = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
-const DAI_DECIMALS = 18;
-const SwapRouterV3Address = "0xE592427A0AEce92De3Edee1F18E0157C05861564";
 const SimpSwapAddress = process.env.SIMPLE_SWAP_ADDRESS;
 const feeTier = 3000;
 
@@ -42,10 +39,28 @@ export async function sendETH(user_wallet_address: string, eth_amount: string) {
     to: user_wallet_address,
     value: ethers.utils.parseEther(eth_amount),
   };
-  const txResponse = await treasuryWallet.sendTransaction(transaction);
-  console.log(txResponse);
 
-  return true;
+  try {
+    const txResponse = await treasuryWallet.sendTransaction(transaction);
+
+    setTimeout(async () => {
+      treasuryProvider.send("evm_mine", []);
+    }, 500);
+
+    const receipt = await txResponse.wait(2);
+
+    if (receipt.status === 0x1) {
+      console.log(`tx success`);
+      return true;
+    } else {
+      console.log(`tx failed`);
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+
+    return false;
+  }
 }
 
 // swap ETH to get exact FT(ERC20) amount
@@ -61,39 +76,65 @@ export async function swapEthToToken(
   );
   const userWallet = new ethers.Wallet(userPrivateKey, userProvider);
 
-  // const ethBalance = userProvider.getBalance(user_public_address);
-
   const weth = new ethers.Contract(WETH_ADDRESS, erc20Abi, userWallet);
-  const deposit = await weth.deposit({ value: ethers.utils.parseEther("10") });
-  await deposit.wait();
 
-  // approve SimpleSwap contract to transfer user's WETH
-  const approve = await weth.approve(
-    SimpSwapAddress,
-    ethers.utils.parseEther("10")
-  );
-  await approve.wait();
+  try {
+    const ethBalanceWei = await userProvider.getBalance(user_public_address);
+    const ethBalanceEther = ethers.utils.formatUnits(ethBalanceWei, 18);
 
-  const simpleSwap = new ethers.Contract(
-    SimpSwapAddress as string,
-    simpleSwapAbi,
-    userWallet
-  );
+    const depositValue = parseFloat(ethBalanceEther) - 1;
 
-  const amountOut = ethers.utils.parseEther(token_amount);
-  const amountInMaximum = ethers.utils.parseEther("10");
-  const swap = await simpleSwap.swapExactOutputSingle(
-    token_address,
-    amountOut,
-    amountInMaximum,
-    feeTier
-  );
-  await swap.wait();
+    // switch ETH to WETH
+    const deposit = await weth.deposit({
+      value: ethers.utils.parseEther(`${depositValue}`),
+    });
+    await deposit.wait();
 
-  const wethBalance = await weth.balanceOf(user_public_address);
-  if (wethBalance > 0) {
-    const withdraw = await weth.withdraw(wethBalance);
-    await withdraw.wait();
+    // approve SimpleSwap contract to transfer user's WETH
+    const approve = await weth.approve(
+      SimpSwapAddress,
+      ethers.utils.parseEther(`${depositValue}`)
+    );
+    await approve.wait();
+
+    const simpleSwap = new ethers.Contract(
+      SimpSwapAddress as string,
+      simpleSwapAbi,
+      userWallet
+    );
+
+    const amountOut = ethers.utils.parseEther(token_amount);
+    const amountInMaximum = ethers.utils.parseEther(`${depositValue}`);
+    const swap = await simpleSwap.swapExactOutputSingle(
+      token_address,
+      amountOut,
+      amountInMaximum,
+      feeTier
+    );
+    const receipt = await swap.wait();
+
+    const wethBalance = await weth.balanceOf(user_public_address);
+    if (wethBalance > 0) {
+      const withdraw = await weth.withdraw(wethBalance);
+      await withdraw.wait();
+    }
+
+    if (receipt.status === 0x1) {
+      console.log(`tx success`);
+      return true;
+    } else {
+      console.log(`tx failed`);
+      return false;
+    }
+  } catch (error) {
+    const wethBalance = await weth.balanceOf(user_public_address);
+    if (wethBalance > 0) {
+      const withdraw = await weth.withdraw(wethBalance);
+      await withdraw.wait();
+    }
+
+    console.log(error);
+    return false;
   }
 }
 
@@ -104,47 +145,58 @@ export async function swapTokenToEth(
   user_private_key: string,
   user_public_address: string
 ) {
-  console.log(token_address);
-  console.log(token_amount);
   const userPrivateKey = user_private_key;
   const userProvider = new ethers.providers.JsonRpcProvider(
     "http://localhost:8545"
   );
   const userWallet = new ethers.Wallet(userPrivateKey, userProvider);
 
-  // approve SimpleSwap contract to transfer user's ERC20 token
-  const er20 = new ethers.Contract(token_address, erc20Abi, userWallet);
-  const approve = await er20.approve(
-    SimpSwapAddress,
-    ethers.utils.parseEther(token_amount)
-  );
-  await approve.wait();
-
-  const simpleSwap = new ethers.Contract(
-    SimpSwapAddress as string,
-    simpleSwapAbi,
-    userWallet
-  );
-
-  const amountIn = ethers.utils.parseEther(token_amount);
-  const swap = await simpleSwap.swapExactInputSingle(
-    token_address,
-    amountIn,
-    feeTier
-  );
-  await swap.wait();
-
   const weth = new ethers.Contract(WETH_ADDRESS, erc20Abi, userWallet);
-  const wethBalance = await weth.balanceOf(user_public_address);
-  if (wethBalance > 0) {
-    const withdraw = await weth.withdraw(wethBalance);
-    await withdraw.wait();
+
+  try {
+    // approve SimpleSwap contract to transfer user's ERC20 token
+    const er20 = new ethers.Contract(token_address, erc20Abi, userWallet);
+    const approve = await er20.approve(
+      SimpSwapAddress,
+      ethers.utils.parseEther(token_amount)
+    );
+    await approve.wait();
+
+    const simpleSwap = new ethers.Contract(
+      SimpSwapAddress as string,
+      simpleSwapAbi,
+      userWallet
+    );
+
+    const amountIn = ethers.utils.parseEther(token_amount);
+    const swap = await simpleSwap.swapExactInputSingle(
+      token_address,
+      amountIn,
+      feeTier
+    );
+    const receipt = await swap.wait();
+
+    const wethBalance = await weth.balanceOf(user_public_address);
+    if (wethBalance > 0) {
+      const withdraw = await weth.withdraw(wethBalance);
+      await withdraw.wait();
+    }
+
+    if (receipt.status === 0x1) {
+      console.log(`tx success`);
+      return true;
+    } else {
+      console.log(`tx failed`);
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 }
 
 // get user private key
 export async function getPrivateKey(public_address: string) {
-  console.log(public_address);
   const results: [RowDataPacket[], FieldPacket[]] = await dbPool.query(
     `
     SELECT private_key FROM user_wallets WHERE public_address = ?
@@ -152,7 +204,6 @@ export async function getPrivateKey(public_address: string) {
     [public_address]
   );
 
-  console.log(results[0][0]);
   return results[0][0];
 }
 

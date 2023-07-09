@@ -1,9 +1,60 @@
 import * as logOut from "./modules/logOut.js";
-import { renderHeaderWalletAddress } from "./modules/getWallet.js";
-renderHeaderWalletAddress();
+import { renderUserInfo } from "./modules/userInfo.js";
 
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Buy";
+
+const userId = Cookies.get("user_id");
+
+const socket = io("wss://localhost:8080");
+socket.on("connect", () => {
+  console.log("browser client connect to socket server...");
+});
+socket.emit("join room", userId);
+socket.on("buyEthStatus", (txResult) => {
+  const { success, token, amount } = txResult;
+  if (success) {
+    // modalDialogContent.textContent = `Buy ${amount} ${token} successfully`;
+    // triggerBtn.click();
+
+    iziToast.show({
+      theme: "dark",
+      image: `https://s2.coinmarketcap.com/static/img/coins/64x64/${1027}.png`,
+      imageWidth: 36,
+      iconUrl: "../images/check-mark.png",
+      title: `Buy ${token} ${parseFloat(amount).toFixed(2)}`,
+      titleSize: 18,
+      message: "successfully",
+      messageSize: 18,
+      position: "topCenter",
+      maxWidth: 500,
+      timeout: 5000,
+      pauseOnHover: true,
+      drag: true,
+      displayMode: 2,
+    });
+  } else {
+    // modalDialogContent.textContent = `Buy ${amount} ${token} unsuccessfully`;
+    // triggerBtn.click();
+
+    iziToast.show({
+      theme: "dark",
+      image: `https://s2.coinmarketcap.com/static/img/coins/64x64/${1027}.png`,
+      imageWidth: 36,
+      iconUrl: `../images/error.png`,
+      title: `Buy ${token} ${amount}`,
+      titleSize: 18,
+      message: "unsuccessfully",
+      messageSize: 18,
+      position: "topCenter",
+      maxWidth: 500,
+      timeout: 5000,
+      pauseOnHover: true,
+      drag: true,
+      displayMode: 2,
+    });
+  }
+});
 
 function addFiatCurrencySelection() {
   const fiatCurrency = document.querySelectorAll(".fiat-currency");
@@ -79,9 +130,40 @@ function addBuyingFunction() {
       }),
     });
     const result = await response.json();
-    modalDialogContent.textContent = `Buy successfully! ETH amount ${result.ethAmount}`;
 
-    triggerBtn.click();
+    if (result.txSending) {
+      iziToast.show({
+        theme: "dark",
+        iconUrl: "../images/check-mark.png",
+        title: "Send transaction",
+        titleSize: 18,
+        message: "successfully",
+        messageSize: 18,
+        position: "topCenter",
+        maxWidth: 500,
+        timeout: 3000,
+        pauseOnHover: true,
+        drag: true,
+        displayMode: 2,
+      });
+    } else {
+      console.log(result.error);
+
+      iziToast.show({
+        theme: "dark",
+        iconUrl: "../images/error.png",
+        title: "Send transaction",
+        titleSize: 18,
+        message: "unsuccessfully",
+        messageSize: 18,
+        position: "topCenter",
+        maxWidth: 500,
+        timeout: 3000,
+        pauseOnHover: true,
+        drag: true,
+        displayMode: 2,
+      });
+    }
   });
 }
 
@@ -108,6 +190,7 @@ function addTokenConvert() {
 }
 
 function main() {
+  renderUserInfo();
   addFiatCurrencySelection();
   addTokenCurrencySelection();
   addBuyingFunction();

@@ -1,6 +1,5 @@
 import * as logOut from "./modules/logOut.js";
-import { renderHeaderWalletAddress } from "./modules/getWallet.js";
-renderHeaderWalletAddress();
+import { renderUserInfo } from "./modules/userInfo.js";
 
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Wallet";
@@ -47,4 +46,9 @@ async function renderInventory() {
   inventoryLists.innerHTML = inventoryListsHTMLs;
 }
 
-renderInventory();
+async function main() {
+  renderUserInfo();
+  renderInventory();
+}
+
+main();

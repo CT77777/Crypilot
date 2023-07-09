@@ -1,5 +1,4 @@
 import * as logOut from "./modules/logOut.js";
+import { renderUserInfo } from "./modules/userInfo.js";
 
-const walletAddress = document.querySelector(".wallet-address").textContent;
-
-Cookies.set("wallet", walletAddress);
+renderUserInfo();

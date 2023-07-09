@@ -17,10 +17,10 @@ contract SimpleSwap {
     }
 
   function swapExactInputSingle(address tokenAddressIn, uint256 amountIn, uint24 feeTier) external returns (uint256 amountOut) {
-    // Transfer the specified amount of WETH9 to this contract.
+    // Transfer the specified amount of token-in to this contract.
     TransferHelper.safeTransferFrom(tokenAddressIn, msg.sender, address(this), amountIn);
 
-    // Approve the router to spend WETH9.
+    // Approve the router to spend token-in.
     TransferHelper.safeApprove(tokenAddressIn, address(swapRouter), amountIn);  
 
     ISwapRouter.ExactInputSingleParams memory params =
