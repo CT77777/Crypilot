@@ -60,6 +60,36 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("buyEthStatus", (txResult, room) => {
+    try {
+      console.log(txResult);
+      socket.broadcast.to(room.toString()).emit("buyEthStatus", txResult);
+    } catch (error: any) {
+      const errorMessage = error.message;
+      console.log(errorMessage);
+    }
+  });
+
+  socket.on("swapEthToStatus", (txResult, room) => {
+    try {
+      console.log(txResult);
+      socket.broadcast.to(room.toString()).emit("swapEthToStatus", txResult);
+    } catch (error: any) {
+      const errorMessage = error.message;
+      console.log(errorMessage);
+    }
+  });
+
+  socket.on("swapTokenToStatus", (txResult, room) => {
+    try {
+      console.log(txResult);
+      socket.broadcast.to(room.toString()).emit("swapTokenToStatus", txResult);
+    } catch (error: any) {
+      const errorMessage = error.message;
+      console.log(errorMessage);
+    }
+  });
+
   socket.on("disconnect", () => {
     try {
       console.log(`one connection disconnected... socket id is ${socket.id}`);

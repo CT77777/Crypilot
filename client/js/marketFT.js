@@ -1,6 +1,5 @@
 import * as logOut from "./modules/logOut.js";
-import { renderHeaderWalletAddress } from "./modules/getWallet.js";
-renderHeaderWalletAddress();
+import { renderUserInfo } from "./modules/userInfo.js";
 
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Market";
@@ -343,6 +342,7 @@ function addEventListenerCloseChatBtn() {
 }
 
 async function main() {
+  renderUserInfo();
   await getMarketFTList();
   addEventListenerContinueChatBtn();
   addEventListenerCloseChatBtn();

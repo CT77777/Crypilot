@@ -27,13 +27,19 @@
                             <!-- personal main -->
                             <div class="container container-main">
                                 <main class="">
-                                    <span class="fs-2">Welcome to Web3! <%=name %>
+                                    <span class="fs-2">
+                                        <%=name %>
                                     </span>
-                                    <img src=<%=picture %> >
-                                    <span class="wallet-address fs-4">Wallet Address: <%=public_address %>
-                                    </span>
-                                    <span class="fs-4">ETH Balance: <%=userEthBalance %>
-                                    </span>
+                                    <img class="avatar" src=<%=picture %> >
+                                    <div class="eth">
+                                        <img class="eth-image" src="../images/ethereum.png">
+                                        <span class="fs-1">
+                                            <%=userEthBalance %> ETH
+                                        </span>
+                                        <span class="fs-5">
+                                            $<%=(userEthBalance*1900).toFixed(2) %> USD
+                                        </span>
+                                    </div>
                                 </main>
                             </div>
 
@@ -50,6 +56,9 @@
             <!-- BS v5.3 CDN JS-->
             <%- include("modules/bsJsCDN.ejs") %>
 
+                <script>
+                    localStorage.setItem('userInfo', `<%- JSON.stringify(userInfo) %>`);
+                </script>
                 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
                 <script type="module" src="../js/profile.js"></script>
 </body>

@@ -12,5 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "sass": "^1.63.6"
+  },
+  "dependencies": {
+    "izitoast": "^1.4.0"
   }
 }

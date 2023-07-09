@@ -69,7 +69,6 @@ export async function register(req: Request, res: Response) {
 // user log in
 export async function logIn(req: Request, res: Response) {
   try {
-    console.log(req.body);
     const { email: email, password: passwordInput } = req.body;
     const { id, password, name, picture, public_address } =
       await searchUserByEmail(email);
@@ -116,13 +115,19 @@ export async function renderUserProfilePage(
 
   const userEthBalance = await getUserEthBalance(public_address as string);
 
+  const userInfo = {
+    name: name,
+    picture: "../images/hacker.png",
+    public_address: public_address,
+  };
+
   const data = {
     name: name,
     picture: "../images/hacker.png",
     public_address: public_address,
     userEthBalance: parseFloat(userEthBalance).toFixed(2),
+    userInfo: userInfo,
   };
-  console.log(data);
 
   res.status(200).render("profile", data);
 }

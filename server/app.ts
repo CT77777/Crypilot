@@ -8,7 +8,7 @@ import gptRouter from "./routes/gptRoute.js";
 import cookieParser from "cookie-parser";
 import { io } from "socket.io-client";
 import { redisClient } from "./utils/cache.js";
-import fs from "fs";
+import { channel, assertQueues } from "./utils/producer.js";
 
 const app = express();
 const port = 3000;
@@ -31,6 +31,7 @@ app.use("/", [
   gptRouter,
 ]);
 
+// connect socket
 export const socket = io("wss://localhost:8080", {
   rejectUnauthorized: false,
 });
@@ -43,7 +44,11 @@ socket.on("connect_error", function (err) {
   console.log(err);
 });
 
+// connect Redis
 redisClient.connect();
+
+// connect RabbitMQ
+assertQueues(channel);
 
 app.listen(port, () => {
   console.log("Server is listening on port:3000...");

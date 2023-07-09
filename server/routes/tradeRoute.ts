@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import {
   renderBuyPage,
-  buyETH,
+  buyEth,
   renderSwapPage,
   swapEthToErc20,
   swapErc20ToEth,
@@ -24,7 +24,7 @@ router
   .post([
     (req: Request, res: Response, next: NextFunction) =>
       authenticate(req as RequestWithPayload, res, next),
-    (req: Request, res: Response) => buyETH(req as RequestWithPayload, res),
+    (req: Request, res: Response) => buyEth(req as RequestWithPayload, res),
   ]);
 
 // render swapping ETH page

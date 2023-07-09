@@ -1,6 +1,5 @@
 import * as logOut from "./modules/logOut.js";
-import { renderHeaderWalletAddress } from "./modules/getWallet.js";
-renderHeaderWalletAddress();
+import { renderUserInfo } from "./modules/userInfo.js";
 
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Tracing";
@@ -183,6 +182,7 @@ function addEventListenerIntroBtn() {
 }
 
 async function main() {
+  renderUserInfo();
   await getTracingListFT();
   addEventListenerIntroBtn();
   setInterval(getTracingListFT, 60000);
