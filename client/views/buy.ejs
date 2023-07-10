@@ -5,6 +5,15 @@
     <%- include("modules/head") %>
         <link rel="stylesheet" href="../css/dist/buy.css">
         <link rel="stylesheet" href="../node_modules/izitoast/dist/css/iziToast.min.css">
+        <style>
+            .tpfield {
+                height: 40px;
+                width: 300px;
+                border: 1px solid gray;
+                margin: 5px 0;
+                padding: 5px;
+            }
+        </style>
 </head>
 
 <body>
@@ -122,8 +131,8 @@
                                             </div>
                                         </div>
 
-                                        <button class="btn btn-warning w-100 py-2 buy-token-btn rounded-5"
-                                            type="button">Buy</button>
+                                        <button class="btn btn-warning w-100 py-2 buy-token-btn rounded-5" type="button"
+                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop-tappay">Buy</button>
 
                                     </form>
                                 </main>
@@ -161,15 +170,20 @@
         </button>
 
         <!-- BS login modal -->
-        <%- include("modules/logInModal") %>
+        <%- include("modules/logInModal.ejs") %>
 
-            <!-- BS v5.3 CDN JS-->
-            <%- include("modules/bsJsCDN.ejs") %>
+            <!-- TapPay modal -->
+            <%- include("modules/tapPay.ejs") %>
 
-                <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-                <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-                <script src="../node_modules/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
-                <script type="module" src="../js/buy.js"></script>
+                <!-- BS v5.3 CDN JS-->
+                <%- include("modules/bsJsCDN.ejs") %>
+
+                    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+                    <script src="../node_modules/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
+                    <script type="module" src="../js/buy.js"></script>
+                    <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.14.0"></script>
+                    <script type="module" src="../js/modules/tapPay.js"></script>
 </body>
 
 </html>
