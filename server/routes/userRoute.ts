@@ -3,6 +3,7 @@ import {
   register,
   logIn,
   renderUserProfilePage,
+  retrievePrivateKey,
 } from "../controllers/userController.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import { JWTPayload } from "jose";
@@ -27,6 +28,16 @@ router
       authenticate(req as RequestWithPayload, res, next),
     (req: Request, res: Response) =>
       renderUserProfilePage(req as RequestWithPayload, res),
+  ]);
+
+// retrieve user's secret key
+router
+  .route("/user/private")
+  .get([
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticate(req as RequestWithPayload, res, next),
+    (req: Request, res: Response) =>
+      retrievePrivateKey(req as RequestWithPayload, res),
   ]);
 
 export default router;

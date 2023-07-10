@@ -91,11 +91,14 @@
         <!-- BS login modal -->
         <%- include("modules/logInModal") %>
 
-            <!-- BS v5.3 CDN JS-->
-            <%- include("modules/bsJsCDN.ejs") %>
+            <!-- BS retrieve modal -->
+            <%- include("modules/retrieveKeyModal.ejs") %>
 
-                <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-                <script type="module" src="../js/wallet.js"></script>
+                <!-- BS v5.3 CDN JS-->
+                <%- include("modules/bsJsCDN.ejs") %>
+
+                    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                    <script type="module" src="../js/wallet.js"></script>
 </body>
 
 </html>

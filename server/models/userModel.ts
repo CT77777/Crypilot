@@ -55,3 +55,100 @@ export async function searchUserByEmail(email: string) {
 
   return results[0][0];
 }
+
+// get user private key
+export async function getPrivateKey(public_address: string) {
+  const results: [RowDataPacket[], FieldPacket[]] = await dbPool.query(
+    `
+    SELECT private_key FROM user_wallets WHERE public_address = ?
+  `,
+    [public_address]
+  );
+
+  return results[0][0];
+}
+
+//delete user's secret key from DB
+export async function removeUserPrivateKey(public_address: string) {
+  try {
+    await dbPool.query(
+      `
+      DELETE FROM user_wallets
+      WHERE public_address = ?
+    `,
+      [public_address]
+    );
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+//delete user's tracing FTs from DB
+export async function removeAllFavoriteFT(user_id: number) {
+  try {
+    await dbPool.query(
+      `
+      DELETE FROM user_favorite_fts
+      WHERE user_id = ?
+    `,
+      [user_id]
+    );
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+//delete user's inventory FTs from DB
+export async function removeAllInventoryFT(user_id: number) {
+  try {
+    await dbPool.query(
+      `
+      DELETE FROM user_inventory_fts
+      WHERE user_id = ?
+    `,
+      [user_id]
+    );
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+//delete user's provider from DB
+export async function removeAllProvider(user_id: number) {
+  try {
+    await dbPool.query(
+      `
+      DELETE FROM user_providers
+      WHERE user_id = ?
+    `,
+      [user_id]
+    );
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+//delete user's information from DB
+export async function removeUserInfo(user_id: number) {
+  try {
+    await dbPool.query(
+      `
+      DELETE FROM users
+      WHERE id = ?
+    `,
+      [user_id]
+    );
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
