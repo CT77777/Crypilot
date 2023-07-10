@@ -1,0 +1,43 @@
+<div class="modal fade modal-sheet p-4 py-md-5" tabindex="-1" role="dialog" id="staticBackdrop-tappay"
+    data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h1 class="fw-bold mb-0 fs-2" id="staticBackdropLabel">TapPay</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-5 pt-0">
+                <form class="" action="/user/login" method="POST">
+                    <div class="form-floating mb-3">
+                        <!-- <input type="email" name="email" class="form-control form-control-dark rounded-4"
+                            id="floatingInput-login" placeholder="name@example.com" required> -->
+                        <div class="tpfield tappay-field-focus form-control form-control-dark rounded-4"
+                            id="card-number">
+                        </div>
+                        <label class="tpfield-lable" for="card-number">Credit Card Number</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <!-- <input type="password" name="password" class="form-control form-control-dark rounded-4"
+                            id="floatingPassword-login" placeholder="Password" required> -->
+                        <div class="tpfield tappay-field-focus form-control form-control-dark  rounded-4"
+                            id="card-expiration-date">
+                        </div>
+                        <label class="tpfield-lable" for="card-expiration-date">Valid Date</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <!-- <input type="password" name="password" class="form-control form-control-dark rounded-4"
+                            id="floatingPassword-login" placeholder="Password" required> -->
+                        <div class="tpfield tappay-field-focus form-control form-control-dark rounded-4" id="card-ccv">
+                        </div>
+                        <label class="tpfield-lable" for="card-ccv">Security Number</label>
+                    </div>
+                    <button class="w-100 mb-2 btn btn-lg rounded-4 btn-warning btn-confirm" type="submit"
+                        data-bs-dismiss="modal">Confirm</button>
+                    <small class="text-body-secondary">By clicking Confirm, you agree to the terms of
+                        use.</small>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
