@@ -93,7 +93,7 @@ TPDirect.card.setup({
     },
     // style focus state
     ":focus": {
-      // 'color': 'black'
+      // color: "black",
     },
     // style valid state
     ".valid": {
@@ -107,7 +107,7 @@ TPDirect.card.setup({
     // Note that these apply to the iframe, not the root window.
     "@media screen and (max-width: 400px)": {
       input: {
-        color: "orange",
+        color: "#FFC107",
       },
     },
   },
@@ -193,3 +193,47 @@ const submitButton = document.querySelector(".btn-confirm");
 submitButton.addEventListener("click", async (event) => {
   onSubmit(event);
 });
+
+// const iframe = document.querySelector("iframe");
+// console.log(iframe);
+
+// const iframeContentDocument =
+//   iframe.contentWindow.document || iframe.contentDocument;
+// console.log(iframeContentDocument);
+
+// console.log(iframe.innerHTML);
+
+// const element = iframeContentDocument.getElementById("card-number-form");
+// console.log(element);
+
+// element.style.backgroundColor = "red";
+
+// iframe.onload = function () {
+//   const iframeContentDocument =
+//     iframe.contentDocument || iframe.contentWindow.document;
+//   // Now you can access the DOM elements within the iframe
+//   const element = iframeContentDocument.getElementById("card-number-form");
+
+//   console.log(element);
+//   element.style.backgroundColor = "red";
+// };
+
+// function iframe() {
+//   const iframe = document.querySelector("iframe");
+//   console.log(iframe);
+
+//   const iframeContentDocument =
+//     iframe.contentDocument || iframe.contentWindow.document;
+//   console.log(iframeContentDocument);
+
+//   const cssLink = document.createElement("link");
+//   cssLink.href = "/css/dist/iframe.css";
+//   cssLink.rel = "stylesheet";
+//   cssLink.type = "text/css";
+
+//   iframeContentDocument.head.appendChild(cssLink);
+// }
+
+// setTimeout(() => {
+//   iframe();
+// }, 5000);
