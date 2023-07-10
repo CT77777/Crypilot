@@ -189,7 +189,7 @@ function onSubmit(event) {
   });
 }
 
-const submitButton = document.querySelector(".btn-confirm");
+const submitButton = document.querySelector(".btn-confirm-buy");
 submitButton.addEventListener("click", async (event) => {
   onSubmit(event);
 });

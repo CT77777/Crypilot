@@ -6,6 +6,7 @@
 @import "./modules/header.scss";
 @import "./modules/footer.scss";
 @import "./modules/RWD.scss";
+@import "./modules/retrieveKey.scss";
 
 .container-main {
   display: flex;
@@ -92,7 +93,7 @@
 }
 
 .tpfield {
-  background-color: white;
+  background: white;
 }
 
 .tappay-field-focus {

@@ -4,12 +4,19 @@ import {
   insetProvider,
   insertWallet,
   searchUserByEmail,
+  getPrivateKey,
+  removeUserPrivateKey,
+  removeAllFavoriteFT,
+  removeAllInventoryFT,
+  removeAllProvider,
+  removeUserInfo,
 } from "../models/userModel.js";
 import { getUserEthBalance } from "../models/walletModel.js";
 import bcrypt from "bcrypt";
 import { createJWT } from "../utils/createJWT.js";
 import { createWallet, encrypt } from "../utils/createWallet.js";
 import { JWTPayload } from "jose";
+import { decrypt } from "../utils/createWallet.js";
 
 interface RequestWithPayload extends Request {
   payload: JWTPayload;
@@ -130,4 +137,62 @@ export async function renderUserProfilePage(
   };
 
   res.status(200).render("profile", data);
+}
+
+// retrieve user's secret key
+export async function retrievePrivateKey(
+  req: RequestWithPayload,
+  res: Response
+) {
+  try {
+    const { public_address: userWalletAddress, id: userId } = req.payload;
+
+    const { private_key: encryptedPrivateKey } = await getPrivateKey(
+      (userWalletAddress as string).slice(2)
+    );
+
+    //decrypt
+    const private_key = decrypt(encryptedPrivateKey);
+    console.log(private_key);
+
+    //delete user's tracing FTs from DB
+    const isRemovedFavoriteFts = await removeAllFavoriteFT(userId as number);
+    if (!isRemovedFavoriteFts) {
+      throw new Error();
+    }
+
+    //delete user's inventory FTs from DB
+    const isRemovedInventoryFts = await removeAllInventoryFT(userId as number);
+    if (!isRemovedInventoryFts) {
+      throw new Error();
+    }
+
+    const isRemovedUserProviders = removeAllProvider(userId as number);
+    if (!isRemovedUserProviders) {
+      throw new Error();
+    }
+
+    //delete user's secret key from DB
+    const isRemovedPrivateKey = await removeUserPrivateKey(
+      (userWalletAddress as string).slice(2)
+    );
+    if (!isRemovedPrivateKey) {
+      throw new Error();
+    }
+
+    //delete user's information from DB
+    const isRemovedUserInfo = await removeUserInfo(userId as number);
+    if (!isRemovedUserInfo) {
+      throw new Error();
+    }
+
+    res.status(200).json({ success: true, private_key });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Retrieve private key failed",
+      error: (error as Error).message,
+    });
+  }
 }

@@ -1,5 +1,6 @@
 import * as logOut from "./modules/logOut.js";
 import { renderUserInfo } from "./modules/userInfo.js";
+import * as retrieveKey from "./modules/retrieveKey.js";
 
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Market";
