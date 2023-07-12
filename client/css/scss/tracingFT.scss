@@ -60,3 +60,39 @@
     }
   }
 }
+
+.modal-gpt {
+  .modal-body-gpt {
+    display: flex;
+
+    .image-container {
+      display: flex;
+      flex-direction: column;
+      margin-right: 10px;
+      height: 100%;
+
+      img {
+        align-self: flex-start;
+        width: 36px;
+        height: 36px;
+      }
+    }
+  }
+
+  .modal-body-gpt-continue {
+    display: flex;
+
+    .image-container {
+      display: flex;
+      flex-direction: column;
+      margin-right: 10px;
+      height: 100%;
+
+      img {
+        align-self: flex-start;
+        width: 36px;
+        height: 36px;
+      }
+    }
+  }
+}

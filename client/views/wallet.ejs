@@ -46,7 +46,7 @@
         </div>
 
         <!-- Modal ChatGPT-->
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        <!-- <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
@@ -63,7 +63,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Modal Tracing-->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -91,14 +91,17 @@
         <!-- BS login modal -->
         <%- include("modules/logInModal") %>
 
-            <!-- BS retrieve modal -->
-            <%- include("modules/retrieveKeyModal.ejs") %>
+            <!-- BS maintenance modal -->
+            <%- include("modules/maintenanceModal.ejs") %>
 
-                <!-- BS v5.3 CDN JS-->
-                <%- include("modules/bsJsCDN.ejs") %>
+                <!-- BS retrieve modal -->
+                <%- include("modules/retrieveKeyModal.ejs") %>
 
-                    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-                    <script type="module" src="../js/wallet.js"></script>
+                    <!-- BS v5.3 CDN JS-->
+                    <%- include("modules/bsJsCDN.ejs") %>
+
+                        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                        <script type="module" src="../js/wallet.js"></script>
 </body>
 
 </html>
