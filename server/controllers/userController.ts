@@ -10,6 +10,8 @@ import {
   removeAllInventoryFT,
   removeAllProvider,
   removeUserInfo,
+  getSecondAuthenticationSecret,
+  updateSecondAuthenticationSecret,
 } from "../models/userModel.js";
 import { getUserEthBalance } from "../models/walletModel.js";
 import bcrypt from "bcrypt";
@@ -17,6 +19,7 @@ import { createJWT } from "../utils/createJWT.js";
 import { createWallet, encrypt } from "../utils/createWallet.js";
 import { JWTPayload } from "jose";
 import { decrypt } from "../utils/createWallet.js";
+import { generateSecret, generateQRcode, verifyToken } from "../utils/2FA.js";
 
 interface RequestWithPayload extends Request {
   payload: JWTPayload;
@@ -51,13 +54,14 @@ export async function register(req: Request, res: Response) {
       await insertWallet(user_id, publicAddress.slice(2), encryptedPrivateKey);
 
       console.log(publicAddress);
-      const { jwt, access_expired } = await createJWT(
+      const { jwt } = await createJWT(
         provider,
         user_id,
         email,
         username,
         picture,
-        publicAddress
+        publicAddress,
+        false
       );
       res.cookie("JWT", jwt);
       res.cookie("user_id", user_id);
@@ -76,11 +80,22 @@ export async function register(req: Request, res: Response) {
 // user log in
 export async function logIn(req: Request, res: Response) {
   try {
-    const { email: email, password: passwordInput } = req.body;
-    const { id, password, name, picture, public_address } =
-      await searchUserByEmail(email);
+    const { email: email, password: passwordInput } = req.body.data;
+    const {
+      id,
+      password,
+      name,
+      picture,
+      public_address,
+      second_authentication_secret,
+    } = await searchUserByEmail(email);
+
     if (id === undefined) {
-      throw Error("This email hasn't been registered!");
+      res
+        .status(400)
+        .json({ error: { message: "This email hasn't been registered!" } });
+
+      return;
     } else {
       const compare = await new Promise((resolve, reject) => {
         bcrypt.compare(passwordInput, password, (err, result) => {
@@ -88,28 +103,126 @@ export async function logIn(req: Request, res: Response) {
         });
       });
 
-      if (compare) {
+      if (compare && second_authentication_secret !== null) {
+        res.status(200).json({ data: { second_FA: true } });
+
+        return;
+      } else if (compare === false) {
+        res.status(400).json({ error: { message: "Password not correct" } });
+
+        return;
+      } else if (second_authentication_secret === null) {
         const publicAddress = `0x${public_address}`;
-        const { jwt, access_expired } = await createJWT(
+        const { jwt } = await createJWT(
           "native",
           id,
           email,
           name,
           picture,
-          publicAddress
+          publicAddress,
+          false
         );
         res.cookie("JWT", jwt);
         res.cookie("user_id", id);
-        res.status(200).redirect(`/user/profile?email=${email}`);
-      } else {
-        throw new Error("password not correct");
+        res
+          .status(200)
+          .json({ data: { redirect: `/user/profile?email=${email}` } });
+
+        return;
       }
     }
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .json({ message: "Login failed", error: (error as Error).message });
+    res.status(500).json({
+      error: { message: "Something wrong on server side" },
+    });
+  }
+}
+
+// user 2fa set up
+export async function setSecondAuthentication(
+  req: RequestWithPayload,
+  res: Response
+) {
+  try {
+    const { email } = req.payload;
+    const { second_authentication_secret: secret, error: error } =
+      await getSecondAuthenticationSecret(email as string);
+
+    if (error) {
+      throw new Error("interact with DB failed");
+    }
+
+    if (secret !== null) {
+      res.status(400).json({ error: { message: "Already set up 2FA" } });
+      return;
+    }
+
+    const newSecret = generateSecret();
+    const newSecretASCII = newSecret.ascii;
+
+    await updateSecondAuthenticationSecret(newSecretASCII, email as string);
+
+    const newQRcode = await generateQRcode(newSecret);
+
+    res.status(200).json({ data: { QRcode: newQRcode } });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      error: { message: "something go wrong when server setting up 2FA" },
+    });
+  }
+}
+
+// user 2fa verify
+export async function verifySecondAuthentication(req: Request, res: Response) {
+  try {
+    const { email, token } = req.body.data;
+    const {
+      id,
+      name,
+      picture,
+      public_address,
+      second_authentication_secret: secret,
+    } = await searchUserByEmail(email);
+
+    if (secret === null || secret === undefined) {
+      res.status(400).json({ error: { message: "Haven't set up 2FA" } });
+      return;
+    }
+
+    const isVerified = await verifyToken(secret, "ascii", token);
+
+    if (isVerified) {
+      const publicAddress = `0x${public_address}`;
+      const { jwt } = await createJWT(
+        "native",
+        id,
+        email,
+        name,
+        picture,
+        publicAddress,
+        isVerified
+      );
+      res.cookie("JWT", jwt);
+      res.cookie("user_id", id);
+      res
+        .status(200)
+        .json({ data: { redirect: `/user/profile?email=${email}` } });
+
+      return;
+    } else {
+      res.status(400).json({ error: { message: "Not valid token" } });
+
+      return;
+    }
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      error: { message: "something go wrong when server verifies token" },
+    });
   }
 }
 
@@ -150,6 +263,10 @@ export async function retrievePrivateKey(
     const { private_key: encryptedPrivateKey } = await getPrivateKey(
       (userWalletAddress as string).slice(2)
     );
+
+    if (encryptedPrivateKey === "0") {
+      throw new Error("interact with DB failed");
+    }
 
     //decrypt
     const private_key = decrypt(encryptedPrivateKey);

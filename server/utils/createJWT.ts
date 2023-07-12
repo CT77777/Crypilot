@@ -9,7 +9,8 @@ export async function createJWT(
   email: string,
   name: string,
   picture: string,
-  public_address: string
+  public_address: string,
+  second_FA: boolean
 ) {
   const secret_key = process.env.JWT_SECRET_KEY;
   const secret = new TextEncoder().encode(secret_key);
@@ -22,6 +23,7 @@ export async function createJWT(
     name: name,
     picture: picture,
     public_address: public_address,
+    second_FA: second_FA,
   })
     .setProtectedHeader(header)
     .setIssuedAt()

@@ -1,6 +1,11 @@
 import dbPool from "./dbPool.js";
 import { OkPacket, RowDataPacket, FieldPacket } from "mysql2";
 
+interface SecondAuthenticationSecret {
+  second_authentication_secret?: string;
+  error?: string;
+}
+
 export async function insertUser(
   email: string,
   password: string,
@@ -45,11 +50,11 @@ export async function insertWallet(
 export async function searchUserByEmail(email: string) {
   const results: [RowDataPacket[], FieldPacket[]] = await dbPool.query(
     `
-        SELECT users.id, password, name, picture, public_address FROM users
-        INNER JOIN user_wallets
-        ON users.id = user_wallets.user_id
-        WHERE email = ?
-    `,
+          SELECT users.id, password, name, picture, public_address, second_authentication_secret FROM users
+          INNER JOIN user_wallets
+          ON users.id = user_wallets.user_id
+          WHERE email = ?
+      `,
     [email]
   );
 
@@ -58,14 +63,19 @@ export async function searchUserByEmail(email: string) {
 
 // get user private key
 export async function getPrivateKey(public_address: string) {
-  const results: [RowDataPacket[], FieldPacket[]] = await dbPool.query(
-    `
-    SELECT private_key FROM user_wallets WHERE public_address = ?
-  `,
-    [public_address]
-  );
+  try {
+    const results: [RowDataPacket[], FieldPacket[]] = await dbPool.query(
+      `
+      SELECT private_key FROM user_wallets WHERE public_address = ?
+    `,
+      [public_address]
+    );
 
-  return results[0][0];
+    return results[0][0];
+  } catch (error) {
+    console.log(error);
+    return { private_key: "0" };
+  }
 }
 
 //delete user's secret key from DB
@@ -149,6 +159,48 @@ export async function removeUserInfo(user_id: number) {
     return true;
   } catch (error) {
     console.log(error);
+    return false;
+  }
+}
+
+export async function getSecondAuthenticationSecret(
+  email: string
+): Promise<SecondAuthenticationSecret> {
+  try {
+    const results: [RowDataPacket[], FieldPacket[]] = await dbPool.query(
+      `
+      SELECT second_authentication_secret FROM users
+      WHERE email = ?
+    `,
+      [email]
+    );
+
+    return results[0][0] as SecondAuthenticationSecret;
+  } catch (error) {
+    console.log(error);
+
+    return { error: "error" };
+  }
+}
+
+export async function updateSecondAuthenticationSecret(
+  secret: string,
+  email: string
+) {
+  try {
+    await dbPool.query(
+      `
+      UPDATE users
+      SET second_authentication_secret = ?
+      WHERE email = ?
+    `,
+      [secret, email]
+    );
+
+    return true;
+  } catch (error) {
+    console.log(error);
+
     return false;
   }
 }

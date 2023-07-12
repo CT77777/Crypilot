@@ -10,28 +10,75 @@
             <div class="modal-body p-5 pt-0">
                 <form class="" action="/user/login" method="POST">
                     <div class="form-floating mb-3">
-                        <input type="email" name="email" class="form-control form-control-dark rounded-4"
+                        <input type="email" name="email" class="form-control form-control-dark rounded-4 email-login"
                             id="floatingInput-login" placeholder="name@example.com" required>
                         <label for="floatingInput-login">Email address</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="password" name="password" class="form-control form-control-dark rounded-4"
-                            id="floatingPassword-login" placeholder="Password" required>
+                        <input type="password" name="password"
+                            class="form-control form-control-dark rounded-4 password-login" id="floatingPassword-login"
+                            placeholder="Password" required>
                         <label for="floatingPassword-login">Password</label>
                     </div>
-                    <button class="w-100 mb-2 btn btn-lg rounded-4 btn-warning" type="submit">Log
+                    <button class="w-100 mb-2 btn btn-lg rounded-4 btn-warning btn-login" type="button">Log
                         in</button>
                     <small class="text-body-secondary">By clicking Log in, you agree to the terms of
                         use.</small>
                     <hr class="my-4">
                     <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
-                    <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="submit">
+                    <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
                         <svg class="bi me-1" width="16" height="16">
                             <use xlink:href="#facebook"></use>
                         </svg>
                         Log in with Facebook
                     </button>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Button trigger 2FA-verify modal -->
+<button type="button" class="btn btn-primary btn-trigger-2fa-verify" data-bs-toggle="modal"
+    data-bs-target="#staticBackdrop-2fa-verify" style="display: none;">
+</button>
+
+<!-- Modal 2FA-verify -->
+<div class="modal fade modal-2fa-verify" id="staticBackdrop-2fa-verify" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Security Authentication</h1>
+                <button type="button" class="btn-close-right-top btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img class="img-2fa-verify" src="../../images/lock.png">
+                <div class="input-2fa">
+                    <div class="input-2fa-wrapper">
+                        <input class="input-2fa-wrapper-box" type="number" maxlength="1" value="">
+                    </div>
+                    <div class="input-2fa-wrapper">
+                        <input class="input-2fa-wrapper-box" type="number" maxlength="1" value="">
+                    </div>
+                    <div class="input-2fa-wrapper">
+                        <input class="input-2fa-wrapper-box" type="number" maxlength="1" value="">
+                    </div>
+                    <div class="input-2fa-wrapper">
+                        <input class="input-2fa-wrapper-box" type="number" maxlength="1" value="">
+                    </div>
+                    <div class="input-2fa-wrapper">
+                        <input class="input-2fa-wrapper-box" type="number" maxlength="1" value="">
+                    </div>
+                    <div class="input-2fa-wrapper">
+                        <input class="input-2fa-wrapper-box" type="number" maxlength="1" value="">
+                    </div>
+                </div>
+                <span class="message">Please enter security code</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-2fa-verify">Verify</button>
             </div>
         </div>
     </div>

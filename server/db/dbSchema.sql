@@ -10,6 +10,7 @@ CREATE TABLE users (
     `password` VARCHAR(255),
     `name` VARCHAR(50),
     picture VARCHAR(255),
+    second_authentication_secret VARCHAR(255) UNIQUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX email_index (email)
@@ -67,7 +68,7 @@ CREATE TABLE user_favorite_nfts (
 CREATE TABLE user_inventory_fts (
     user_id BIGINT UNSIGNED NOT NULL,
     ft_cmc_id BIGINT UNSIGNED NOT NULL,
-    balance BIGINT UNSIGNED NOT NULL,
+    balance BIGINT UNSIGNED,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (ft_cmc_id) REFERENCES fts(cmc_id),
     PRIMARY KEY (user_id, ft_cmc_id)
