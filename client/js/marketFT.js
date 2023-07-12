@@ -118,8 +118,22 @@ ftMarketLists.addEventListener("click", async (event) => {
 
     if (response.status === 200) {
       // alert("add tracing FT successfully");
-      tracingModalDialogContent.textContent = "Add tracing FT successfully";
-      triggerTracingModalBtn.click();
+      // tracingModalDialogContent.textContent = "Add tracing FT successfully";
+      // triggerTracingModalBtn.click();
+      iziToast.show({
+        theme: "dark",
+        iconUrl: "../images/check-mark.png",
+        title: "Add tracing crypto successfully",
+        titleSize: 18,
+        messageSize: 18,
+        position: "topCenter",
+        maxWidth: 500,
+        timeout: 3000,
+        pauseOnHover: true,
+        drag: true,
+        displayMode: 2,
+      });
+
       target.setAttribute("src", "../images/star-fill.png");
       target.setAttribute("data-state", "true");
       target.parentNode.parentNode.setAttribute("class", "tracing");
@@ -145,8 +159,23 @@ ftMarketLists.addEventListener("click", async (event) => {
 
     if (response.status === 200) {
       // alert("remove tracing FT successfully");
-      tracingModalDialogContent.textContent = "Remove tracing FT successfully";
-      triggerTracingModalBtn.click();
+      // tracingModalDialogContent.textContent = "Remove tracing FT successfully";
+      // triggerTracingModalBtn.click();
+
+      iziToast.show({
+        theme: "dark",
+        iconUrl: "../images/check-mark.png",
+        title: "Remove tracing crypto successfully",
+        titleSize: 18,
+        messageSize: 18,
+        position: "topCenter",
+        maxWidth: 500,
+        timeout: 3000,
+        pauseOnHover: true,
+        drag: true,
+        displayMode: 2,
+      });
+
       target.setAttribute("src", "../images/star-empty.png");
       target.setAttribute("data-state", "false");
       //   target.parentNode.parentNode.removeAttribute("class");

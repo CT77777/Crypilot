@@ -4,6 +4,7 @@
 <head>
     <%- include("modules/head") %>
         <link rel="stylesheet" href="../css/dist/marketFT.css">
+        <link rel="stylesheet" href="../node_modules/izitoast/dist/css/iziToast.min.css">
 </head>
 
 <body>
@@ -31,7 +32,8 @@
                                         <table class="table table-borderless table-hover align-middle">
                                             <thead class="market-lists-title">
                                             </thead>
-                                            <tbody class="market-lists table-group-divider">
+                                            <tbody class="market-lists table-group-divider" data-bs-spy="scroll"
+                                                data-bs-smooth-scroll="true">
                                             </tbody>
                                         </table>
                                     </div>
@@ -100,15 +102,19 @@
         <!-- BS login modal -->
         <%- include("modules/logInModal") %>
 
-            <!-- BS retrieve modal -->
-            <%- include("modules/retrieveKeyModal.ejs") %>
+            <!-- BS maintenance modal -->
+            <%- include("modules/maintenanceModal.ejs") %>
 
-                <!-- BS v5.3 CDN JS-->
-                <%- include("modules/bsJsCDN.ejs") %>
+                <!-- BS retrieve modal -->
+                <%- include("modules/retrieveKeyModal.ejs") %>
 
-                    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-                    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-                    <script type="module" src="../js/marketFT.js"></script>
+                    <!-- BS v5.3 CDN JS-->
+                    <%- include("modules/bsJsCDN.ejs") %>
+
+                        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                        <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+                        <script src="../node_modules/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
+                        <script type="module" src="../js/marketFT.js"></script>
 </body>
 
 </html>

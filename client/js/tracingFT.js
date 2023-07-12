@@ -8,6 +8,8 @@ pageName.textContent = "Tracing";
 const ftMarketLists = document.querySelector(".market-lists");
 const ftMarketListTitle = document.querySelector(".market-lists-title");
 
+const sockets = [];
+
 async function getTracingListFT() {
   const responseTracing = await fetch("/market/ft/list/tracing");
   const resultsTracing = await responseTracing.json();
@@ -41,7 +43,7 @@ async function getTracingListFT() {
         <th scope="col">30d%</th>
         <th scope="col">Market Cap</th>
         <th scope="col">Volume(24h)</th>
-        <th scope="col">Introduction</th>
+        <th scope="col">AI Intro.</th>
     </tr>
     `;
 
@@ -65,7 +67,7 @@ async function getTracingListFT() {
             <td>$${ft.volume_24h.toFixed(0)}</td>
             <td><button type="button" class="intro-btn btn btn-warning" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1rem;" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-symbol=${
               ft.symbol
-            }>Read</button></td>
+            }>Chat</button></td>
         </tr>
         `;
       ftListHTML += ftHTMLTrue;
@@ -84,13 +86,15 @@ async function getTracingListFT() {
             <td>$${ft.volume_24h.toFixed(0)}</td>
             <td><button type="button" class="intro-btn btn btn-info" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1rem;" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-symbol=${
               ft.symbol
-            }>Read</button></td>
+            }>Chat</button></td>
         </tr>
         `;
       ftListHTML += ftHTMLFalse;
     }
   }
   ftMarketLists.innerHTML = ftListHTML;
+
+  addEventListenerStartChatBtn();
 }
 
 // add or remove tracing ft
@@ -120,8 +124,22 @@ ftMarketLists.addEventListener("click", async (event) => {
     });
 
     if (response.status === 200) {
-      tracingModalDialogContent.textContent = "Add tracing FT successfully";
-      triggerTracingModalBtn.click();
+      // tracingModalDialogContent.textContent = "Add tracing FT successfully";
+      // triggerTracingModalBtn.click();
+
+      iziToast.show({
+        theme: "dark",
+        iconUrl: "../images/check-mark.png",
+        title: "Add tracing crypto successfully",
+        titleSize: 18,
+        messageSize: 18,
+        position: "topCenter",
+        maxWidth: 500,
+        timeout: 3000,
+        pauseOnHover: true,
+        drag: true,
+        displayMode: 2,
+      });
       target.setAttribute("src", "../images/star-fill.png");
       target.setAttribute("data-state", "true");
       target.parentNode.parentNode.setAttribute("class", "tracing");
@@ -145,8 +163,22 @@ ftMarketLists.addEventListener("click", async (event) => {
     });
 
     if (response.status === 200) {
-      tracingModalDialogContent.textContent = "Remove tracing FT successfully";
-      triggerTracingModalBtn.click();
+      // tracingModalDialogContent.textContent = "Remove tracing FT successfully";
+      // triggerTracingModalBtn.click();
+
+      iziToast.show({
+        theme: "dark",
+        iconUrl: "../images/check-mark.png",
+        title: "Remove tracing crypto successfully",
+        titleSize: 18,
+        messageSize: 18,
+        position: "topCenter",
+        maxWidth: 500,
+        timeout: 3000,
+        pauseOnHover: true,
+        drag: true,
+        displayMode: 2,
+      });
       target.setAttribute("src", "../images/star-empty.png");
       target.setAttribute("data-state", "false");
       target.parentNode.parentNode.classList.remove("tracing");
@@ -154,16 +186,69 @@ ftMarketLists.addEventListener("click", async (event) => {
   }
 });
 
-function addEventListenerIntroBtn() {
+// function addEventListenerIntroBtn() {
+//   const introCryptoButton = document.querySelectorAll(".intro-btn");
+//   const modalDialogBody = document.querySelector(".modal-body");
+
+//   introCryptoButton.forEach((element) => {
+//     element.addEventListener("click", async () => {
+//       const symbol = element.getAttribute("data-symbol");
+//       const jwt = Cookies.get("JWT");
+
+//       console.log("fetching GPT...");
+
+//       const response = await fetch("/gpt/start", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authentication: `Bearer ${jwt}`,
+//         },
+//         body: JSON.stringify({ symbol: symbol }),
+//       });
+
+//       const result = await response.json();
+
+//       console.log(result);
+//       modalDialogBody.textContent = result;
+//     });
+//   });
+// }
+
+// start chatting with openAI
+function addEventListenerStartChatBtn() {
   const introCryptoButton = document.querySelectorAll(".intro-btn");
-  const modalDialogBody = document.querySelector(".modal-body");
+  const modalDialogBody = document.querySelector(".modal-body-gpt");
+  const modalDialogBodyImage = modalDialogBody.querySelector(".image");
+  const modalDialogBodyText = modalDialogBody.querySelector(".text");
 
   introCryptoButton.forEach((element) => {
     element.addEventListener("click", async () => {
+      console.log("fetching GPT...");
+
+      const userId = Cookies.get("user_id");
+
+      const socket = io("wss://localhost:8080");
+      socket.on("connect", () => {
+        console.log("browser client connect to socket server...");
+        sockets.push(socket);
+      });
+      socket.emit("join room", userId);
+
       const symbol = element.getAttribute("data-symbol");
       const jwt = Cookies.get("JWT");
 
-      console.log("fetching GPT...");
+      let isStart = true;
+
+      socket.on("streaming", (content) => {
+        if (isStart) {
+          modalDialogBodyImage.style.display = "block";
+          modalDialogBodyText.textContent = `: ${content}`;
+
+          isStart = false;
+        } else {
+          modalDialogBodyText.textContent += content;
+        }
+      });
 
       const response = await fetch("/gpt/start", {
         method: "POST",
@@ -176,16 +261,150 @@ function addEventListenerIntroBtn() {
 
       const result = await response.json();
 
+      socket.disconnect();
+      sockets.length = 0;
+
       console.log(result);
-      modalDialogBody.textContent = result;
     });
+  });
+}
+
+// continue chatting with openAI
+function addEventListenerContinueChatBtn() {
+  const continueGptBtn = document.querySelector(".continue-gpt-btn");
+
+  continueGptBtn.addEventListener("click", async () => {
+    if (document.querySelector(".continue-gpt-input").value === "") {
+      return;
+    }
+
+    const lastModalBodyContinueText = document
+      .querySelector(".modal-content-gpt")
+      .children[
+        document.querySelector(".modal-content-gpt").children.length - 2
+      ].querySelector(".text");
+
+    console.log(lastModalBodyContinueText);
+    console.log(
+      document.querySelector(".modal-content-gpt").children[
+        document.querySelector(".modal-content-gpt").children.length - 2
+      ]
+    );
+
+    if (lastModalBodyContinueText.textContent === "Waiting...") {
+      document
+        .querySelector(".modal-content-gpt")
+        .removeChild(
+          document.querySelector(".modal-content-gpt").children[
+            document.querySelector(".modal-content-gpt").children.length - 2
+          ]
+        );
+
+      if (sockets.length !== 0) {
+        sockets.forEach((element) => {
+          element.disconnect();
+        });
+        sockets.length = 0;
+      }
+    }
+
+    console.log("fetching GPT continue...");
+
+    const userId = Cookies.get("user_id");
+
+    const socket = io("wss://localhost:8080");
+    socket.on("connect", () => {
+      console.log("browser client connect to socket server...");
+      sockets.push(socket);
+    });
+    socket.emit("join room", userId);
+
+    const jwt = Cookies.get("JWT");
+    const inputText = document.querySelector(".continue-gpt-input").value;
+    document.querySelector(".continue-gpt-input").value = "";
+    const modalFooter = document.querySelector(".modal-footer-gpt");
+
+    const modalBody = `
+    <div class="modal-body modal-body-gpt-continue">
+      <div class="image-container">
+          <img class="image" src="../images/bot.png">
+      </div>
+      <span class="text">Waiting...</span>
+    </div>
+    `;
+
+    modalFooter.insertAdjacentHTML("beforebegin", modalBody);
+
+    let modalDialogBodyContinueText = document
+      .querySelector(".modal-content-gpt")
+      .children[
+        document.querySelector(".modal-content-gpt").children.length - 2
+      ].querySelector(".text");
+
+    let isStart = true;
+
+    socket.on("streamingContinue", (content) => {
+      if (isStart) {
+        modalDialogBodyContinueText.textContent = `: ${content}`;
+        isStart = false;
+      } else {
+        modalDialogBodyContinueText.textContent += content;
+      }
+    });
+
+    const response = await fetch("/gpt/continue", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authentication: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({ inputText }),
+    });
+
+    const result = await response.json();
+
+    socket.disconnect();
+    sockets.length = 0;
+
+    console.log(result);
+  });
+}
+
+// clear record after closing the ChatGPT dialog
+function addEventListenerCloseChatBtn() {
+  const closeGptBtn = document.querySelector(".btn-close-gpt");
+
+  closeGptBtn.addEventListener("click", () => {
+    const modalContent = document.querySelector(".modal-content-gpt");
+    const modalBodyStart = document.querySelector(".modal-body-gpt");
+    const modalBodyContinues = document.querySelectorAll(
+      ".modal-body-gpt-continue"
+    );
+
+    if (modalBodyStart !== undefined) {
+      modalBodyStart.querySelector(".text").textContent = `Waiting...`;
+    }
+
+    if (modalBodyContinues.length !== 0) {
+      modalBodyContinues.forEach((element) => {
+        modalContent.removeChild(element);
+      });
+    }
+
+    if (sockets.length !== 0) {
+      sockets.forEach((element) => {
+        element.disconnect();
+      });
+      sockets.length = 0;
+    }
   });
 }
 
 async function main() {
   renderUserInfo();
   await getTracingListFT();
-  addEventListenerIntroBtn();
+  addEventListenerContinueChatBtn();
+  addEventListenerCloseChatBtn();
   setInterval(getTracingListFT, 60000);
 }
 

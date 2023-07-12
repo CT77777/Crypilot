@@ -35,16 +35,8 @@ export async function authenticate(
     } catch (error) {
       console.log(error);
       res.render("home");
-      // res.status(403).json({
-      //   message: "authenticate failed",
-      //   error: (error as Error).message,
-      // });
     }
   } else {
-    const errorMessage = new Error("Haven't logged in");
     res.redirect("/");
-    // res
-    //   .status(401)
-    //   .json({ message: "authenticate failed", error: errorMessage.message });
   }
 }
