@@ -4,6 +4,7 @@
 <head>
     <%- include("modules/head") %>
         <link rel="stylesheet" href="../css/dist/home.css">
+        <link rel="stylesheet" href="../node_modules/izitoast/dist/css/iziToast.min.css">
 </head>
 
 <body>
@@ -53,6 +54,9 @@
 
                 <!-- BS v5.3 CDN JS-->
                 <%- include("modules/bsJsCDN.ejs") %>
+
+                    <script src="../node_modules/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
+                    <script type="module" src="../js/home.js"></script>
 </body>
 
 </html>

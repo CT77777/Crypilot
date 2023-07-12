@@ -4,6 +4,8 @@ import {
   logIn,
   renderUserProfilePage,
   retrievePrivateKey,
+  setSecondAuthentication,
+  verifySecondAuthentication,
 } from "../controllers/userController.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import { JWTPayload } from "jose";
@@ -19,6 +21,19 @@ router.route("/user/register").post(register);
 
 // user log in
 router.route("/user/login").post(logIn);
+
+// user 2fa set up
+router
+  .route("/user/2fa")
+  .get([
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticate(req as RequestWithPayload, res, next),
+    (req: Request, res: Response) =>
+      setSecondAuthentication(req as RequestWithPayload, res),
+  ]);
+
+// user 2fa verified
+router.route("/user/2fa").post(verifySecondAuthentication);
 
 // render user profile page
 router
