@@ -109,64 +109,10 @@ function addTokenCurrencySelection() {
   });
 }
 
-const buyByFiatBtn = document.querySelector(".buy-token-btn");
-function addBuyingFunction() {
-  // buyByFiatBtn.addEventListener("click", async () => {
-  //   const jwt = Cookies.get("JWT");
-  //   const tokenAddress = document.querySelector(".contract-address").value;
-  //   const ethAmount = document.querySelector(".amount-token").value;
-  //   const modalDialogContent = document.querySelector(".modal-body");
-  //   const triggerBtn = document.querySelector(".trigger-btn");
-  //   const response = await fetch("/trade/buy", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authentication: `Bearer ${jwt}`,
-  //     },
-  //     body: JSON.stringify({
-  //       tokenAddress: tokenAddress,
-  //       ethAmount: ethAmount,
-  //     }),
-  //   });
-  //   const result = await response.json();
-  //   if (result.txSending) {
-  //     iziToast.show({
-  //       theme: "dark",
-  //       iconUrl: "../images/check-mark.png",
-  //       title: "Send transaction",
-  //       titleSize: 18,
-  //       message: "successfully",
-  //       messageSize: 18,
-  //       position: "topCenter",
-  //       maxWidth: 500,
-  //       timeout: 3000,
-  //       pauseOnHover: true,
-  //       drag: true,
-  //       displayMode: 2,
-  //     });
-  //   } else {
-  //     console.log(result.error);
-  //     iziToast.show({
-  //       theme: "dark",
-  //       iconUrl: "../images/error.png",
-  //       title: "Send transaction",
-  //       titleSize: 18,
-  //       message: "unsuccessfully",
-  //       messageSize: 18,
-  //       position: "topCenter",
-  //       maxWidth: 500,
-  //       timeout: 3000,
-  //       pauseOnHover: true,
-  //       drag: true,
-  //       displayMode: 2,
-  //     });
-  //   }
-  // });
-}
+function addFiatInputEvent() {
+  const fiatInput = document.querySelector(".amount-fiat");
+  const tokenInput = document.querySelector(".amount-token");
 
-const fiatInput = document.querySelector(".amount-fiat");
-const tokenInput = document.querySelector(".amount-token");
-function addFiatConvert() {
   fiatInput.addEventListener("input", (event) => {
     const tokenPrice = 1980 * 30;
     const fiatValue = event.target.value;
@@ -174,9 +120,23 @@ function addFiatConvert() {
 
     tokenInput.value = tokenValue;
   });
+
+  fiatInput.addEventListener("keydown", (event) => {
+    if (
+      event.key === "e" ||
+      event.key === "E" ||
+      event.key === "+" ||
+      event.key === "-"
+    ) {
+      event.preventDefault();
+    }
+  });
 }
 
-function addTokenConvert() {
+function addTokenInputEvent() {
+  const fiatInput = document.querySelector(".amount-fiat");
+  const tokenInput = document.querySelector(".amount-token");
+
   tokenInput.addEventListener("input", (event) => {
     const tokenPrice = 1980 * 30;
     const tokenValue = event.target.value;
@@ -184,15 +144,25 @@ function addTokenConvert() {
 
     fiatInput.value = fiatValue;
   });
+
+  tokenInput.addEventListener("keydown", (event) => {
+    if (
+      event.key === "e" ||
+      event.key === "E" ||
+      event.key === "+" ||
+      event.key === "-"
+    ) {
+      event.preventDefault();
+    }
+  });
 }
 
 function main() {
   renderUserInfo();
   addFiatCurrencySelection();
   addTokenCurrencySelection();
-  addBuyingFunction();
-  addFiatConvert();
-  addTokenConvert();
+  addFiatInputEvent();
+  addTokenInputEvent();
 }
 
 main();
