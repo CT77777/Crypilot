@@ -1,11 +1,13 @@
 import * as logOut from "./modules/logOut.js";
 import { renderUserInfo } from "./modules/userInfo.js";
 import * as retrieveKey from "./modules/retrieveKey.js";
+import { parseJWT } from "./modules/parseJWT.js";
 
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Buy";
 
-const userId = Cookies.get("user_id");
+const jwt = Cookies.get("JWT");
+const { id: userId } = parseJWT(jwt);
 
 const socket = io("wss://localhost:8080");
 socket.on("connect", () => {
@@ -15,9 +17,6 @@ socket.emit("join room", userId);
 socket.on("buyEthStatus", (txResult) => {
   const { success, token, amount } = txResult;
   if (success) {
-    // modalDialogContent.textContent = `Buy ${amount} ${token} successfully`;
-    // triggerBtn.click();
-
     iziToast.show({
       theme: "dark",
       image: `https://s2.coinmarketcap.com/static/img/coins/64x64/${1027}.png`,
@@ -35,9 +34,6 @@ socket.on("buyEthStatus", (txResult) => {
       displayMode: 2,
     });
   } else {
-    // modalDialogContent.textContent = `Buy ${amount} ${token} unsuccessfully`;
-    // triggerBtn.click();
-
     iziToast.show({
       theme: "dark",
       image: `https://s2.coinmarketcap.com/static/img/coins/64x64/${1027}.png`,

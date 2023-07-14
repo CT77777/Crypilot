@@ -240,3 +240,16 @@ export async function insertInventoryFt(
     );
   }
 }
+
+// get swap tokens
+export async function selectSwapTokens(cmc_ids: number[]) {
+  const swapTokens: [RowDataPacket[], FieldPacket[]] = await dbPool.query(
+    `
+    SELECT name, symbol, contract_address, cmc_id, logo FROM fts 
+    WHERE cmc_id IN (?)
+  `,
+    [cmc_ids]
+  );
+
+  return swapTokens[0];
+}

@@ -1,11 +1,13 @@
 import * as logOut from "./modules/logOut.js";
 import { renderUserInfo } from "./modules/userInfo.js";
 import * as retrieveKey from "./modules/retrieveKey.js";
+import { parseJWT } from "./modules/parseJWT.js";
 
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Swap";
 
-const userId = Cookies.get("user_id");
+const jwt = Cookies.get("JWT");
+const { id: userId } = parseJWT(jwt);
 
 const socket = io("wss://localhost:8080");
 socket.on("connect", () => {
@@ -98,33 +100,26 @@ socket.on("swapTokenToStatus", (txResult) => {
 });
 
 async function renderSwapTokens() {
-  const response = await fetch("/market/ft/list");
-  const results = await response.json();
-  const { ftList } = results;
-  console.log(ftList);
+  const response = await fetch("/trade/swap/tokens");
+  const result = await response.json();
+  const fts = result.data;
+  console.log(fts);
   const dropDownMenu = document.querySelector(".dropdown-menu-tokens");
 
-  for (let key in ftList) {
-    if (
-      ftList[key].symbol !== "ETH" &&
-      ftList[key].symbol !== "USDT" &&
-      ftList[key].symbol !== "USDC" &&
-      ftList[key].symbol !== "WBTC"
-    ) {
-      const currencyHtml = `
+  fts.forEach((ft) => {
+    const currencyHtml = `
             <li class="tokens">
-              <a class="dropdown-item" data-id="${ftList[key].id}" data-contract="${ftList[key].token_address}">
+              <a class="dropdown-item" data-id="${ft.cmc_id}" data-contract="${ft.contract_address}">
                   <img class="currency-logo"
-                      src="${ftList[key].logo}">${ftList[key].symbol}
+                      src="${ft.logo}">${ft.symbol}
               </a>
             </li>
             <li>
                 <hr class="dropdown-divider">
             </li>
             `;
-      dropDownMenu.insertAdjacentHTML("afterbegin", currencyHtml);
-    }
-  }
+    dropDownMenu.insertAdjacentHTML("afterbegin", currencyHtml);
+  });
   dropDownMenu.removeChild(dropDownMenu.lastElementChild);
 }
 
@@ -295,6 +290,7 @@ function addSwapFunction() {
     const tokenAddress = document
       .querySelector(".tokens-form")
       .querySelector(".contract-address").value;
+
     const tokenAmount = document
       .querySelector(".tokens-form")
       .querySelector(".amount-token").value;

@@ -5,6 +5,7 @@ import {
   swapTokenToEth,
   getPrivateKey,
   insertInventoryFt,
+  selectSwapTokens,
 } from "../models/tradeModel.js";
 import { JWTPayload } from "jose";
 import { decrypt } from "../utils/createWallet.js";
@@ -41,11 +42,28 @@ export function renderSwapPage(req: Request, res: Response) {
   res.status(200).render("swap");
 }
 
+// get swap tokens
+export async function getSwapTokens(req: Request, res: Response) {
+  try {
+    const ft_cmc_ids = [3717, 4943, 825, 3408, 8104, 7278, 5692, 7083, 6758];
+    const swapTokens = await selectSwapTokens(ft_cmc_ids);
+
+    res.status(200).json({ data: swapTokens });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: { message: "Something wrong at server side" } });
+  }
+}
+
 // swap ETH to ERC20 token
 export async function swapEthToErc20(req: RequestWithPayload, res: Response) {
   try {
     const { tokenAddress, tokenAmount, tokenSymbol, tokenCmcId } = req.body;
     const { public_address: userWalletAddress, id: userId } = req.payload;
+
+    console.log(req.body);
 
     const task = {
       data: {
@@ -64,10 +82,14 @@ export async function swapEthToErc20(req: RequestWithPayload, res: Response) {
     );
 
     res.status(200).json({ txSending: true });
+
+    return;
   } catch (error) {
     console.log(error);
 
     res.status(500).json({ txSending: false, error: (error as Error).message });
+
+    return;
   }
 }
 

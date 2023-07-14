@@ -108,7 +108,7 @@ async function consumerSwapEthToErc20(channel: Channel) {
           );
 
           if (isSuccessful) {
-            await insertInventoryFt(tokenAddress.slice(2), userId as number);
+            await insertInventoryFt(tokenAddress, userId as number);
             const txResult = {
               success: true,
               token: tokenSymbol,

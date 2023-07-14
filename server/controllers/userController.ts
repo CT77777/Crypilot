@@ -28,12 +28,12 @@ interface RequestWithPayload extends Request {
 // user register
 export async function register(req: Request, res: Response) {
   try {
-    console.log(req.body);
     const { email, password, username } = req.body;
     const picture = "https://cdn-icons-png.flaticon.com/128/6774/6774978.png";
     const provider = "native";
-    const user = await searchUserByEmail(email);
-    if (user === undefined) {
+    const userInfo = await searchUserByEmail(email);
+
+    if (userInfo === undefined) {
       const saltRounds = 7;
       const passwordHash = await new Promise((resolve, reject) => {
         bcrypt.hash(password, saltRounds, (err, hash) => {
@@ -63,17 +63,23 @@ export async function register(req: Request, res: Response) {
         publicAddress,
         false
       );
-      res.cookie("JWT", jwt);
-      res.cookie("user_id", user_id);
+      res.cookie("JWT", jwt, { maxAge: 2 * 60 * 60 * 1000 });
+      // res.cookie("user_id", user_id);
       res.status(200).redirect(`/user/profile?email=${email}`);
+
+      return;
     } else {
-      throw new Error("This email has already been registered!");
+      res.status(400).json({
+        error: { message: "This email has already been registered!" },
+      });
+
+      return;
     }
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .json({ message: "register failed", error: (error as Error).message });
+    res.status(500).json({
+      error: { message: "Something wrong on server side" },
+    });
   }
 }
 
@@ -81,22 +87,24 @@ export async function register(req: Request, res: Response) {
 export async function logIn(req: Request, res: Response) {
   try {
     const { email: email, password: passwordInput } = req.body.data;
-    const {
-      id,
-      password,
-      name,
-      picture,
-      public_address,
-      second_authentication_secret,
-    } = await searchUserByEmail(email);
+    const userInfo = await searchUserByEmail(email);
 
-    if (id === undefined) {
+    if (userInfo === undefined) {
       res
         .status(400)
         .json({ error: { message: "This email hasn't been registered!" } });
 
       return;
     } else {
+      const {
+        id,
+        password,
+        name,
+        picture,
+        public_address,
+        second_authentication_secret,
+      } = userInfo;
+
       const compare = await new Promise((resolve, reject) => {
         bcrypt.compare(passwordInput, password, (err, result) => {
           resolve(result);
@@ -122,8 +130,8 @@ export async function logIn(req: Request, res: Response) {
           publicAddress,
           false
         );
-        res.cookie("JWT", jwt);
-        res.cookie("user_id", id);
+        res.cookie("JWT", jwt, { maxAge: 2 * 60 * 60 * 1000 });
+        // res.cookie("user_id", id);
         res
           .status(200)
           .json({ data: { redirect: `/user/profile?email=${email}` } });
@@ -205,8 +213,8 @@ export async function verifySecondAuthentication(req: Request, res: Response) {
         publicAddress,
         isVerified
       );
-      res.cookie("JWT", jwt);
-      res.cookie("user_id", id);
+      res.cookie("JWT", jwt, { maxAge: 2 * 60 * 60 * 1000 });
+      // res.cookie("user_id", id);
       res
         .status(200)
         .json({ data: { redirect: `/user/profile?email=${email}` } });

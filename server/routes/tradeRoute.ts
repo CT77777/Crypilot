@@ -5,6 +5,7 @@ import {
   renderSwapPage,
   swapEthToErc20,
   swapErc20ToEth,
+  getSwapTokens,
 } from "../controllers/tradeController.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import { JWTPayload } from "jose";
@@ -29,6 +30,8 @@ router
 
 // render swapping ETH page
 router.route("/trade/swap").get(renderSwapPage);
+
+router.route("/trade/swap/tokens").get(getSwapTokens);
 
 // swap ETH to ERC20 token
 router

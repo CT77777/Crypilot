@@ -1,6 +1,7 @@
 import * as logOut from "./modules/logOut.js";
 import { renderUserInfo } from "./modules/userInfo.js";
 import * as retrieveKey from "./modules/retrieveKey.js";
+import { parseJWT } from "./modules/parseJWT.js";
 
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Market";
@@ -196,7 +197,8 @@ function addEventListenerStartChatBtn() {
     element.addEventListener("click", async () => {
       console.log("fetching GPT...");
 
-      const userId = Cookies.get("user_id");
+      const jwt = Cookies.get("JWT");
+      const { id: userId } = parseJWT(jwt);
 
       const socket = io("wss://localhost:8080");
       socket.on("connect", () => {
@@ -206,7 +208,6 @@ function addEventListenerStartChatBtn() {
       socket.emit("join room", userId);
 
       const symbol = element.getAttribute("data-symbol");
-      const jwt = Cookies.get("JWT");
 
       let isStart = true;
 
@@ -281,7 +282,8 @@ function addEventListenerContinueChatBtn() {
 
     console.log("fetching GPT continue...");
 
-    const userId = Cookies.get("user_id");
+    const jwt = Cookies.get("JWT");
+    const { id: userId } = parseJWT(jwt);
 
     const socket = io("wss://localhost:8080");
     socket.on("connect", () => {
@@ -290,7 +292,6 @@ function addEventListenerContinueChatBtn() {
     });
     socket.emit("join room", userId);
 
-    const jwt = Cookies.get("JWT");
     const inputText = document.querySelector(".continue-gpt-input").value;
     document.querySelector(".continue-gpt-input").value = "";
     const modalFooter = document.querySelector(".modal-footer-gpt");
