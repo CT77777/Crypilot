@@ -33,6 +33,8 @@
                                         <div class="container-currency">
                                             <label>I want to spend</label>
                                             <div class="form-floating currency-form">
+                                                <input class="exchange-rate" type="text" name="exchange-rate"
+                                                    style="display: none">
                                                 <input type="number" step="0.01" name="fiatAmount"
                                                     class="form-control form-control-dark amount-fiat"
                                                     id="floatingFiatAmount" placeholder="Amount" required>
@@ -45,29 +47,30 @@
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li class="fiat-currency">
-                                                            <a class="dropdown-item" href="#" data-contract="">
+                                                            <a class="dropdown-item" data-rate="31">
                                                                 <img class="currency-logo"
-                                                                    src="https://static.moonpay.com/widget/currencies/twd.svg">TWD
+                                                                    src="https://static.moonpay.com/widget/currencies/twd.svg">
+                                                                <span>TWD</span>
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <hr class="dropdown-divider">
                                                         </li>
                                                         <li class="fiat-currency">
-                                                            <a class="dropdown-item disabled" href="#"
-                                                                data-contract="0x6b175474e89094c44da98b954eedeac495271d0f">
+                                                            <a class="dropdown-item" data-rate="1">
                                                                 <img class="currency-logo"
-                                                                    src="https://static.moonpay.com/widget/currencies/usd.svg">USD
+                                                                    src="https://static.moonpay.com/widget/currencies/usd.svg">
+                                                                <span>USD</span>
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <hr class="dropdown-divider">
                                                         </li>
                                                         <li class="fiat-currency">
-                                                            <a class="dropdown-item disabled" href="#"
-                                                                data-contract="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48">
+                                                            <a class="dropdown-item" data-rate="139">
                                                                 <img class="currency-logo"
-                                                                    src="https://static.moonpay.com/widget/currencies/jpy.svg">JPY
+                                                                    src="https://static.moonpay.com/widget/currencies/jpy.svg">
+                                                                <span>JPY</span>
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -92,29 +95,33 @@
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li class="token-currency">
-                                                            <a class="dropdown-item" href="#" data-contract="">
+                                                            <a class="dropdown-item"
+                                                                data-contract="0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2">
                                                                 <img class="currency-logo"
-                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png">ETH
+                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png">
+                                                                <span>ETH</span>
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <hr class="dropdown-divider">
                                                         </li>
                                                         <li class="token-currency">
-                                                            <a class="dropdown-item disabled" href="#"
+                                                            <a class="dropdown-item disabled"
                                                                 data-contract="0x6b175474e89094c44da98b954eedeac495271d0f">
                                                                 <img class="currency-logo"
-                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png">DAI
+                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png">
+                                                                <span>DAI</span>
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <hr class="dropdown-divider">
                                                         </li>
                                                         <li class="token-currency">
-                                                            <a class="dropdown-item disabled" href="#"
+                                                            <a class="dropdown-item disabled"
                                                                 data-contract="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48">
                                                                 <img class="currency-logo"
-                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png">USDC
+                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png">
+                                                                <span>USDC</span>
                                                             </a>
                                                         </li>
                                                     </ul>

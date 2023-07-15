@@ -58,6 +58,7 @@ function addFiatCurrencySelection() {
   const selectedFiatCurrency = document.querySelector(
     ".selected-fiat-currency"
   );
+  const exchangeRate = document.querySelector(".exchange-rate");
 
   fiatCurrency.forEach((element) => {
     element.addEventListener("click", (event) => {
@@ -68,9 +69,15 @@ function addFiatCurrencySelection() {
       }
 
       const logo = element.querySelector(".currency-logo").getAttribute("src");
-      const symbol = element.querySelector(".dropdown-item").textContent;
+      const symbol = element
+        .querySelector(".dropdown-item")
+        .querySelector("span").textContent;
+      const rate = element
+        .querySelector(".dropdown-item")
+        .getAttribute("data-rate");
 
-      const currencyHtml = `<img class="currency-logo" src="${logo}">${symbol}`;
+      exchangeRate.value = rate;
+      const currencyHtml = `<img class="currency-logo" src="${logo}"><span>${symbol}</span>`;
       selectedFiatCurrency.innerHTML = currencyHtml;
     });
   });
@@ -92,15 +99,16 @@ function addTokenCurrencySelection() {
       }
 
       const logo = element.querySelector(".currency-logo").getAttribute("src");
-      const symbol = element.querySelector(".dropdown-item").textContent;
+      const symbol = element
+        .querySelector(".dropdown-item")
+        .querySelector("span").textContent;
       const contract = element
         .querySelector(".dropdown-item")
         .getAttribute("data-contract");
 
-      const currencyHtml = `<img class="currency-logo" src="${logo}">${symbol}`;
       contractAddress.value = contract;
+      const currencyHtml = `<img class="currency-logo" src="${logo}"><span>${symbol}</span>`;
       selectedTokenCurrency.innerHTML = currencyHtml;
-      console.log(contractAddress.value);
     });
   });
 }
@@ -109,8 +117,50 @@ function addFiatInputEvent() {
   const fiatInput = document.querySelector(".amount-fiat");
   const tokenInput = document.querySelector(".amount-token");
 
-  fiatInput.addEventListener("input", (event) => {
-    const tokenPrice = 1980 * 30;
+  fiatInput.addEventListener("input", async (event) => {
+    const tokenIn = document.querySelector(".contract-address").value;
+    const tokenInSymbolContainer = document
+      .querySelector(".selected-token-currency")
+      .querySelector("span");
+
+    const fiatExchangeRate = document.querySelector(".exchange-rate").value;
+    const fiatSymbolContainer = document
+      .querySelector(".selected-fiat-currency")
+      .querySelector("span");
+
+    if (
+      tokenIn === "" ||
+      tokenInSymbolContainer === null ||
+      fiatExchangeRate === "" ||
+      fiatSymbolContainer === null
+    ) {
+      return;
+    }
+
+    const tokenInSymbol = tokenInSymbolContainer.textContent;
+    const tokenOut = "0xdac17f958d2ee523a2206206994597c13d831ec7";
+    const tokenOutSymbol = "USDT";
+    const amountIn = "1";
+
+    const response = await fetch("/trade/quote/exact/input", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        tokenIn,
+        tokenInSymbol,
+        amountIn,
+        tokenOut,
+        tokenOutSymbol,
+      }),
+    });
+
+    const results = await response.json();
+
+    const { amountOut, estimateGasFee } = results.data;
+
+    const tokenPrice = amountOut * fiatExchangeRate;
     const fiatValue = event.target.value;
     const tokenValue = fiatValue / tokenPrice;
 
@@ -126,6 +176,39 @@ function addFiatInputEvent() {
     ) {
       event.preventDefault();
     }
+
+    const tokenIn = document.querySelector(".contract-address").value;
+    const tokenInSymbolContainer = document
+      .querySelector(".selected-token-currency")
+      .querySelector("span");
+
+    const fiatExchangeRate = document.querySelector(".exchange-rate").value;
+    const fiatSymbolContainer = document
+      .querySelector(".selected-fiat-currency")
+      .querySelector("span");
+
+    if (
+      tokenIn === "" ||
+      tokenInSymbolContainer === null ||
+      fiatExchangeRate === "" ||
+      fiatSymbolContainer === null
+    ) {
+      event.preventDefault();
+
+      iziToast.show({
+        theme: "dark",
+        iconUrl: "../images/error.png",
+        title: "Select fiat currency and crypto",
+        titleSize: 18,
+        messageSize: 18,
+        position: "topCenter",
+        maxWidth: 500,
+        timeout: 3000,
+        pauseOnHover: true,
+        drag: true,
+        displayMode: 2,
+      });
+    }
   });
 }
 
@@ -133,8 +216,50 @@ function addTokenInputEvent() {
   const fiatInput = document.querySelector(".amount-fiat");
   const tokenInput = document.querySelector(".amount-token");
 
-  tokenInput.addEventListener("input", (event) => {
-    const tokenPrice = 1980 * 30;
+  tokenInput.addEventListener("input", async (event) => {
+    const tokenIn = document.querySelector(".contract-address").value;
+    const tokenInSymbolContainer = document
+      .querySelector(".selected-token-currency")
+      .querySelector("span");
+
+    const fiatExchangeRate = document.querySelector(".exchange-rate").value;
+    const fiatSymbolContainer = document
+      .querySelector(".selected-fiat-currency")
+      .querySelector("span");
+
+    if (
+      tokenIn === "" ||
+      tokenInSymbolContainer === null ||
+      fiatExchangeRate === "" ||
+      fiatSymbolContainer === null
+    ) {
+      return;
+    }
+
+    const tokenInSymbol = tokenInSymbolContainer.textContent;
+    const tokenOut = "0xdac17f958d2ee523a2206206994597c13d831ec7";
+    const tokenOutSymbol = "USDT";
+    const amountIn = "1";
+
+    const response = await fetch("/trade/quote/exact/input", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        tokenIn,
+        tokenInSymbol,
+        amountIn,
+        tokenOut,
+        tokenOutSymbol,
+      }),
+    });
+
+    const results = await response.json();
+
+    const { amountOut, estimateGasFee } = results.data;
+
+    const tokenPrice = amountOut * fiatExchangeRate;
     const tokenValue = event.target.value;
     const fiatValue = tokenValue * tokenPrice;
 
@@ -149,6 +274,39 @@ function addTokenInputEvent() {
       event.key === "-"
     ) {
       event.preventDefault();
+    }
+
+    const tokenIn = document.querySelector(".contract-address").value;
+    const tokenInSymbolContainer = document
+      .querySelector(".selected-token-currency")
+      .querySelector("span");
+
+    const fiatExchangeRate = document.querySelector(".exchange-rate").value;
+    const fiatSymbolContainer = document
+      .querySelector(".selected-fiat-currency")
+      .querySelector("span");
+
+    if (
+      tokenIn === "" ||
+      tokenInSymbolContainer === null ||
+      fiatExchangeRate === "" ||
+      fiatSymbolContainer === null
+    ) {
+      event.preventDefault();
+
+      iziToast.show({
+        theme: "dark",
+        iconUrl: "../images/error.png",
+        title: "Select fiat currency and crypto",
+        titleSize: 18,
+        messageSize: 18,
+        position: "topCenter",
+        maxWidth: 500,
+        timeout: 3000,
+        pauseOnHover: true,
+        drag: true,
+        displayMode: 2,
+      });
     }
   });
 }

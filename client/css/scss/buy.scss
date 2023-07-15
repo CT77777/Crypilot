@@ -21,6 +21,11 @@
     .container-currency {
       margin-top: 30px;
 
+      .fiat-currency,
+      .token-currency {
+        cursor: pointer;
+      }
+
       label {
         margin-bottom: 10px;
       }

@@ -6,6 +6,8 @@ import {
   swapEthToErc20,
   swapErc20ToEth,
   getSwapTokens,
+  quoteExactInput,
+  quoteExactOutput,
 } from "../controllers/tradeController.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import { JWTPayload } from "jose";
@@ -31,6 +33,7 @@ router
 // render swapping ETH page
 router.route("/trade/swap").get(renderSwapPage);
 
+// get swap tokens
 router.route("/trade/swap/tokens").get(getSwapTokens);
 
 // swap ETH to ERC20 token
@@ -52,5 +55,11 @@ router
     (req: Request, res: Response) =>
       swapErc20ToEth(req as RequestWithPayload, res),
   ]);
+
+// get quote of exact input swap token
+router.route("/trade/quote/exact/input").post(quoteExactInput);
+
+// get quote of exact output swap token
+router.route("/trade/quote/exact/output").post(quoteExactOutput);
 
 export default router;

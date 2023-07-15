@@ -1,14 +1,10 @@
 import { Request, Response } from "express";
 import {
-  sendETH,
-  swapEthToToken,
-  swapTokenToEth,
-  getPrivateKey,
-  insertInventoryFt,
   selectSwapTokens,
+  quoteExactInputSwapToken,
+  quoteExactOutputSwapToken,
 } from "../models/tradeModel.js";
 import { JWTPayload } from "jose";
-import { decrypt } from "../utils/createWallet.js";
 import { channel } from "../utils/producer.js";
 
 interface RequestWithPayload extends Request {
@@ -122,5 +118,79 @@ export async function swapErc20ToEth(req: RequestWithPayload, res: Response) {
     console.log(error);
 
     res.status(500).json({ txSending: false, error: (error as Error).message });
+  }
+}
+
+// get quote of exact input swap token
+export async function quoteExactInput(req: Request, res: Response) {
+  try {
+    const { tokenIn, tokenInSymbol, amountIn, tokenOut, tokenOutSymbol } =
+      req.body;
+    let decimalIn = 18;
+    let decimalOut = 18;
+    if (tokenInSymbol === "USDC" || tokenInSymbol === "USDT") {
+      decimalIn = 6;
+    }
+    if (tokenOutSymbol === "USDC" || tokenOutSymbol === "USDT") {
+      decimalOut = 6;
+    }
+
+    const { amountOut, estimateGasFee } = await quoteExactInputSwapToken(
+      tokenIn,
+      tokenOut,
+      amountIn,
+      decimalIn,
+      decimalOut
+    );
+
+    res.status(200).json({
+      data: {
+        amountOut,
+        estimateGasFee,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+
+    res
+      .status(500)
+      .json({ error: { message: "Something wrong at server side" } });
+  }
+}
+
+// get quote of exact output swap token
+export async function quoteExactOutput(req: Request, res: Response) {
+  try {
+    const { tokenIn, tokenInSymbol, tokenOut, tokenOutSymbol, amountOut } =
+      req.body;
+    let decimalIn = 18;
+    let decimalOut = 18;
+    if (tokenInSymbol === "USDC" || tokenInSymbol === "USDT") {
+      decimalIn = 6;
+    }
+    if (tokenOutSymbol === "USDC" || tokenOutSymbol === "USDT") {
+      decimalOut = 6;
+    }
+
+    const { amountIn, estimateGasFee } = await quoteExactOutputSwapToken(
+      tokenIn,
+      tokenOut,
+      amountOut,
+      decimalIn,
+      decimalOut
+    );
+
+    res.status(200).json({
+      data: {
+        amountIn,
+        estimateGasFee,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+
+    res
+      .status(500)
+      .json({ error: { message: "Something wrong at server side" } });
   }
 }
