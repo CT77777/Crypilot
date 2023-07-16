@@ -139,6 +139,10 @@ function addFiatInputEvent() {
       return;
     }
 
+    tokenInput.setAttribute("disabled", "true");
+    document.querySelector(".spinner-token").style.display = "block";
+    document.querySelector(".label-token").style.display = "none";
+
     const tokenInSymbol = tokenInSymbolContainer.textContent;
     const tokenOut = "0xdac17f958d2ee523a2206206994597c13d831ec7";
     const tokenOutSymbol = "USDT";
@@ -167,6 +171,10 @@ function addFiatInputEvent() {
     const tokenValue = fiatValue / tokenPrice;
 
     tokenInput.value = tokenValue;
+
+    tokenInput.removeAttribute("disabled");
+    document.querySelector(".spinner-token").style.display = "none";
+    document.querySelector(".label-token").style.display = "block";
   });
 
   fiatInput.addEventListener("keydown", (event) => {
@@ -238,6 +246,10 @@ function addTokenInputEvent() {
       return;
     }
 
+    fiatInput.setAttribute("disabled", "true");
+    document.querySelector(".spinner-fiat").style.display = "block";
+    document.querySelector(".label-fiat").style.display = "none";
+
     const tokenInSymbol = tokenInSymbolContainer.textContent;
     const tokenOut = "0xdac17f958d2ee523a2206206994597c13d831ec7";
     const tokenOutSymbol = "USDT";
@@ -266,6 +278,10 @@ function addTokenInputEvent() {
     const fiatValue = tokenValue * tokenPrice;
 
     fiatInput.value = fiatValue;
+
+    fiatInput.removeAttribute("disabled");
+    document.querySelector(".spinner-fiat").style.display = "none";
+    document.querySelector(".label-fiat").style.display = "block";
   });
 
   tokenInput.addEventListener("keydown", (event) => {

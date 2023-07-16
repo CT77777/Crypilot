@@ -59,6 +59,14 @@
 
       .token-currency-form,
       .tokens-form {
+        .spinner-tokens,
+        .spinner-currency-token {
+          position: absolute;
+          top: 13px;
+          left: 90px;
+          display: none;
+        }
+
         .currency-menu {
           position: absolute;
           top: 1px;

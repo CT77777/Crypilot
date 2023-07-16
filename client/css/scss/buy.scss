@@ -23,6 +23,14 @@
     .container-currency {
       margin-top: 30px;
 
+      .spinner-fiat,
+      .spinner-token {
+        position: absolute;
+        top: 13px;
+        left: 90px;
+        display: none;
+      }
+
       .fiat-currency,
       .token-currency {
         cursor: pointer;

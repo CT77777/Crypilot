@@ -39,7 +39,14 @@
                                                 <input type="number" step="0.01" name="tokenAmount"
                                                     class="form-control form-control-dark amount-token"
                                                     id="floatingtTokenCurrencyAmount" placeholder="Amount" required>
-                                                <label for="floatingtTokenCurrencyAmount">Amount</label>
+                                                <label class="label-currency-token"
+                                                    for="floatingtTokenCurrencyAmount">Amount</label>
+
+                                                <div class="spinner-border text-dark spinner-currency-token"
+                                                    role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+
                                                 <div class="dropdown dropend currency-menu">
                                                     <button
                                                         class="btn btn-secondary dropdown-toggle selected-token-currency"
@@ -102,7 +109,12 @@
                                                 <input type="number" step="0.01" name="tokenAmount"
                                                     class="form-control form-control-dark amount-token"
                                                     id="floatingtTokensAmount" placeholder="Amount" required>
-                                                <label for="floatingtTokensAmount">Amount</label>
+                                                <label class="label-tokens" for="floatingtTokensAmount">Amount</label>
+
+                                                <div class="spinner-border text-dark spinner-tokens" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+
                                                 <div class="dropdown dropend currency-menu">
                                                     <button class="btn btn-secondary dropdown-toggle selected-tokens"
                                                         type="button" data-bs-toggle="dropdown" aria-expanded="false">

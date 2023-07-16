@@ -38,7 +38,12 @@
                                                 <input type="number" step="0.01" name="fiatAmount"
                                                     class="form-control form-control-dark amount-fiat"
                                                     id="floatingFiatAmount" placeholder="Amount" required>
-                                                <label for="floatingFiatAmount">Amount</label>
+                                                <label class="label-fiat" for="floatingFiatAmount">Amount</label>
+
+                                                <div class="spinner-border text-dark spinner-fiat" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+
                                                 <div class="dropdown dropend currency-menu">
                                                     <button
                                                         class="btn btn-secondary dropdown-toggle selected-fiat-currency"
@@ -86,7 +91,12 @@
                                                 <input type="number" step="0.01" name="tokenAmount"
                                                     class="form-control form-control-dark amount-token"
                                                     id="floatingtTokenAmount" placeholder="Amount" required>
-                                                <label for="floatingtTokenAmount">Amount</label>
+                                                <label class="label-token" for="floatingtTokenAmount">Amount</label>
+
+                                                <div class="spinner-border text-dark spinner-token" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+
                                                 <div class="dropdown dropend currency-menu">
                                                     <button
                                                         class="btn btn-secondary dropdown-toggle selected-token-currency"

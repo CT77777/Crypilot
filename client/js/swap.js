@@ -231,6 +231,10 @@ function addTokenCurrencyConvert() {
       return;
     }
 
+    tokensInput.setAttribute("disabled", "true");
+    document.querySelector(".spinner-tokens").style.display = "block";
+    document.querySelector(".label-tokens").style.display = "none";
+
     const currencyInContainer = document.querySelector(
       ".container-currency-in"
     );
@@ -292,6 +296,10 @@ function addTokenCurrencyConvert() {
         displayMode: 2,
       });
     }
+
+    tokensInput.removeAttribute("disabled");
+    document.querySelector(".spinner-tokens").style.display = "none";
+    document.querySelector(".label-tokens").style.display = "block";
   });
 
   tokenCurrencyInput.addEventListener("keydown", (event) => {
@@ -382,6 +390,10 @@ function addTokensConvert() {
       return;
     }
 
+    tokenCurrencyInput.setAttribute("disabled", "true");
+    document.querySelector(".spinner-currency-token").style.display = "block";
+    document.querySelector(".label-currency-token").style.display = "none";
+
     const currencyInContainer = document.querySelector(
       ".container-currency-in"
     );
@@ -443,6 +455,10 @@ function addTokensConvert() {
         displayMode: 2,
       });
     }
+
+    tokenCurrencyInput.removeAttribute("disabled");
+    document.querySelector(".spinner-currency-token").style.display = "none";
+    document.querySelector(".label-currency-token").style.display = "block";
   });
 
   tokensInput.addEventListener("keydown", (event) => {
