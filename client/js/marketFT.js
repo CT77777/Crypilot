@@ -15,6 +15,9 @@ const sockets = [];
 
 // render Market FT
 async function getMarketFTList() {
+  document.querySelector(".main-market").style.display = "none";
+  document.querySelector(".spinner-market").style.display = "block";
+
   const response = await fetch("/market/ft/list");
   const results = await response.json();
   console.log(results);
@@ -89,6 +92,9 @@ async function getMarketFTList() {
   }
 
   ftMarketLists.innerHTML = ftListHTML;
+
+  document.querySelector(".main-market").style.display = "flex";
+  document.querySelector(".spinner-market").style.display = "none";
 
   addEventListenerStartChatBtn();
 }

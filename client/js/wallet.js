@@ -19,7 +19,18 @@ async function getInventoryFts() {
 }
 
 async function renderInventory() {
+  document.querySelector(".main-wallet").style.display = "none";
+  document.querySelector(".spinner-wallet").style.display = "block";
+
   const userFtsBalance = await getInventoryFts();
+
+  console.log(userFtsBalance);
+
+  if (userFtsBalance.length === 0) {
+    document.querySelector(".span-wallet").style.display = "block";
+    document.querySelector(".spinner-wallet").style.display = "none";
+    return;
+  }
 
   inventoryListTitles.innerHTML = `
     <tr>
@@ -47,6 +58,9 @@ async function renderInventory() {
   });
 
   inventoryLists.innerHTML = inventoryListsHTMLs;
+
+  document.querySelector(".main-wallet").style.display = "flex";
+  document.querySelector(".spinner-wallet").style.display = "none";
 }
 
 async function main() {

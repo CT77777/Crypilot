@@ -14,6 +14,19 @@
   display: flex;
   justify-content: center;
 
+  .spinner-container-tracing {
+    .spinner-tracing {
+      display: none;
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+
+  .span-tracing {
+    display: none;
+    align-self: center;
+  }
+
   main {
     display: flex;
     flex-direction: column;

@@ -14,13 +14,17 @@ const ftMarketListTitle = document.querySelector(".market-lists-title");
 const sockets = [];
 
 async function getTracingListFT() {
+  document.querySelector(".main-tracing").style.display = "none";
+  document.querySelector(".spinner-tracing").style.display = "block";
+
   const responseTracing = await fetch("/market/ft/list/tracing");
   const resultsTracing = await responseTracing.json();
   const { ftTracingIds } = resultsTracing;
   console.log(ftTracingIds);
 
   if (ftTracingIds.length === 0) {
-    ftMarketLists.innerHTML = ``;
+    document.querySelector(".span-tracing").style.display = "block";
+    document.querySelector(".spinner-tracing").style.display = "none";
     return;
   }
 
@@ -96,6 +100,9 @@ async function getTracingListFT() {
     }
   }
   ftMarketLists.innerHTML = ftListHTML;
+
+  document.querySelector(".main-tracing").style.display = "flex";
+  document.querySelector(".spinner-tracing").style.display = "none";
 
   addEventListenerStartChatBtn();
 }

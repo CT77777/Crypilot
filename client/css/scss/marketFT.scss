@@ -14,6 +14,14 @@
   display: flex;
   justify-content: center;
 
+  .spinner-container-market {
+    .spinner-market {
+      display: none;
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+
   main {
     display: flex;
     flex-direction: column;
