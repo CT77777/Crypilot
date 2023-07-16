@@ -13,10 +13,9 @@ const ftMarketListTitle = document.querySelector(".market-lists-title");
 
 const sockets = [];
 
-async function getTracingListFT() {
-  document.querySelector(".main-tracing").style.display = "none";
-  document.querySelector(".spinner-tracing").style.display = "block";
+const prePriceTemps = {};
 
+async function getTracingListFT() {
   const responseTracing = await fetch("/market/ft/list/tracing");
   const resultsTracing = await responseTracing.json();
   const { ftTracingIds } = resultsTracing;
@@ -65,11 +64,11 @@ async function getTracingListFT() {
             <td><img class="favorite" data-state="true" data-cmc_id=${id} src="../images/star-fill.png"></td>
             <td><img class="logo" src="${ft.logo}"></td>
             <td>${ft.name}</td>
-            <td>${ft.symbol}</td>
-            <td>$${ft.price.toFixed(2)}</td>
-            <td>${ft.percent_change_24h.toFixed(2)}%</td>
-            <td>${ft.percent_change_7d.toFixed(2)}%</td>
-            <td>${ft.percent_change_30d.toFixed(2)}%</td>
+            <td class="td-symbol">${ft.symbol}</td>
+            <td class="td-price">$${ft.price.toFixed(2)}</td>
+            <td class="td-24h">${ft.percent_change_24h.toFixed(2)}%</td>
+            <td class="td-7d">${ft.percent_change_7d.toFixed(2)}%</td>
+            <td class="td-30d">${ft.percent_change_30d.toFixed(2)}%</td>
             <td>$${ft.market_cap.toFixed(0)}</td>
             <td>$${ft.volume_24h.toFixed(0)}</td>
             <td><button type="button" class="intro-btn btn btn-warning" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1rem;" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-symbol=${
@@ -84,11 +83,11 @@ async function getTracingListFT() {
             <td><img class="favorite" data-state="false" data-cmc_id=${id} src="../images/star-empty.png"></td>
             <td><img class="logo" src="${ft.logo}"></td>
             <td>${ft.name}</td>
-            <td>${ft.symbol}</td>
-            <td>$${ft.price.toFixed(2)}</td>
-            <td>${ft.percent_change_24h.toFixed(2)}%</td>
-            <td>${ft.percent_change_7d.toFixed(2)}%</td>
-            <td>${ft.percent_change_30d.toFixed(2)}%</td>
+            <td class="td-symbol">${ft.symbol}</td>
+            <td class="td-price">$${ft.price.toFixed(2)}</td>
+            <td class="td-24h">${ft.percent_change_24h.toFixed(2)}%</td>
+            <td class="td-7d">${ft.percent_change_7d.toFixed(2)}%</td>
+            <td class="td-30d">${ft.percent_change_30d.toFixed(2)}%</td>
             <td>$${ft.market_cap.toFixed(0)}</td>
             <td>$${ft.volume_24h.toFixed(0)}</td>
             <td><button type="button" class="intro-btn btn btn-info" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1rem;" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-symbol=${
@@ -101,8 +100,58 @@ async function getTracingListFT() {
   }
   ftMarketLists.innerHTML = ftListHTML;
 
-  document.querySelector(".main-tracing").style.display = "flex";
-  document.querySelector(".spinner-tracing").style.display = "none";
+  const tdsSymbol = document.querySelectorAll(".td-symbol");
+  const tdsPrice = document.querySelectorAll(".td-price");
+
+  for (let i = 0; i < tdsSymbol.length; i++) {
+    const number = tdsPrice[i].textContent.replace("$", "");
+    const numberParse = parseFloat(number);
+
+    if (Object.keys(prePriceTemps).length !== 0) {
+      if (numberParse > prePriceTemps[tdsSymbol[i].textContent]) {
+        tdsPrice[i].style.color = "green";
+      } else if (numberParse < prePriceTemps[tdsSymbol[i].textContent]) {
+        tdsPrice[i].style.color = "red";
+      } else {
+        tdsPrice[i].style.color = "";
+      }
+    }
+
+    prePriceTemps[tdsSymbol[i].textContent] = numberParse;
+  }
+
+  const tds24h = document.querySelectorAll(".td-24h");
+  tds24h.forEach((td) => {
+    const number = td.textContent.replace("%", "");
+    const numberParse = parseFloat(number);
+    if (numberParse >= 0) {
+      td.style.color = "green";
+    } else {
+      td.style.color = "red";
+    }
+  });
+
+  const tds7d = document.querySelectorAll(".td-7d");
+  tds7d.forEach((td) => {
+    const number = td.textContent.replace("%", "");
+    const numberParse = parseFloat(number);
+    if (numberParse >= 0) {
+      td.style.color = "green";
+    } else {
+      td.style.color = "red";
+    }
+  });
+
+  const tds30d = document.querySelectorAll(".td-30d");
+  tds30d.forEach((td) => {
+    const number = td.textContent.replace("%", "");
+    const numberParse = parseFloat(number);
+    if (numberParse >= 0) {
+      td.style.color = "green";
+    } else {
+      td.style.color = "red";
+    }
+  });
 
   addEventListenerStartChatBtn();
 }
@@ -110,10 +159,6 @@ async function getTracingListFT() {
 // add or remove tracing ft
 ftMarketLists.addEventListener("click", async (event) => {
   const target = event.target;
-  const triggerTracingModalBtn = document.querySelector(".btn-tracing");
-  const tracingModalDialogContent = document.querySelector(
-    ".modal-body-tracing"
-  );
 
   if (
     target.getAttribute("class") === "favorite" &&
@@ -195,34 +240,6 @@ ftMarketLists.addEventListener("click", async (event) => {
     }
   }
 });
-
-// function addEventListenerIntroBtn() {
-//   const introCryptoButton = document.querySelectorAll(".intro-btn");
-//   const modalDialogBody = document.querySelector(".modal-body");
-
-//   introCryptoButton.forEach((element) => {
-//     element.addEventListener("click", async () => {
-//       const symbol = element.getAttribute("data-symbol");
-//       const jwt = Cookies.get("JWT");
-
-//       console.log("fetching GPT...");
-
-//       const response = await fetch("/gpt/start", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authentication: `Bearer ${jwt}`,
-//         },
-//         body: JSON.stringify({ symbol: symbol }),
-//       });
-
-//       const result = await response.json();
-
-//       console.log(result);
-//       modalDialogBody.textContent = result;
-//     });
-//   });
-// }
 
 // start chatting with openAI
 function addEventListenerStartChatBtn() {
@@ -412,7 +429,11 @@ function addEventListenerCloseChatBtn() {
 
 async function main() {
   renderUserInfo();
+  document.querySelector(".main-tracing").style.display = "none";
+  document.querySelector(".spinner-tracing").style.display = "block";
   await getTracingListFT();
+  document.querySelector(".main-tracing").style.display = "flex";
+  document.querySelector(".spinner-tracing").style.display = "none";
   addEventListenerContinueChatBtn();
   addEventListenerCloseChatBtn();
   setInterval(getTracingListFT, 60000);
