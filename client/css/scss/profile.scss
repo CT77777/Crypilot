@@ -8,10 +8,12 @@
 @import "./modules/RWD.scss";
 @import "./modules/retrieveKey.scss";
 @import "./modules/2FA.scss";
+@import "./modules/logIn.scss";
 
 .container-main {
   display: flex;
   justify-content: center;
+
   main {
     display: flex;
     flex-direction: column;

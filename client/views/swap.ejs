@@ -48,29 +48,33 @@
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li class="token-currency">
-                                                            <a class="dropdown-item" href="#" data-contract="">
+                                                            <a class="dropdown-item"
+                                                                data-contract="0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2">
                                                                 <img class="currency-logo"
-                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png">ETH
+                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png">
+                                                                <span>ETH</span>
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <hr class="dropdown-divider">
                                                         </li>
                                                         <li class="token-currency">
-                                                            <a class="dropdown-item disabled" href="#"
+                                                            <a class="dropdown-item disabled"
                                                                 data-contract="0x6b175474e89094c44da98b954eedeac495271d0f">
                                                                 <img class="currency-logo"
-                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png">DAI
+                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png">
+                                                                <span>DAI</span>
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <hr class="dropdown-divider">
                                                         </li>
                                                         <li class="token-currency">
-                                                            <a class="dropdown-item disabled" href="#"
+                                                            <a class="dropdown-item disabled"
                                                                 data-contract="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48">
                                                                 <img class="currency-logo"
-                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png">USDC
+                                                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png">
+                                                                <span>USDC</span>
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -155,16 +159,20 @@
             <!-- BS maintenance modal -->
             <%- include("modules/maintenanceModal.ejs") %>
 
-                <!-- BS retrieve modal -->
+                <!-- BS retrieve private key modal -->
                 <%- include("modules/retrieveKeyModal.ejs") %>
 
-                    <!-- BS v5.3 CDN JS-->
-                    <%- include("modules/bsJsCDN.ejs") %>
+                    <!-- BS 2FA modal -->
+                    <%- include("modules/set2FAModal.ejs") %>
 
-                        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-                        <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-                        <script src="../node_modules/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
-                        <script type="module" src="../js/swap.js"></script>
+                        <!-- BS v5.3 CDN JS-->
+                        <%- include("modules/bsJsCDN.ejs") %>
+
+                            <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                            <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+                            <script src="../node_modules/izitoast/dist/js/iziToast.min.js"
+                                type="text/javascript"></script>
+                            <script type="module" src="../js/swap.js"></script>
 </body>
 
 </html>

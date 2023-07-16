@@ -25,21 +25,22 @@ const COMP = "0xc00e94cb662c3520282e6f5717214004a7f26888";
 const USDC = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48";
 const USDT = "0xdac17f958d2ee523a2206206994597c13d831ec7";
 const amountIn = ethers.utils.parseUnits("1", 18);
+const amountOut = ethers.utils.parseUnits("28.3", 18);
 
 console.log(amountIn);
 
 const params = {
   tokenIn: WETH9, // replace with your token address
-  tokenOut: USDT, // replace with your token address
+  tokenOut: COMP, // replace with your token address
   fee: 3000, // replace with desired fee amount
-  amountIn: amountIn, // replace with the amount you're willing to trade
+  amount: amountOut, // replace with the amount you're willing to trade
   sqrtPriceLimitX96: 0, // replace with your s
 };
 
-const results = await IQuoterV2.callStatic.quoteExactInputSingle(params);
+const results = await IQuoterV2.callStatic.quoteExactOutputSingle(params);
 
 console.log(results);
-console.log(ethers.utils.formatUnits(results[0], 6));
+console.log(ethers.utils.formatUnits(results[0], 18));
 console.log(ethers.utils.formatUnits(results[1], 18));
 console.log(ethers.utils.formatUnits(results[3], 0));
 

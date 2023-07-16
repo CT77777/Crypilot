@@ -126,6 +126,7 @@ export async function quoteExactInput(req: Request, res: Response) {
   try {
     const { tokenIn, tokenInSymbol, amountIn, tokenOut, tokenOutSymbol } =
       req.body;
+
     let decimalIn = 18;
     let decimalOut = 18;
     if (tokenInSymbol === "USDC" || tokenInSymbol === "USDT") {
@@ -163,6 +164,7 @@ export async function quoteExactOutput(req: Request, res: Response) {
   try {
     const { tokenIn, tokenInSymbol, tokenOut, tokenOutSymbol, amountOut } =
       req.body;
+
     let decimalIn = 18;
     let decimalOut = 18;
     if (tokenInSymbol === "USDC" || tokenInSymbol === "USDT") {

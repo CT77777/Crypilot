@@ -51,7 +51,10 @@ async function consumerBuyEth(channel: Channel) {
           );
 
           if (isSuccessful) {
-            await insertInventoryFt("", userId as number);
+            await insertInventoryFt(
+              "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+              userId as number
+            );
 
             const txResult = { success: true, token: "ETH", amount: ethAmount };
             socket.emit("buyEthStatus", txResult, userId);

@@ -44,11 +44,11 @@ export async function sendETH(user_wallet_address: string, eth_amount: string) {
   try {
     const txResponse = await treasuryWallet.sendTransaction(transaction);
 
-    setTimeout(async () => {
-      treasuryProvider.send("evm_mine", []);
-    }, 500);
+    // setTimeout(async () => {
+    //   treasuryProvider.send("evm_mine", []);
+    // }, 500);
 
-    const receipt = await txResponse.wait(2);
+    const receipt = await txResponse.wait();
 
     if (receipt.status === 0x1) {
       console.log(`tx success`);
@@ -313,12 +313,11 @@ export async function quoteExactOutputSwapToken(
     tokenIn: token_in,
     tokenOut: token_out,
     fee: feeTier,
-    amountIn: amountOut,
+    amount: amountOut,
     sqrtPriceLimitX96: 0,
   };
 
   const results = await IQuoterV2.callStatic.quoteExactOutputSingle(params);
-
   const amountIn = ethers.utils.formatUnits(results[0], decimal_in);
   const estimateGas = ethers.utils.formatUnits(results[3], 0);
   const estimateGasFee = parseFloat(estimateGas) * parseFloat(gasPriceEth);

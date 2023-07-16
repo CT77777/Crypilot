@@ -35,23 +35,15 @@ export async function getUserFtsBalance(
     ft_contract_addresses.map(async (element) => {
       const { contract_address } = element;
 
-      if (
-        contract_address !== "" &&
-        contract_address !== "a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
-      ) {
-        const erc20 = new ethers.Contract(
-          contract_address,
-          erc20Abi,
-          treasuryProvider
-        );
-        const erc20Balance = await erc20.balanceOf(user_wallet_address);
-        const erc20BalanceFormat = ethers.utils.formatUnits(erc20Balance, 18);
+      if (contract_address === "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2") {
+        const ethBalanceFormat = await getUserEthBalance(user_wallet_address);
 
-        element["balance"] = erc20BalanceFormat;
+        element["balance"] = ethBalanceFormat;
 
         return element;
       } else if (
-        contract_address === "a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+        contract_address === "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" ||
+        contract_address === "0xdac17f958d2ee523a2206206994597c13d831ec7"
       ) {
         const erc20 = new ethers.Contract(
           contract_address,
@@ -65,9 +57,15 @@ export async function getUserFtsBalance(
 
         return element;
       } else {
-        const ethBalanceFormat = await getUserEthBalance(user_wallet_address);
+        const erc20 = new ethers.Contract(
+          contract_address,
+          erc20Abi,
+          treasuryProvider
+        );
+        const erc20Balance = await erc20.balanceOf(user_wallet_address);
+        const erc20BalanceFormat = ethers.utils.formatUnits(erc20Balance, 18);
 
-        element["balance"] = ethBalanceFormat;
+        element["balance"] = erc20BalanceFormat;
 
         return element;
       }
