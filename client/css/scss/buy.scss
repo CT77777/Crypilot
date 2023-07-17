@@ -7,6 +7,8 @@
 @import "./modules/footer.scss";
 @import "./modules/RWD.scss";
 @import "./modules/retrieveKey.scss";
+@import "./modules/2FA.scss";
+@import "./modules/logIn.scss";
 
 .container-main {
   display: flex;
@@ -20,6 +22,19 @@
 
     .container-currency {
       margin-top: 30px;
+
+      .spinner-fiat,
+      .spinner-token {
+        position: absolute;
+        top: 13px;
+        left: 90px;
+        display: none;
+      }
+
+      .fiat-currency,
+      .token-currency {
+        cursor: pointer;
+      }
 
       label {
         margin-bottom: 10px;

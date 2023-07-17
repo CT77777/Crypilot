@@ -1,7 +1,8 @@
-const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+import { parseJWT } from "./parseJWT.js";
 
 export function renderUserInfo() {
-  const { name, public_address } = userInfo;
+  const jwt = Cookies.get("JWT");
+  const { name, public_address } = parseJWT(jwt);
 
   const headerWalletAddress = document.querySelector(".header-wallet-address");
   const sidebarUsername = document.querySelector(".sidebar-username");

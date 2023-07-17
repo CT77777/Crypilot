@@ -1,6 +1,9 @@
 import * as logOut from "./modules/logOut.js";
-import { renderUserInfo } from "./modules/userInfo.js";
 import * as retrieveKey from "./modules/retrieveKey.js";
+import * as secondFA from "./modules/2FA.js";
+import * as logIn from "./modules/logIn.js";
+import { renderUserInfo } from "./modules/userInfo.js";
+import { parseJWT } from "./modules/parseJWT.js";
 
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Market";
@@ -9,6 +12,8 @@ const ftMarketLists = document.querySelector(".market-lists");
 const ftMarketListTitle = document.querySelector(".market-lists-title");
 
 const sockets = [];
+
+const prePriceTemps = {};
 
 // render Market FT
 async function getMarketFTList() {
@@ -50,11 +55,11 @@ async function getMarketFTList() {
           <td><img class="favorite" data-state="true" data-cmc_id=${id} src="../images/star-fill.png"></td>
           <td><img class="logo" src="${ft.logo}"></td>
           <td>${ft.name}</td>
-          <td>${ft.symbol}</td>
-          <td>$${ft.price.toFixed(2)}</td>
-          <td>${ft.percent_change_24h.toFixed(2)}%</td>
-          <td>${ft.percent_change_7d.toFixed(2)}%</td>
-          <td>${ft.percent_change_30d.toFixed(2)}%</td>
+          <td class="td-symbol">${ft.symbol}</td>
+          <td class="td-price">$${ft.price.toFixed(2)}</td>
+          <td class="td-24h">${ft.percent_change_24h.toFixed(2)}%</td>
+          <td class="td-7d">${ft.percent_change_7d.toFixed(2)}%</td>
+          <td class="td-30d">${ft.percent_change_30d.toFixed(2)}%</td>
           <td>$${ft.market_cap.toFixed(0)}</td>
           <td>$${ft.volume_24h.toFixed(0)}</td>
           <td><button type="button" class="intro-btn btn btn-warning" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1rem;" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-symbol=${
@@ -69,11 +74,11 @@ async function getMarketFTList() {
           <td><img class="favorite" data-state="false" data-cmc_id=${id} src="../images/star-empty.png"></td>
           <td><img class="logo" src="${ft.logo}"></td>
           <td>${ft.name}</td>
-          <td>${ft.symbol}</td>
-          <td>$${ft.price.toFixed(2)}</td>
-          <td>${ft.percent_change_24h.toFixed(2)}%</td>
-          <td>${ft.percent_change_7d.toFixed(2)}%</td>
-          <td>${ft.percent_change_30d.toFixed(2)}%</td>
+          <td class="td-symbol">${ft.symbol}</td>
+          <td class="td-price">$${ft.price.toFixed(2)}</td>
+          <td class="td-24h">${ft.percent_change_24h.toFixed(2)}%</td>
+          <td class="td-7d">${ft.percent_change_7d.toFixed(2)}%</td>
+          <td class="td-30d">${ft.percent_change_30d.toFixed(2)}%</td>
           <td>$${ft.market_cap.toFixed(0)}</td>
           <td>$${ft.volume_24h.toFixed(0)}</td>
           <td><button type="button" class="intro-btn btn btn-warning" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1rem;" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-symbol=${
@@ -84,8 +89,60 @@ async function getMarketFTList() {
       ftListHTML += ftHTMLFalse;
     }
   }
-
   ftMarketLists.innerHTML = ftListHTML;
+
+  const tdsSymbol = document.querySelectorAll(".td-symbol");
+  const tdsPrice = document.querySelectorAll(".td-price");
+
+  for (let i = 0; i < tdsSymbol.length; i++) {
+    const number = tdsPrice[i].textContent.replace("$", "");
+    const numberParse = parseFloat(number);
+
+    if (Object.keys(prePriceTemps).length !== 0) {
+      if (numberParse > prePriceTemps[tdsSymbol[i].textContent]) {
+        tdsPrice[i].style.color = "green";
+      } else if (numberParse < prePriceTemps[tdsSymbol[i].textContent]) {
+        tdsPrice[i].style.color = "red";
+      } else {
+        tdsPrice[i].style.color = "";
+      }
+    }
+
+    prePriceTemps[tdsSymbol[i].textContent] = numberParse;
+  }
+
+  const tds24h = document.querySelectorAll(".td-24h");
+  tds24h.forEach((td) => {
+    const number = td.textContent.replace("%", "");
+    const numberParse = parseFloat(number);
+    if (numberParse >= 0) {
+      td.style.color = "green";
+    } else {
+      td.style.color = "red";
+    }
+  });
+
+  const tds7d = document.querySelectorAll(".td-7d");
+  tds7d.forEach((td) => {
+    const number = td.textContent.replace("%", "");
+    const numberParse = parseFloat(number);
+    if (numberParse >= 0) {
+      td.style.color = "green";
+    } else {
+      td.style.color = "red";
+    }
+  });
+
+  const tds30d = document.querySelectorAll(".td-30d");
+  tds30d.forEach((td) => {
+    const number = td.textContent.replace("%", "");
+    const numberParse = parseFloat(number);
+    if (numberParse >= 0) {
+      td.style.color = "green";
+    } else {
+      td.style.color = "red";
+    }
+  });
 
   addEventListenerStartChatBtn();
 }
@@ -196,7 +253,8 @@ function addEventListenerStartChatBtn() {
     element.addEventListener("click", async () => {
       console.log("fetching GPT...");
 
-      const userId = Cookies.get("user_id");
+      const jwt = Cookies.get("JWT");
+      const { id: userId } = parseJWT(jwt);
 
       const socket = io("wss://localhost:8080");
       socket.on("connect", () => {
@@ -206,7 +264,6 @@ function addEventListenerStartChatBtn() {
       socket.emit("join room", userId);
 
       const symbol = element.getAttribute("data-symbol");
-      const jwt = Cookies.get("JWT");
 
       let isStart = true;
 
@@ -281,7 +338,8 @@ function addEventListenerContinueChatBtn() {
 
     console.log("fetching GPT continue...");
 
-    const userId = Cookies.get("user_id");
+    const jwt = Cookies.get("JWT");
+    const { id: userId } = parseJWT(jwt);
 
     const socket = io("wss://localhost:8080");
     socket.on("connect", () => {
@@ -290,7 +348,6 @@ function addEventListenerContinueChatBtn() {
     });
     socket.emit("join room", userId);
 
-    const jwt = Cookies.get("JWT");
     const inputText = document.querySelector(".continue-gpt-input").value;
     document.querySelector(".continue-gpt-input").value = "";
     const modalFooter = document.querySelector(".modal-footer-gpt");
@@ -373,7 +430,11 @@ function addEventListenerCloseChatBtn() {
 
 async function main() {
   renderUserInfo();
+  document.querySelector(".main-market").style.display = "none";
+  document.querySelector(".spinner-market").style.display = "block";
   await getMarketFTList();
+  document.querySelector(".main-market").style.display = "flex";
+  document.querySelector(".spinner-market").style.display = "none";
   addEventListenerContinueChatBtn();
   addEventListenerCloseChatBtn();
   setInterval(getMarketFTList, 60000);

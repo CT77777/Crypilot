@@ -1,8 +1,8 @@
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import dbPool from "./dbPool.js";
 import { RowDataPacket, FieldPacket } from "mysql2";
 import dotenv from "dotenv";
-
+import QuoterV2 from "@uniswap/v3-periphery/artifacts/contracts/lens/QuoterV2.sol/QuoterV2.json" assert { type: "json" };
 dotenv.config();
 
 const treasuryPrivateKey = process.env.TREASURY_PRIVATE_KEY;
@@ -16,6 +16,7 @@ const treasuryWallet = new ethers.Wallet(
 
 const WETH_ADDRESS = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
 const SimpSwapAddress = process.env.SIMPLE_SWAP_ADDRESS;
+const IQuoterV2Address = "0x61fFE014bA17989E743c5F6cB21bF9697530B21e";
 const feeTier = 3000;
 
 const erc20Abi = [
@@ -43,11 +44,11 @@ export async function sendETH(user_wallet_address: string, eth_amount: string) {
   try {
     const txResponse = await treasuryWallet.sendTransaction(transaction);
 
-    setTimeout(async () => {
-      treasuryProvider.send("evm_mine", []);
-    }, 500);
+    // setTimeout(async () => {
+    //   treasuryProvider.send("evm_mine", []);
+    // }, 500);
 
-    const receipt = await txResponse.wait(2);
+    const receipt = await txResponse.wait();
 
     if (receipt.status === 0x1) {
       console.log(`tx success`);
@@ -239,4 +240,87 @@ export async function insertInventoryFt(
       [user_id, ft_cmc_id]
     );
   }
+}
+
+// get swap tokens
+export async function selectSwapTokens(cmc_ids: number[]) {
+  const swapTokens: [RowDataPacket[], FieldPacket[]] = await dbPool.query(
+    `
+    SELECT name, symbol, contract_address, cmc_id, logo FROM fts 
+    WHERE cmc_id IN (?)
+  `,
+    [cmc_ids]
+  );
+
+  return swapTokens[0];
+}
+
+// get quote of exact input swap token
+export async function quoteExactInputSwapToken(
+  token_in: string,
+  token_out: string,
+  amount_token_in: string,
+  decimal_in: number,
+  decimal_out: number
+) {
+  const gasPrice = await treasuryProvider.getGasPrice();
+  const gasPriceEth = ethers.utils.formatUnits(gasPrice, 18);
+
+  const IQuoterV2 = new ethers.Contract(
+    IQuoterV2Address,
+    QuoterV2.abi,
+    treasuryProvider
+  );
+
+  const amountIn = ethers.utils.parseUnits(amount_token_in, decimal_in);
+
+  const params = {
+    tokenIn: token_in,
+    tokenOut: token_out,
+    fee: feeTier,
+    amountIn: amountIn,
+    sqrtPriceLimitX96: 0,
+  };
+
+  const results = await IQuoterV2.callStatic.quoteExactInputSingle(params);
+  const amountOut = ethers.utils.formatUnits(results[0], decimal_out);
+  const estimateGas = ethers.utils.formatUnits(results[3], 0);
+  const estimateGasFee = parseFloat(estimateGas) * parseFloat(gasPriceEth);
+
+  return { amountOut, estimateGasFee };
+}
+
+// get quote of exact output swap token
+export async function quoteExactOutputSwapToken(
+  token_in: string,
+  token_out: string,
+  amount_token_out: string,
+  decimal_in: number,
+  decimal_out: number
+) {
+  const gasPrice = await treasuryProvider.getGasPrice();
+  const gasPriceEth = ethers.utils.formatUnits(gasPrice, 18);
+
+  const IQuoterV2 = new ethers.Contract(
+    IQuoterV2Address,
+    QuoterV2.abi,
+    treasuryProvider
+  );
+
+  const amountOut = ethers.utils.parseUnits(amount_token_out, decimal_out);
+
+  const params = {
+    tokenIn: token_in,
+    tokenOut: token_out,
+    fee: feeTier,
+    amount: amountOut,
+    sqrtPriceLimitX96: 0,
+  };
+
+  const results = await IQuoterV2.callStatic.quoteExactOutputSingle(params);
+  const amountIn = ethers.utils.formatUnits(results[0], decimal_in);
+  const estimateGas = ethers.utils.formatUnits(results[3], 0);
+  const estimateGasFee = parseFloat(estimateGas) * parseFloat(gasPriceEth);
+
+  return { amountIn, estimateGasFee };
 }

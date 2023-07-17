@@ -8,10 +8,20 @@
 @import "./modules/RWD.scss";
 @import "./modules/retrieveKey.scss";
 @import "./modules/2FA.scss";
+@import "./modules/logIn.scss";
 
 .container-main {
   display: flex;
-  justify-content: center;
+  justify-content: start;
+  align-items: center;
+
+  .pie-chart {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-left: 200px;
+  }
+
   main {
     display: flex;
     flex-direction: column;

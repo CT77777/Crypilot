@@ -7,10 +7,20 @@
 @import "./modules/footer.scss";
 @import "./modules/RWD.scss";
 @import "./modules/retrieveKey.scss";
+@import "./modules/2FA.scss";
+@import "./modules/logIn.scss";
 
 .container-main {
   display: flex;
   justify-content: center;
+
+  .spinner-container-market {
+    .spinner-market {
+      display: none;
+      width: 3rem;
+      height: 3rem;
+    }
+  }
 
   main {
     display: flex;

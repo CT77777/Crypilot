@@ -1,9 +1,93 @@
+const preBuyBtn = document.querySelector(".pre-buy-btn");
+preBuyBtn.addEventListener("click", () => {
+  const ethAmount = document.querySelector(".amount-token").value;
+
+  const selectedFiatCurrency = document
+    .querySelector(".selected-fiat-currency")
+    .querySelector("img");
+
+  const selectedTokenCurrency = document
+    .querySelector(".selected-token-currency")
+    .querySelector("img");
+
+  if (selectedFiatCurrency === null) {
+    iziToast.show({
+      theme: "dark",
+      iconUrl: "../images/error.png",
+      title: "Please select fiat currency",
+      titleSize: 18,
+      messageSize: 18,
+      position: "topCenter",
+      maxWidth: 500,
+      timeout: 3000,
+      pauseOnHover: true,
+      drag: true,
+      displayMode: 2,
+    });
+
+    return;
+  }
+
+  if (selectedTokenCurrency === null) {
+    iziToast.show({
+      theme: "dark",
+      iconUrl: "../images/error.png",
+      title: "Please select token",
+      titleSize: 18,
+      messageSize: 18,
+      position: "topCenter",
+      maxWidth: 500,
+      timeout: 3000,
+      pauseOnHover: true,
+      drag: true,
+      displayMode: 2,
+    });
+
+    return;
+  }
+
+  if (ethAmount > 100) {
+    iziToast.show({
+      theme: "dark",
+      iconUrl: "../images/error.png",
+      title: "You can only buy a maximum of 100 ETH per round",
+      titleSize: 18,
+      messageSize: 18,
+      position: "topCenter",
+      maxWidth: 700,
+      timeout: 3000,
+      pauseOnHover: true,
+      drag: true,
+      displayMode: 2,
+    });
+
+    return;
+  } else if (ethAmount < 0.01) {
+    iziToast.show({
+      theme: "dark",
+      iconUrl: "../images/error.png",
+      title: "You can only buy a minimum of 0.01 ETH per round",
+      titleSize: 18,
+      messageSize: 18,
+      position: "topCenter",
+      maxWidth: 700,
+      timeout: 3000,
+      pauseOnHover: true,
+      drag: true,
+      displayMode: 2,
+    });
+
+    return;
+  }
+
+  document.querySelector(".btn-trigger-tappay").click();
+});
+
 async function buyEth(prime) {
   const jwt = Cookies.get("JWT");
   const tokenAddress = document.querySelector(".contract-address").value;
   const ethAmount = document.querySelector(".amount-token").value;
-  const modalDialogContent = document.querySelector(".modal-body");
-  const triggerBtn = document.querySelector(".trigger-btn");
+
   const response = await fetch("/trade/buy", {
     method: "POST",
     headers: {

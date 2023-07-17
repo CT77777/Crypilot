@@ -19,7 +19,6 @@ export function renderWalletPage(req: Request, res: Response) {
 export async function getWalletETH(req: RequestWithPayload, res: Response) {
   const { public_address: userWalletAddress } = req.payload;
   const userEthBalance = await getUserEthBalance(userWalletAddress as string);
-  console.log(userEthBalance);
 
   res.status(200).json({ userEthBalance });
 }
@@ -32,7 +31,6 @@ export async function getWalletFts(req: RequestWithPayload, res: Response) {
     userWalletAddress as string,
     userFts
   );
-  console.log(userFtsBalance);
 
   res.status(200).json({ userFtsBalance });
 }

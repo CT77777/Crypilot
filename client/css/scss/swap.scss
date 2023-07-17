@@ -7,6 +7,8 @@
 @import "./modules/footer.scss";
 @import "./modules/RWD.scss";
 @import "./modules/retrieveKey.scss";
+@import "./modules/2FA.scss";
+@import "./modules/logIn.scss";
 
 .container-main {
   display: flex;
@@ -57,6 +59,14 @@
 
       .token-currency-form,
       .tokens-form {
+        .spinner-tokens,
+        .spinner-currency-token {
+          position: absolute;
+          top: 13px;
+          left: 90px;
+          display: none;
+        }
+
         .currency-menu {
           position: absolute;
           top: 1px;

@@ -24,6 +24,7 @@
     "typescript": "^5.1.3"
   },
   "dependencies": {
+    "@uniswap/v3-periphery": "^1.4.3",
     "amqplib": "^0.10.3",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",

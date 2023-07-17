@@ -4,6 +4,8 @@
 <head>
     <%- include("modules/head") %>
         <link rel="stylesheet" href="../css/dist/profile.css">
+        <link rel="stylesheet" href="../node_modules/izitoast/dist/css/iziToast.min.css">
+        <script src="https://cdn.plot.ly/plotly-2.24.1.min.js" charset="utf-8"></script>
 </head>
 
 <body>
@@ -26,6 +28,7 @@
 
                             <!-- personal main -->
                             <div class="container container-main">
+                                <div class="pie-chart"></div>
                                 <main class="">
                                     <span class="fs-2">
                                         <%=name %>
@@ -65,10 +68,9 @@
                         <!-- BS v5.3 CDN JS-->
                         <%- include("modules/bsJsCDN.ejs") %>
 
-                            <script>
-                                localStorage.setItem('userInfo', `<%- JSON.stringify(userInfo) %>`);
-                            </script>
                             <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                            <script src="../node_modules/izitoast/dist/js/iziToast.min.js"
+                                type="text/javascript"></script>
                             <script type="module" src="../js/profile.js"></script>
 </body>
 
