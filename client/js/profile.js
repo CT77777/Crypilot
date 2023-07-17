@@ -13,69 +13,180 @@ async function getInventoryFts() {
 }
 
 async function renderAssetChart() {
-  const userFtsBalance = await getInventoryFts();
-
-  const values = [];
-  const labels = [];
-
-  userFtsBalance.forEach((ft) => {
-    values.push(ft.value);
-    labels.push(ft.symbol);
-  });
-
   const pieChart = document.querySelector(".pie-chart");
 
-  const data = [
-    {
-      values: values,
-      labels: labels,
-      hoverinfo: "label+percent",
-      textinfo: "label+percent",
-      hole: 0.4,
-      type: "pie",
-      textposition: "inside",
-      texttemplate: "%{label}",
-      textfont: {
-        size: 20,
-        color: "#F0F8FF",
-      },
-      hoverlabel: {
-        font: {
-          color: "#F0F8FF",
-        },
-      },
-      marker: {
-        colors: [
-          "#7895CB",
-          "#787A91",
-          "#3C486B",
-          "#9DB2BF",
-          "#27374D",
-          "#A0BFE0",
-          "#B7CADB",
-          "#454545",
-          "#4A55A2",
-          "#7895CB",
-        ], // This will use a predefined color scale
-      },
-    },
-  ];
+  const userFtsBalance = await getInventoryFts();
 
-  const layout = {
-    annotations: [
+  console.log(userFtsBalance.length);
+
+  let data;
+  let layout;
+
+  if (userFtsBalance.length === 0) {
+    data = [
       {
-        font: {
-          size: 30,
+        values: [1],
+        labels: [""],
+        hoverinfo: "label+percent",
+        textinfo: "label+percent",
+        hole: 0.4,
+        type: "pie",
+        textposition: "inside",
+        texttemplate: "%{label}",
+        textfont: {
+          size: 20,
           color: "#F0F8FF",
         },
-        showarrow: false,
-        text: "Asset",
+        hoverlabel: {
+          font: {
+            color: "#F0F8FF",
+          },
+        },
+        marker: {
+          colors: [
+            "#7895CB",
+            "#787A91",
+            "#3C486B",
+            "#9DB2BF",
+            "#27374D",
+            "#A0BFE0",
+            "#B7CADB",
+            "#454545",
+            "#4A55A2",
+            "#7895CB",
+          ], // This will use a predefined color scale
+        },
       },
-    ],
-    plot_bgcolor: "rgba(0, 0, 0, 0)",
-    paper_bgcolor: "rgba(0, 0, 0, 0)",
-    showlegend: false,
-  };
+    ];
+
+    layout = {
+      annotations: [
+        {
+          font: {
+            size: 30,
+            color: "#F0F8FF",
+          },
+          showarrow: false,
+          text: "Asset",
+        },
+      ],
+      plot_bgcolor: "rgba(0, 0, 0, 0)",
+      paper_bgcolor: "rgba(0, 0, 0, 0)",
+      showlegend: false,
+    };
+  } else {
+    const values = [];
+    const labels = [];
+
+    userFtsBalance.forEach((ft) => {
+      values.push(ft.value);
+      labels.push(ft.symbol);
+    });
+
+    data = [
+      {
+        values: values,
+        labels: labels,
+        hoverinfo: "label+percent",
+        textinfo: "label+percent",
+        hole: 0.4,
+        type: "pie",
+        textposition: "inside",
+        texttemplate: "%{label}",
+        textfont: {
+          size: 20,
+          color: "#F0F8FF",
+        },
+        hoverlabel: {
+          font: {
+            color: "#F0F8FF",
+          },
+        },
+        marker: {
+          colors: [
+            "#7895CB",
+            "#787A91",
+            "#3C486B",
+            "#9DB2BF",
+            "#27374D",
+            "#A0BFE0",
+            "#B7CADB",
+            "#454545",
+            "#4A55A2",
+            "#7895CB",
+          ], // This will use a predefined color scale
+        },
+      },
+    ];
+
+    layout = {
+      annotations: [
+        {
+          font: {
+            size: 30,
+            color: "#F0F8FF",
+          },
+          showarrow: false,
+          text: "Asset",
+        },
+      ],
+      plot_bgcolor: "rgba(0, 0, 0, 0)",
+      paper_bgcolor: "rgba(0, 0, 0, 0)",
+      showlegend: false,
+    };
+  }
+
+  // data = [
+  //   {
+  //     values: values,
+  //     labels: labels,
+  //     hoverinfo: "label+percent",
+  //     textinfo: "label+percent",
+  //     hole: 0.4,
+  //     type: "pie",
+  //     textposition: "inside",
+  //     texttemplate: "%{label}",
+  //     textfont: {
+  //       size: 20,
+  //       color: "#F0F8FF",
+  //     },
+  //     hoverlabel: {
+  //       font: {
+  //         color: "#F0F8FF",
+  //       },
+  //     },
+  //     marker: {
+  //       colors: [
+  //         "#7895CB",
+  //         "#787A91",
+  //         "#3C486B",
+  //         "#9DB2BF",
+  //         "#27374D",
+  //         "#A0BFE0",
+  //         "#B7CADB",
+  //         "#454545",
+  //         "#4A55A2",
+  //         "#7895CB",
+  //       ], // This will use a predefined color scale
+  //     },
+  //   },
+  // ];
+
+  // layout = {
+  //   annotations: [
+  //     {
+  //       font: {
+  //         size: 30,
+  //         color: "#F0F8FF",
+  //       },
+  //       showarrow: false,
+  //       text: "Asset",
+  //     },
+  //   ],
+  //   plot_bgcolor: "rgba(0, 0, 0, 0)",
+  //   paper_bgcolor: "rgba(0, 0, 0, 0)",
+  //   showlegend: false,
+  // };
 
   Plotly.newPlot(pieChart, data, layout);
 }

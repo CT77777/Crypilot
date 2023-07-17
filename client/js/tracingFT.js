@@ -24,7 +24,7 @@ async function getTracingListFT() {
   if (ftTracingIds.length === 0) {
     document.querySelector(".span-tracing").style.display = "block";
     document.querySelector(".spinner-tracing").style.display = "none";
-    return;
+    return false;
   }
 
   const resultsTracingString = ftTracingIds.join(",");
@@ -154,6 +154,8 @@ async function getTracingListFT() {
   });
 
   addEventListenerStartChatBtn();
+
+  return true;
 }
 
 // add or remove tracing ft
@@ -431,8 +433,10 @@ async function main() {
   renderUserInfo();
   document.querySelector(".main-tracing").style.display = "none";
   document.querySelector(".spinner-tracing").style.display = "block";
-  await getTracingListFT();
-  document.querySelector(".main-tracing").style.display = "flex";
+  const isTracingFts = await getTracingListFT();
+  if (isTracingFts) {
+    document.querySelector(".main-tracing").style.display = "flex";
+  }
   document.querySelector(".spinner-tracing").style.display = "none";
   addEventListenerContinueChatBtn();
   addEventListenerCloseChatBtn();
