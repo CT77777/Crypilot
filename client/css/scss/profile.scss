@@ -12,7 +12,15 @@
 
 .container-main {
   display: flex;
-  justify-content: center;
+  justify-content: start;
+  align-items: center;
+
+  .pie-chart {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-left: 200px;
+  }
 
   main {
     display: flex;

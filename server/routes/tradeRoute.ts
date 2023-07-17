@@ -62,4 +62,7 @@ router.route("/trade/quote/exact/input").post(quoteExactInput);
 // get quote of exact output swap token
 router.route("/trade/quote/exact/output").post(quoteExactOutput);
 
+// get quote of exact input swap tokens
+router.route("/trade/quote/exact/inputs").post();
+
 export default router;
