@@ -38,6 +38,7 @@ async function renderInventory() {
         <th scope="col">Name</th>
         <th scope="col">Symbol</th>
         <th scope="col">Amount</th>
+        <th scope="col">Value(USD)</th>
     </tr>
     `;
 
@@ -52,6 +53,7 @@ async function renderInventory() {
         <td>${element.name}</td>
         <td>${element.symbol}</td>
         <td>${parseFloat(element.balance).toFixed(2)}</td>
+        <td>${parseFloat(element.value).toFixed(2)}</td>
       </tr>
       `;
     inventoryListsHTMLs += inventoryListsHTML;
