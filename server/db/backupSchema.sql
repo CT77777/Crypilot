@@ -26,13 +26,13 @@ CREATE TABLE `fts` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
   `symbol` varchar(50) DEFAULT NULL,
-  `contract_address` varchar(40) DEFAULT NULL,
+  `contract_address` varchar(42) DEFAULT NULL,
   `cmc_id` bigint unsigned NOT NULL,
   `logo` varchar(255) DEFAULT NULL,
   `twitter` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `contract_address` (`contract_address`),
-  KEY `cmc_id_index` (`cmc_id`)
+  UNIQUE KEY `cmc_id` (`cmc_id`),
+  UNIQUE KEY `contract_address` (`contract_address`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -47,7 +47,9 @@ CREATE TABLE `nfts` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
   `symbol` varchar(50) DEFAULT NULL,
-  `contract_address` varchar(40) NOT NULL,
+  `contract_address` varchar(42) NOT NULL,
+  `logo` varchar(255) DEFAULT NULL,
+  `twitter` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `contract_address` (`contract_address`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -130,9 +132,9 @@ CREATE TABLE `user_favorite_fts` (
   `user_id` bigint unsigned NOT NULL,
   `ft_cmc_id` bigint unsigned NOT NULL,
   PRIMARY KEY (`user_id`,`ft_cmc_id`),
-  KEY `fk_ft_cmc_id` (`ft_cmc_id`),
-  CONSTRAINT `fk_ft_cmc_id` FOREIGN KEY (`ft_cmc_id`) REFERENCES `fts` (`cmc_id`),
-  CONSTRAINT `user_favorite_fts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  KEY `ft_cmc_id` (`ft_cmc_id`),
+  CONSTRAINT `user_favorite_fts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `user_favorite_fts_ibfk_2` FOREIGN KEY (`ft_cmc_id`) REFERENCES `fts` (`cmc_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -162,12 +164,11 @@ DROP TABLE IF EXISTS `user_inventory_fts`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_inventory_fts` (
   `user_id` bigint unsigned NOT NULL,
-  `balance` bigint unsigned DEFAULT NULL,
   `ft_cmc_id` bigint unsigned NOT NULL,
   PRIMARY KEY (`user_id`,`ft_cmc_id`),
-  KEY `fk_ft_cmc_id_inventory` (`ft_cmc_id`),
-  CONSTRAINT `fk_ft_cmc_id_inventory` FOREIGN KEY (`ft_cmc_id`) REFERENCES `fts` (`cmc_id`),
-  CONSTRAINT `fk_user_id_inventory` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  KEY `ft_cmc_id` (`ft_cmc_id`),
+  CONSTRAINT `user_inventory_fts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `user_inventory_fts_ibfk_2` FOREIGN KEY (`ft_cmc_id`) REFERENCES `fts` (`cmc_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -201,11 +202,10 @@ CREATE TABLE `user_providers` (
   `user_id` bigint unsigned NOT NULL,
   `name` enum('native','facebook','google','apple') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_providers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -218,14 +218,14 @@ DROP TABLE IF EXISTS `user_wallets`;
 CREATE TABLE `user_wallets` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint unsigned NOT NULL,
-  `public_address` varchar(40) DEFAULT NULL,
-  `private_key` varchar(255) DEFAULT NULL,
+  `public_address` varchar(42) NOT NULL,
+  `private_key` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `public_address` (`public_address`),
   UNIQUE KEY `private_key` (`private_key`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_wallets_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -241,12 +241,14 @@ CREATE TABLE `users` (
   `password` varchar(255) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `picture` varchar(255) DEFAULT NULL,
+  `second_authentication_secret` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `second_authentication_secret` (`second_authentication_secret`),
   KEY `email_index` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -258,4 +260,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-04 20:30:18
+-- Dump completed on 2023-07-17 18:14:28

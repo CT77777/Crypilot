@@ -12,14 +12,20 @@
 
 .container-main {
   display: flex;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
 
+  .spinner-container-piechart {
+    width: 700px;
+    .spinner-piechart {
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+
   .pie-chart {
-    display: flex;
+    display: none;
     align-items: center;
-    height: 100%;
-    margin-left: 200px;
   }
 
   main {
@@ -27,6 +33,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    margin-right: 250px;
 
     span {
       color: aliceblue;
@@ -48,6 +56,16 @@
         height: 72px;
         margin-bottom: 10px;
       }
+    }
+
+    .spinner-eth {
+      margin-top: 50px;
+    }
+
+    .eth-balance {
+      display: none;
+      flex-direction: column;
+      align-items: center;
     }
   }
 }

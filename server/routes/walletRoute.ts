@@ -14,7 +14,14 @@ interface RequestWithPayload extends Request {
 const router = Router();
 
 //render wallet page
-router.route("/wallet").get(renderWalletPage);
+router
+  .route("/wallet")
+  .get([
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticate(req as RequestWithPayload, res, next),
+    (req: Request, res: Response) =>
+      renderWalletPage(req as RequestWithPayload, res),
+  ]);
 
 //get ETH of user's wallet
 router

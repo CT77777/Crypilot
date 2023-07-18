@@ -28,18 +28,25 @@
 
                             <!-- personal main -->
                             <div class="container container-main">
+                                <div class="spinner-container-piechart text-center">
+                                    <div class="spinner-grow spinner-piechart" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
                                 <div class="pie-chart"></div>
                                 <main class="">
-                                    <span class="fs-2">
-                                        <%=name %>
-                                    </span>
                                     <img class="avatar" src=<%=picture %> >
                                     <div class="eth">
                                         <img class="eth-image" src="../images/ethereum.png">
-                                        <span class="fs-1">
+                                    </div>
+                                    <div class="spinner-grow spinner-eth" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <div class="eth-balance">
+                                        <span class="fs-1 eth-balance-count">
                                             <%=userEthBalance %> ETH
                                         </span>
-                                        <span class="fs-5">
+                                        <span class="fs-5 eth-balance-value">
                                             $<%=(userEthBalance*1900).toFixed(2) %> USD
                                         </span>
                                     </div>
