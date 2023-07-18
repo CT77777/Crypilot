@@ -234,32 +234,6 @@ export async function verifySecondAuthentication(req: Request, res: Response) {
   }
 }
 
-// render user profile page
-export async function renderUserProfilePage(
-  req: RequestWithPayload,
-  res: Response
-) {
-  const { name, picture, public_address } = req.payload;
-
-  const userEthBalance = await getUserEthBalance(public_address as string);
-
-  const userInfo = {
-    name: name,
-    picture: "../images/hacker.png",
-    public_address: public_address,
-  };
-
-  const data = {
-    name: name,
-    picture: "../images/hacker.png",
-    public_address: public_address,
-    userEthBalance: parseFloat(userEthBalance).toFixed(2),
-    userInfo: userInfo,
-  };
-
-  res.status(200).render("profile", data);
-}
-
 // retrieve user's secret key
 export async function retrievePrivateKey(
   req: RequestWithPayload,
@@ -320,4 +294,24 @@ export async function retrievePrivateKey(
       error: (error as Error).message,
     });
   }
+}
+
+// render user profile page
+export async function renderUserProfilePage(
+  req: RequestWithPayload,
+  res: Response
+) {
+  const { name, picture, public_address } = req.payload;
+
+  const userEthBalance = await getUserEthBalance(public_address as string);
+
+  const data = {
+    title: `Profile`,
+    name: name,
+    picture: picture,
+    public_address: public_address,
+    userEthBalance: parseFloat(userEthBalance).toFixed(2),
+  };
+
+  res.status(200).render("profile", data);
 }

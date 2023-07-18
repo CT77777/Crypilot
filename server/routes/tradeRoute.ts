@@ -19,7 +19,14 @@ interface RequestWithPayload extends Request {
 const router = Router();
 
 // render buying ETH by fiat currency page
-router.route("/trade/buy").get(renderBuyPage);
+router
+  .route("/trade/buy")
+  .get([
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticate(req as RequestWithPayload, res, next),
+    (req: Request, res: Response) =>
+      renderBuyPage(req as RequestWithPayload, res),
+  ]);
 
 // buy ETH by fiat currency
 router
@@ -31,7 +38,14 @@ router
   ]);
 
 // render swapping ETH page
-router.route("/trade/swap").get(renderSwapPage);
+router
+  .route("/trade/swap")
+  .get([
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticate(req as RequestWithPayload, res, next),
+    (req: Request, res: Response) =>
+      renderSwapPage(req as RequestWithPayload, res),
+  ]);
 
 // get swap tokens
 router.route("/trade/swap/tokens").get(getSwapTokens);

@@ -2,7 +2,6 @@ import * as logOut from "./modules/logOut.js";
 import * as retrieveKey from "./modules/retrieveKey.js";
 import * as secondFA from "./modules/2FA.js";
 import * as logIn from "./modules/logIn.js";
-import { renderUserInfo } from "./modules/userInfo.js";
 import { parseJWT } from "./modules/parseJWT.js";
 
 const pageName = document.querySelector(".page-name");
@@ -109,7 +108,21 @@ async function renderSwapTokens() {
   const dropDownMenu = document.querySelector(".dropdown-menu-tokens");
 
   fts.forEach((ft) => {
-    const currencyHtml = `
+    if (ft.symbol === "WBTC" || ft.symbol === "USDC" || ft.symbol === "USDT") {
+      const currencyHtml = `
+            <li class="tokens">
+              <a class="dropdown-item disabled" data-id="${ft.cmc_id}" data-contract="${ft.contract_address}">
+                  <img class="currency-logo"
+                      src="${ft.logo}"><span>${ft.symbol}</span> 
+              </a>
+            </li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            `;
+      dropDownMenu.insertAdjacentHTML("afterbegin", currencyHtml);
+    } else {
+      const currencyHtml = `
             <li class="tokens">
               <a class="dropdown-item" data-id="${ft.cmc_id}" data-contract="${ft.contract_address}">
                   <img class="currency-logo"
@@ -120,7 +133,8 @@ async function renderSwapTokens() {
                 <hr class="dropdown-divider">
             </li>
             `;
-    dropDownMenu.insertAdjacentHTML("afterbegin", currencyHtml);
+      dropDownMenu.insertAdjacentHTML("afterbegin", currencyHtml);
+    }
   });
   dropDownMenu.removeChild(dropDownMenu.lastElementChild);
 }
@@ -781,7 +795,6 @@ function addSwapFunction() {
 }
 
 async function main() {
-  renderUserInfo();
   await renderSwapTokens();
   addTokenCurrencySelection();
   addTokensSelection();

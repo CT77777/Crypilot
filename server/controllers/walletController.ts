@@ -11,8 +11,17 @@ interface RequestWithPayload extends Request {
 }
 
 // render wallet page
-export function renderWalletPage(req: Request, res: Response) {
-  res.status(200).render("wallet");
+export function renderWalletPage(req: RequestWithPayload, res: Response) {
+  const { name, picture, public_address } = req.payload;
+
+  const data = {
+    title: `Wallet`,
+    name: name,
+    picture: picture,
+    public_address: public_address,
+  };
+
+  res.status(200).render("wallet", data);
 }
 
 // get ETH balance of user's wallet

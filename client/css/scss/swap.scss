@@ -59,6 +59,11 @@
 
       .token-currency-form,
       .tokens-form {
+        .token-currency,
+        .tokens {
+          cursor: pointer;
+        }
+
         .spinner-tokens,
         .spinner-currency-token {
           position: absolute;

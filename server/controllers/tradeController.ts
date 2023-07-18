@@ -12,8 +12,17 @@ interface RequestWithPayload extends Request {
 }
 
 // render buy ETH by fiat currency page
-export function renderBuyPage(req: Request, res: Response) {
-  res.status(200).render("buy");
+export function renderBuyPage(req: RequestWithPayload, res: Response) {
+  const { name, picture, public_address } = req.payload;
+
+  const data = {
+    title: `Buy`,
+    name: name,
+    picture: picture,
+    public_address: public_address,
+  };
+
+  res.status(200).render("buy", data);
 }
 
 // buy ETH by fiat currency
@@ -34,8 +43,17 @@ export async function buyEth(req: RequestWithPayload, res: Response) {
 }
 
 // render swap ETH page
-export function renderSwapPage(req: Request, res: Response) {
-  res.status(200).render("swap");
+export function renderSwapPage(req: RequestWithPayload, res: Response) {
+  const { name, picture, public_address } = req.payload;
+
+  const data = {
+    title: `Swap`,
+    name: name,
+    picture: picture,
+    public_address: public_address,
+  };
+
+  res.status(200).render("swap", data);
 }
 
 // get swap tokens

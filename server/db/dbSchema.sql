@@ -126,4 +126,7 @@ VALUES
 ("SushiSwap", "SUSHI", "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2", 6758, "https://s2.coinmarketcap.com/static/img/coins/64x64/6758.png"),
 ("Uniswap", "UNI", "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984", 7083, "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png"),
 ("Aave", "AAVE", "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9", 7278, "https://s2.coinmarketcap.com/static/img/coins/64x64/7278.png"),
-("1inch Network", "1INCH", "0x111111111117dc0aa78b770fa6a738034120c302", 8104, "https://s2.coinmarketcap.com/static/img/coins/64x64/8104.png");
+("1inch Network", "1INCH", "0x111111111117dc0aa78b770fa6a738034120c302", 8104, "https://s2.coinmarketcap.com/static/img/coins/64x64/8104.png"),
+("Chainlink", "LINK", "0x514910771af9ca656af840dff83e8264ecf986ca", 1975, "https://s2.coinmarketcap.com/static/img/coins/64x64/1975.png"),
+("Curve DAO Token", "CRV", "0xD533a949740bb3306d119CC777fa900bA034cd52", 6538, "https://s2.coinmarketcap.com/static/img/coins/64x64/6538.png"),
+("ApeCoin", "APE", "0x4d224452801aced8b2f0aebe155379bb5d594381", 18876, "https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png");

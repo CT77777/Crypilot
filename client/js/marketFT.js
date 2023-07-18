@@ -2,7 +2,6 @@ import * as logOut from "./modules/logOut.js";
 import * as retrieveKey from "./modules/retrieveKey.js";
 import * as secondFA from "./modules/2FA.js";
 import * as logIn from "./modules/logIn.js";
-import { renderUserInfo } from "./modules/userInfo.js";
 import { parseJWT } from "./modules/parseJWT.js";
 
 const pageName = document.querySelector(".page-name");
@@ -23,7 +22,6 @@ async function getMarketFTList() {
 
   const responseTracing = await fetch("/market/ft/list/tracing");
   const resultsTracing = await responseTracing.json();
-  console.log(resultsTracing);
 
   const ftList = results.ftList;
   const ftTracingIds = resultsTracing.ftTracingIds;
@@ -429,7 +427,6 @@ function addEventListenerCloseChatBtn() {
 }
 
 async function main() {
-  renderUserInfo();
   document.querySelector(".main-market").style.display = "none";
   document.querySelector(".spinner-market").style.display = "block";
   await getMarketFTList();

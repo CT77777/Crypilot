@@ -17,13 +17,27 @@ interface RequestWithPayload extends Request {
 const router = Router();
 
 // render market FT page
-router.route("/market/ft").get(renderMarketFTPage);
+router
+  .route("/market/ft")
+  .get([
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticate(req as RequestWithPayload, res, next),
+    (req: Request, res: Response) =>
+      renderMarketFTPage(req as RequestWithPayload, res),
+  ]);
 
 // get market FT list
 router.route("/market/ft/list").get(getMarketFTList);
 
 // render user's tracing FT page
-router.route("/market/tracing").get(renderTracingPage);
+router
+  .route("/market/tracing")
+  .get([
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticate(req as RequestWithPayload, res, next),
+    (req: Request, res: Response) =>
+      renderTracingPage(req as RequestWithPayload, res),
+  ]);
 
 // get user's tracing FT list
 router
