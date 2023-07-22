@@ -76,8 +76,6 @@ export async function startChatWithGPT(symbol: string, user_id: number) {
       (chatCompletion.data as any).on("error", reject);
     });
 
-    console.log(completedMessage.content);
-
     const cacheMessages = [...requestMessages, completedMessage];
 
     await redisClient.set(`${user_id}`, JSON.stringify(cacheMessages));
@@ -152,8 +150,6 @@ export async function continueChatWithGPT(
       (chatCompletion.data as any).on("end", resolve);
       (chatCompletion.data as any).on("error", reject);
     });
-
-    console.log(completedMessage.content);
 
     const cacheMessages = [...requestMessages, completedMessage];
 

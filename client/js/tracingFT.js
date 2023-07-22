@@ -3,6 +3,7 @@ import * as retrieveKey from "./modules/retrieveKey.js";
 import * as secondFA from "./modules/2FA.js";
 import * as logIn from "./modules/logIn.js";
 import { parseJWT } from "./modules/parseJWT.js";
+import { SOCKET_URL } from "../config/config.js";
 
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Tracing";
@@ -15,10 +16,9 @@ const sockets = [];
 const prePriceTemps = {};
 
 async function getTracingListFT() {
-  const responseTracing = await fetch("/market/ft/list/tracing");
+  const responseTracing = await fetch("/market/tracing/ft/list");
   const resultsTracing = await responseTracing.json();
-  const { ftTracingIds } = resultsTracing;
-  console.log(ftTracingIds);
+  const { ftTracingIds } = resultsTracing.data;
 
   if (ftTracingIds.length === 0) {
     document.querySelector(".span-tracing").style.display = "block";
@@ -32,9 +32,8 @@ async function getTracingListFT() {
     `/market/ft/list?ids=${resultsTracingString}`
   );
   const resultsMarketByTracing = await responseMarketByTracing.json();
-  console.log(resultsMarketByTracing);
 
-  const { ftList } = resultsMarketByTracing;
+  const { ftList } = resultsMarketByTracing.data;
 
   ftMarketListTitle.innerHTML = `
     <tr>
@@ -60,7 +59,7 @@ async function getTracingListFT() {
     if (ftTracingIds.indexOf(parseInt(id)) !== -1) {
       const ftHTMLTrue = `
         <tr class="tracing">
-            <td><img class="favorite" data-state="true" data-cmc_id=${id} src="../images/star-fill.png"></td>
+            <td><img class="favorite" data-state="true" data-cmc_id=${id} src="/images/star-fill.png"></td>
             <td><img class="logo" src="${ft.logo}"></td>
             <td>${ft.name}</td>
             <td class="td-symbol">${ft.symbol}</td>
@@ -79,7 +78,7 @@ async function getTracingListFT() {
     } else {
       const ftHTMLFalse = `
         <tr>
-            <td><img class="favorite" data-state="false" data-cmc_id=${id} src="../images/star-empty.png"></td>
+            <td><img class="favorite" data-state="false" data-cmc_id=${id} src="/images/star-empty.png"></td>
             <td><img class="logo" src="${ft.logo}"></td>
             <td>${ft.name}</td>
             <td class="td-symbol">${ft.symbol}</td>
@@ -168,7 +167,7 @@ ftMarketLists.addEventListener("click", async (event) => {
     const jwt = Cookies.get("JWT");
     const cmc_id = target.getAttribute("data-cmc_id");
 
-    const response = await fetch("/market/ft/tracing/add", {
+    const response = await fetch("/market/tracing/ft/list", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -180,12 +179,9 @@ ftMarketLists.addEventListener("click", async (event) => {
     });
 
     if (response.status === 200) {
-      // tracingModalDialogContent.textContent = "Add tracing FT successfully";
-      // triggerTracingModalBtn.click();
-
       iziToast.show({
         theme: "dark",
-        iconUrl: "../images/check-mark.png",
+        iconUrl: "/images/check-mark.png",
         title: "Add tracing crypto successfully",
         titleSize: 18,
         messageSize: 18,
@@ -196,7 +192,7 @@ ftMarketLists.addEventListener("click", async (event) => {
         drag: true,
         displayMode: 2,
       });
-      target.setAttribute("src", "../images/star-fill.png");
+      target.setAttribute("src", "/images/star-fill.png");
       target.setAttribute("data-state", "true");
       target.parentNode.parentNode.setAttribute("class", "tracing");
     }
@@ -207,8 +203,8 @@ ftMarketLists.addEventListener("click", async (event) => {
     const jwt = Cookies.get("JWT");
     const cmc_id = target.getAttribute("data-cmc_id");
 
-    const response = await fetch("/market/ft/tracing/remove", {
-      method: "POST",
+    const response = await fetch("/market/tracing/ft/list", {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authentication: `Bearer ${jwt}`,
@@ -219,12 +215,9 @@ ftMarketLists.addEventListener("click", async (event) => {
     });
 
     if (response.status === 200) {
-      // tracingModalDialogContent.textContent = "Remove tracing FT successfully";
-      // triggerTracingModalBtn.click();
-
       iziToast.show({
         theme: "dark",
-        iconUrl: "../images/check-mark.png",
+        iconUrl: "/images/check-mark.png",
         title: "Remove tracing crypto successfully",
         titleSize: 18,
         messageSize: 18,
@@ -235,7 +228,7 @@ ftMarketLists.addEventListener("click", async (event) => {
         drag: true,
         displayMode: 2,
       });
-      target.setAttribute("src", "../images/star-empty.png");
+      target.setAttribute("src", "/images/star-empty.png");
       target.setAttribute("data-state", "false");
       target.parentNode.parentNode.classList.remove("tracing");
     }
@@ -256,7 +249,7 @@ function addEventListenerStartChatBtn() {
       const jwt = Cookies.get("JWT");
       const { id: userId } = parseJWT(jwt);
 
-      const socket = io("wss://localhost:8080");
+      const socket = io(SOCKET_URL);
       socket.on("connect", () => {
         console.log("browser client connect to socket server...");
         sockets.push(socket);
@@ -312,13 +305,6 @@ function addEventListenerContinueChatBtn() {
         document.querySelector(".modal-content-gpt").children.length - 2
       ].querySelector(".text");
 
-    console.log(lastModalBodyContinueText);
-    console.log(
-      document.querySelector(".modal-content-gpt").children[
-        document.querySelector(".modal-content-gpt").children.length - 2
-      ]
-    );
-
     if (lastModalBodyContinueText.textContent === "Waiting...") {
       document
         .querySelector(".modal-content-gpt")
@@ -341,7 +327,7 @@ function addEventListenerContinueChatBtn() {
     const jwt = Cookies.get("JWT");
     const { id: userId } = parseJWT(jwt);
 
-    const socket = io("wss://localhost:8080");
+    const socket = io(SOCKET_URL);
     socket.on("connect", () => {
       console.log("browser client connect to socket server...");
       sockets.push(socket);
@@ -355,7 +341,7 @@ function addEventListenerContinueChatBtn() {
     const modalBody = `
     <div class="modal-body modal-body-gpt-continue">
       <div class="image-container">
-          <img class="image" src="../images/bot.png">
+          <img class="image" src="/images/bot.png">
       </div>
       <span class="text">Waiting...</span>
     </div>

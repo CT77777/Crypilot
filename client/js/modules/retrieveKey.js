@@ -1,23 +1,19 @@
 const retrievePrivateKeyBtn = document.querySelector(".btn-confirm");
 
 retrievePrivateKeyBtn.addEventListener("click", async () => {
-  try {
-    const modalBodyPrivateKey = document.querySelector(".private-key");
-    const triggerBtn = document.querySelector(".btn-trigger-retrieve-2");
+  const modalBodyPrivateKey = document.querySelector(".private-key");
+  const triggerBtn = document.querySelector(".btn-trigger-retrieve-2");
 
-    const response = await fetch("/user/private");
-    const result = await response.json();
-    const { success } = result;
+  const response = await fetch("/user/private");
+  const result = await response.json();
+  const { success } = result;
 
-    if (success) {
-      const { private_key } = result;
-      modalBodyPrivateKey.textContent = private_key;
-      triggerBtn.click();
-    } else {
-      console.log(result);
-    }
-  } catch (error) {
-    console.log(error);
+  if (success) {
+    const { private_key } = result;
+    modalBodyPrivateKey.textContent = private_key;
+    triggerBtn.click();
+  } else {
+    console.log(result);
   }
 });
 

@@ -3,36 +3,26 @@ import dbPool from "./dbPool.js";
 import { RowDataPacket, FieldPacket } from "mysql2";
 import dotenv from "dotenv";
 import QuoterV2 from "@uniswap/v3-periphery/artifacts/contracts/lens/QuoterV2.sol/QuoterV2.json" assert { type: "json" };
+import {
+  RPC_URL,
+  token_address,
+  uniswap_address,
+  contract_ABI,
+} from "../config/config.js";
 dotenv.config();
 
-const treasuryPrivateKey = process.env.TREASURY_PRIVATE_KEY;
-const treasuryProvider = new ethers.providers.JsonRpcProvider(
-  "http://localhost:8545"
-);
-const treasuryWallet = new ethers.Wallet(
-  treasuryPrivateKey as string,
-  treasuryProvider
-);
+const treasuryPrivateKey = process.env.TREASURY_PRIVATE_KEY || "0x0";
+const treasuryProvider = new ethers.providers.JsonRpcProvider(RPC_URL);
+const treasuryWallet = new ethers.Wallet(treasuryPrivateKey, treasuryProvider);
 
-const WETH_ADDRESS = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
+const WETH_ADDRESS = token_address.WETH;
 const SimpSwapAddress = process.env.SIMPLE_SWAP_ADDRESS;
-const IQuoterV2Address = "0x61fFE014bA17989E743c5F6cB21bF9697530B21e";
+const QuoterV2Address = uniswap_address.QuoterV2;
 const feeTier = 3000;
 
-const erc20Abi = [
-  // Read-Only Functions
-  "function balanceOf(address owner) view returns (uint256)",
-  // Authenticated Functions
-  "function transfer(address to, uint amount) returns (bool)",
-  "function deposit() public payable",
-  "function approve(address spender, uint256 amount) returns (bool)",
-  "function withdraw(uint256 wad) public",
-];
+const erc20Abi = contract_ABI.ERC20;
 
-const simpleSwapAbi = [
-  "function swapExactOutputSingle(address tokenAddressOut, uint256 amountOut, uint256 amountInMaximum, uint24 feeTier) external returns (uint256 amountIn)",
-  "function swapExactInputSingle(address tokenAddressIn, uint256 amountIn, uint24 feeTier) external returns (uint256 amountOut)",
-];
+const simpleSwapAbi = contract_ABI.simple_swap;
 
 // send ETH to user from treasury wallet
 export async function sendETH(user_wallet_address: string, eth_amount: string) {
@@ -44,10 +34,7 @@ export async function sendETH(user_wallet_address: string, eth_amount: string) {
   try {
     const txResponse = await treasuryWallet.sendTransaction(transaction);
 
-    // setTimeout(async () => {
-    //   treasuryProvider.send("evm_mine", []);
-    // }, 500);
-
+    //wait() is for checking whether tx is mined in blockchain
     const receipt = await txResponse.wait();
 
     if (receipt.status === 0x1) {
@@ -72,9 +59,7 @@ export async function swapEthToToken(
   user_public_address: string
 ) {
   const userPrivateKey = user_private_key;
-  const userProvider = new ethers.providers.JsonRpcProvider(
-    "http://localhost:8545"
-  );
+  const userProvider = new ethers.providers.JsonRpcProvider(RPC_URL);
   const userWallet = new ethers.Wallet(userPrivateKey, userProvider);
 
   const weth = new ethers.Contract(WETH_ADDRESS, erc20Abi, userWallet);
@@ -147,9 +132,7 @@ export async function swapTokenToEth(
   user_public_address: string
 ) {
   const userPrivateKey = user_private_key;
-  const userProvider = new ethers.providers.JsonRpcProvider(
-    "http://localhost:8545"
-  );
+  const userProvider = new ethers.providers.JsonRpcProvider(RPC_URL);
   const userWallet = new ethers.Wallet(userPrivateKey, userProvider);
 
   const weth = new ethers.Contract(WETH_ADDRESS, erc20Abi, userWallet);
@@ -267,7 +250,7 @@ export async function quoteExactInputSwapToken(
   const gasPriceEth = ethers.utils.formatUnits(gasPrice, 18);
 
   const IQuoterV2 = new ethers.Contract(
-    IQuoterV2Address,
+    QuoterV2Address,
     QuoterV2.abi,
     treasuryProvider
   );
@@ -302,7 +285,7 @@ export async function quoteExactOutputSwapToken(
   const gasPriceEth = ethers.utils.formatUnits(gasPrice, 18);
 
   const IQuoterV2 = new ethers.Contract(
-    IQuoterV2Address,
+    QuoterV2Address,
     QuoterV2.abi,
     treasuryProvider
   );

@@ -35,8 +35,7 @@ io.on("connection", (socket) => {
         `socket id {${socket.id}} joined the room {${room.toString()}}`
       );
     } catch (error: any) {
-      const errorMessage = error.message;
-      console.log(errorMessage);
+      console.log(error);
     }
   });
 
@@ -45,8 +44,7 @@ io.on("connection", (socket) => {
       console.log(content);
       socket.broadcast.to(room.toString()).emit("streaming", content); // send a message to specified room, room name must be the same type
     } catch (error: any) {
-      const errorMessage = error.message;
-      console.log(errorMessage);
+      console.log(error);
     }
   });
 
@@ -55,8 +53,7 @@ io.on("connection", (socket) => {
       console.log(content);
       socket.broadcast.to(room.toString()).emit("streamingContinue", content); // send a message to specified room, room name must be the same type
     } catch (error: any) {
-      const errorMessage = error.message;
-      console.log(errorMessage);
+      console.log(error);
     }
   });
 
@@ -65,8 +62,7 @@ io.on("connection", (socket) => {
       console.log(txResult);
       socket.broadcast.to(room.toString()).emit("buyEthStatus", txResult);
     } catch (error: any) {
-      const errorMessage = error.message;
-      console.log(errorMessage);
+      console.log(error);
     }
   });
 
@@ -75,8 +71,7 @@ io.on("connection", (socket) => {
       console.log(txResult);
       socket.broadcast.to(room.toString()).emit("swapEthToStatus", txResult);
     } catch (error: any) {
-      const errorMessage = error.message;
-      console.log(errorMessage);
+      console.log(error);
     }
   });
 
@@ -85,8 +80,7 @@ io.on("connection", (socket) => {
       console.log(txResult);
       socket.broadcast.to(room.toString()).emit("swapTokenToStatus", txResult);
     } catch (error: any) {
-      const errorMessage = error.message;
-      console.log(errorMessage);
+      console.log(error);
     }
   });
 
@@ -94,8 +88,7 @@ io.on("connection", (socket) => {
     try {
       console.log(`one connection disconnected... socket id is ${socket.id}`);
     } catch (error: any) {
-      const errorMessage = error.message;
-      console.log(errorMessage);
+      console.log(error);
     }
   });
 });

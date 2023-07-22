@@ -3,22 +3,14 @@ import dotenv from "dotenv";
 import dbPool from "./dbPool.js";
 import { RowDataPacket, FieldPacket } from "mysql2";
 import { quoteExactInputSwapToken } from "./tradeModel.js";
+import { RPC_URL, contract_ABI, token_address } from "../config/config.js";
 
 dotenv.config();
 
 // ERC20 interface
-const erc20Abi = [
-  // Read-Only Functions
-  "function balanceOf(address owner) view returns (uint256)",
-  // Authenticated Functions
-  "function transfer(address to, uint amount) returns (bool)",
-  "function deposit() public payable",
-  "function approve(address spender, uint256 amount) returns (bool)",
-];
+const erc20Abi = contract_ABI.ERC20;
 
-const treasuryProvider = new ethers.providers.JsonRpcProvider(
-  "http://localhost:8545"
-);
+const treasuryProvider = new ethers.providers.JsonRpcProvider(RPC_URL);
 
 // get ETH balance from blockchain
 export async function getUserEthBalance(user_wallet_address: string) {
@@ -32,8 +24,7 @@ export async function getUserFtsBalance(
   user_wallet_address: string,
   ft_contract_addresses: RowDataPacket[]
 ) {
-  const WETH = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
-  const UDST = "0xdac17f958d2ee523a2206206994597c13d831ec7";
+  const { WETH, UDST, USDC } = token_address;
 
   const { amountOut: ethPrice } = await quoteExactInputSwapToken(
     WETH,
@@ -47,17 +38,14 @@ export async function getUserFtsBalance(
     ft_contract_addresses.map(async (element) => {
       const { contract_address } = element;
 
-      if (contract_address === "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2") {
+      if (contract_address === WETH) {
         const ethBalanceFormat = await getUserEthBalance(user_wallet_address);
 
         element["balance"] = ethBalanceFormat;
         element["value"] = parseFloat(ethBalanceFormat) * parseFloat(ethPrice);
 
         return element;
-      } else if (
-        contract_address === "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" ||
-        contract_address === "0xdac17f958d2ee523a2206206994597c13d831ec7"
-      ) {
+      } else if (contract_address === USDC || contract_address === UDST) {
         const erc20 = new ethers.Contract(
           contract_address,
           erc20Abi,

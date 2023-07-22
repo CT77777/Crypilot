@@ -23,8 +23,6 @@ async function renderInventory() {
 
   const userFtsBalance = await getInventoryFts();
 
-  console.log(userFtsBalance);
-
   if (userFtsBalance.length === 0) {
     document.querySelector(".span-wallet").style.display = "block";
     document.querySelector(".spinner-wallet").style.display = "none";

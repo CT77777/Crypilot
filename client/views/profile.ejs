@@ -3,8 +3,8 @@
 
 <head>
     <%- include("modules/head") %>
-        <link rel="stylesheet" href="../css/dist/profile.css">
-        <link rel="stylesheet" href="../node_modules/izitoast/dist/css/iziToast.min.css">
+        <link rel="stylesheet" href="/css/dist/profile.css">
+        <link rel="stylesheet" href="/node_modules/izitoast/dist/css/iziToast.min.css">
         <script src="https://cdn.plot.ly/plotly-2.24.1.min.js" charset="utf-8"></script>
 </head>
 
@@ -37,7 +37,7 @@
                                 <main class="">
                                     <img class="avatar" src=<%=picture %> >
                                     <div class="eth">
-                                        <img class="eth-image" src="../images/ethereum.png">
+                                        <img class="eth-image" src="/images/ethereum.png">
                                     </div>
                                     <div class="spinner-grow spinner-eth" role="status">
                                         <span class="visually-hidden">Loading...</span>
@@ -76,9 +76,9 @@
                         <%- include("modules/bsJsCDN.ejs") %>
 
                             <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-                            <script src="../node_modules/izitoast/dist/js/iziToast.min.js"
+                            <script src="/node_modules/izitoast/dist/js/iziToast.min.js"
                                 type="text/javascript"></script>
-                            <script type="module" src="../js/profile.js"></script>
+                            <script type="module" src="/js/profile.js"></script>
 </body>
 
 </html>

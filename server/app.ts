@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import { io } from "socket.io-client";
 import { redisClient } from "./utils/cache.js";
 import { channel, assertQueues } from "./utils/producer.js";
+import { SOCKET_URL } from "./config/config.js";
 
 const app = express();
 const port = 3000;
@@ -32,7 +33,7 @@ app.use("/", [
 ]);
 
 // connect socket
-export const socket = io("wss://localhost:8080", {
+export const socket = io(SOCKET_URL, {
   rejectUnauthorized: false,
 });
 

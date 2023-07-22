@@ -4,15 +4,10 @@ import {
   getUserFts,
   getUserFtsBalance,
 } from "../models/walletModel.js";
-import { JWTPayload } from "jose";
-
-interface RequestWithPayload extends Request {
-  payload: JWTPayload;
-}
 
 // render wallet page
-export function renderWalletPage(req: RequestWithPayload, res: Response) {
-  const { name, picture, public_address } = req.payload;
+export function renderWalletPage(req: Request, res: Response) {
+  const { name, picture, public_address } = res.locals.payload;
 
   const data = {
     title: `Wallet`,
@@ -25,16 +20,16 @@ export function renderWalletPage(req: RequestWithPayload, res: Response) {
 }
 
 // get ETH balance of user's wallet
-export async function getWalletETH(req: RequestWithPayload, res: Response) {
-  const { public_address: userWalletAddress } = req.payload;
+export async function getWalletETH(req: Request, res: Response) {
+  const { public_address: userWalletAddress } = res.locals.payload;
   const userEthBalance = await getUserEthBalance(userWalletAddress as string);
 
   res.status(200).json({ userEthBalance });
 }
 
 // get FTs of user's wallet
-export async function getWalletFts(req: RequestWithPayload, res: Response) {
-  const { public_address: userWalletAddress, id: userId } = req.payload;
+export async function getWalletFts(req: Request, res: Response) {
+  const { public_address: userWalletAddress, id: userId } = res.locals.payload;
   const userFts = await getUserFts(userId as number);
   const userFtsBalance = await getUserFtsBalance(
     userWalletAddress as string,

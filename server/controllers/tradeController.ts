@@ -4,16 +4,12 @@ import {
   quoteExactInputSwapToken,
   quoteExactOutputSwapToken,
 } from "../models/tradeModel.js";
-import { JWTPayload } from "jose";
 import { channel } from "../utils/producer.js";
-
-interface RequestWithPayload extends Request {
-  payload: JWTPayload;
-}
+import { SWAP_TOKEN_CMC_IDS } from "../config/config.js";
 
 // render buy ETH by fiat currency page
-export function renderBuyPage(req: RequestWithPayload, res: Response) {
-  const { name, picture, public_address } = req.payload;
+export function renderBuyPage(req: Request, res: Response) {
+  const { name, picture, public_address } = res.locals.payload;
 
   const data = {
     title: `Buy`,
@@ -26,9 +22,10 @@ export function renderBuyPage(req: RequestWithPayload, res: Response) {
 }
 
 // buy ETH by fiat currency
-export async function buyEth(req: RequestWithPayload, res: Response) {
+export async function buyEth(req: Request, res: Response) {
   try {
-    const { public_address: userWalletAddress, id: userId } = req.payload;
+    const { public_address: userWalletAddress, id: userId } =
+      res.locals.payload;
     const { ethAmount } = req.body;
 
     const task = { data: { userId, userWalletAddress, ethAmount } };
@@ -38,13 +35,14 @@ export async function buyEth(req: RequestWithPayload, res: Response) {
     res.status(200).json({ txSending: true });
   } catch (error) {
     console.log(error);
+
     res.status(500).json({ txSending: false, error: (error as Error).message });
   }
 }
 
 // render swap ETH page
-export function renderSwapPage(req: RequestWithPayload, res: Response) {
-  const { name, picture, public_address } = req.payload;
+export function renderSwapPage(req: Request, res: Response) {
+  const { name, picture, public_address } = res.locals.payload;
 
   const data = {
     title: `Swap`,
@@ -59,7 +57,7 @@ export function renderSwapPage(req: RequestWithPayload, res: Response) {
 // get swap tokens
 export async function getSwapTokens(req: Request, res: Response) {
   try {
-    const ft_cmc_ids = [3717, 4943, 825, 3408, 8104, 7278, 5692, 7083, 6758];
+    const ft_cmc_ids = SWAP_TOKEN_CMC_IDS;
     const swapTokens = await selectSwapTokens(ft_cmc_ids);
 
     res.status(200).json({ data: swapTokens });
@@ -72,12 +70,11 @@ export async function getSwapTokens(req: Request, res: Response) {
 }
 
 // swap ETH to ERC20 token
-export async function swapEthToErc20(req: RequestWithPayload, res: Response) {
+export async function swapEthToErc20(req: Request, res: Response) {
   try {
     const { tokenAddress, tokenAmount, tokenSymbol, tokenCmcId } = req.body;
-    const { public_address: userWalletAddress, id: userId } = req.payload;
-
-    console.log(req.body);
+    const { public_address: userWalletAddress, id: userId } =
+      res.locals.payload;
 
     const task = {
       data: {
@@ -108,10 +105,11 @@ export async function swapEthToErc20(req: RequestWithPayload, res: Response) {
 }
 
 // swap ERC20 token to ETH
-export async function swapErc20ToEth(req: RequestWithPayload, res: Response) {
+export async function swapErc20ToEth(req: Request, res: Response) {
   try {
     const { tokenAddress, tokenAmount, tokenSymbol, tokenCmcId } = req.body;
-    const { public_address: userWalletAddress, id: userId } = req.payload;
+    const { public_address: userWalletAddress, id: userId } =
+      res.locals.payload;
 
     const task = {
       data: {
@@ -123,8 +121,6 @@ export async function swapErc20ToEth(req: RequestWithPayload, res: Response) {
         tokenCmcId,
       },
     };
-
-    console.log(task);
 
     channel.sendToQueue(
       "swapErc20ToEth_Queue",

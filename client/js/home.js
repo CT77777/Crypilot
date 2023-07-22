@@ -10,7 +10,7 @@ navUserLinks.forEach((userLink) => {
     if (jwt === undefined) {
       iziToast.show({
         theme: "dark",
-        iconUrl: "../images/error.png",
+        iconUrl: "/images/error.png",
         title: `Please log in first`,
         titleSize: 18,
         messageSize: 18,
