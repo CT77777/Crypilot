@@ -17,13 +17,8 @@ import { getUserEthBalance } from "../models/walletModel.js";
 import bcrypt from "bcrypt";
 import { createJWT } from "../utils/createJWT.js";
 import { createWallet, encrypt } from "../utils/createWallet.js";
-import { JWTPayload } from "jose";
 import { decrypt } from "../utils/createWallet.js";
 import { generateSecret, generateQRcode, verifyToken } from "../utils/2FA.js";
-
-interface RequestWithPayload extends Request {
-  payload: JWTPayload;
-}
 
 // user register
 export async function register(req: Request, res: Response) {
@@ -53,7 +48,6 @@ export async function register(req: Request, res: Response) {
       await insetProvider(user_id, provider);
       await insertWallet(user_id, publicAddress.slice(2), encryptedPrivateKey);
 
-      console.log(publicAddress);
       const { jwt } = await createJWT(
         provider,
         user_id,
@@ -148,12 +142,9 @@ export async function logIn(req: Request, res: Response) {
 }
 
 // user 2fa set up
-export async function setSecondAuthentication(
-  req: RequestWithPayload,
-  res: Response
-) {
+export async function setSecondAuthentication(req: Request, res: Response) {
   try {
-    const { email } = req.payload;
+    const { email } = res.locals.payload;
     const { second_authentication_secret: secret, error: error } =
       await getSecondAuthenticationSecret(email as string);
 
@@ -235,12 +226,10 @@ export async function verifySecondAuthentication(req: Request, res: Response) {
 }
 
 // retrieve user's secret key
-export async function retrievePrivateKey(
-  req: RequestWithPayload,
-  res: Response
-) {
+export async function retrievePrivateKey(req: Request, res: Response) {
   try {
-    const { public_address: userWalletAddress, id: userId } = req.payload;
+    const { public_address: userWalletAddress, id: userId } =
+      res.locals.payload;
 
     const { private_key: encryptedPrivateKey } = await getPrivateKey(
       (userWalletAddress as string).slice(2)
@@ -252,7 +241,6 @@ export async function retrievePrivateKey(
 
     //decrypt
     const private_key = decrypt(encryptedPrivateKey);
-    console.log(private_key);
 
     //delete user's tracing FTs from DB
     const isRemovedFavoriteFts = await removeAllFavoriteFT(userId as number);
@@ -297,11 +285,8 @@ export async function retrievePrivateKey(
 }
 
 // render user profile page
-export async function renderUserProfilePage(
-  req: RequestWithPayload,
-  res: Response
-) {
-  const { name, picture, public_address } = req.payload;
+export async function renderUserProfilePage(req: Request, res: Response) {
+  const { name, picture, public_address } = res.locals.payload;
 
   const userEthBalance = await getUserEthBalance(public_address as string);
 

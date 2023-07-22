@@ -17,7 +17,7 @@ logInBtn.addEventListener("click", async () => {
   if (result.error) {
     iziToast.show({
       theme: "dark",
-      iconUrl: "../images/error.png",
+      iconUrl: "/images/error.png",
       title: `${result.error.message}`,
       titleSize: 18,
       messageSize: 18,
@@ -107,8 +107,6 @@ secondFAVerifyBtn.addEventListener("click", async () => {
     token += boxInput.value;
   });
 
-  console.log(token);
-
   const response = await fetch("/user/2fa", {
     method: "POST",
     headers: {
@@ -122,7 +120,7 @@ secondFAVerifyBtn.addEventListener("click", async () => {
   if (result.error) {
     iziToast.show({
       theme: "dark",
-      iconUrl: "../images/error.png",
+      iconUrl: "/images/error.png",
       title: `${result.error.message}`,
       titleSize: 18,
       messageSize: 18,

@@ -6,6 +6,7 @@ interface SecondAuthenticationSecret {
   error?: string;
 }
 
+// insert user's info
 export async function insertUser(
   email: string,
   password: string,
@@ -23,6 +24,7 @@ export async function insertUser(
   return user_id;
 }
 
+// insert user's provider
 export async function insetProvider(user_id: number, name: string) {
   await dbPool.query(
     `
@@ -33,6 +35,7 @@ export async function insetProvider(user_id: number, name: string) {
   );
 }
 
+// insert user's wallet
 export async function insertWallet(
   user_id: number,
   public_address: string,
@@ -47,6 +50,7 @@ export async function insertWallet(
   );
 }
 
+// select user's info. by email from DB
 export async function searchUserByEmail(email: string) {
   const results: [RowDataPacket[], FieldPacket[]] = await dbPool.query(
     `
@@ -61,7 +65,7 @@ export async function searchUserByEmail(email: string) {
   return results[0][0];
 }
 
-// get user private key
+// select user's private key from DB
 export async function getPrivateKey(public_address: string) {
   try {
     const results: [RowDataPacket[], FieldPacket[]] = await dbPool.query(
@@ -78,7 +82,7 @@ export async function getPrivateKey(public_address: string) {
   }
 }
 
-//delete user's secret key from DB
+// delete user's secret key from DB
 export async function removeUserPrivateKey(public_address: string) {
   try {
     await dbPool.query(
@@ -95,7 +99,7 @@ export async function removeUserPrivateKey(public_address: string) {
   }
 }
 
-//delete user's tracing FTs from DB
+// delete user's tracing FTs from DB
 export async function removeAllFavoriteFT(user_id: number) {
   try {
     await dbPool.query(
@@ -112,7 +116,7 @@ export async function removeAllFavoriteFT(user_id: number) {
   }
 }
 
-//delete user's inventory FTs from DB
+// delete user's inventory FTs from DB
 export async function removeAllInventoryFT(user_id: number) {
   try {
     await dbPool.query(
@@ -129,7 +133,7 @@ export async function removeAllInventoryFT(user_id: number) {
   }
 }
 
-//delete user's provider from DB
+// delete user's provider from DB
 export async function removeAllProvider(user_id: number) {
   try {
     await dbPool.query(
@@ -146,7 +150,7 @@ export async function removeAllProvider(user_id: number) {
   }
 }
 
-//delete user's information from DB
+// delete user's info. from DB
 export async function removeUserInfo(user_id: number) {
   try {
     await dbPool.query(
@@ -163,6 +167,7 @@ export async function removeUserInfo(user_id: number) {
   }
 }
 
+// select second authentication secret
 export async function getSecondAuthenticationSecret(
   email: string
 ): Promise<SecondAuthenticationSecret> {
@@ -183,6 +188,7 @@ export async function getSecondAuthenticationSecret(
   }
 }
 
+// update second authentication secret
 export async function updateSecondAuthenticationSecret(
   secret: string,
   email: string

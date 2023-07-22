@@ -3,6 +3,7 @@ import * as retrieveKey from "./modules/retrieveKey.js";
 import * as secondFA from "./modules/2FA.js";
 import * as logIn from "./modules/logIn.js";
 import { parseJWT } from "./modules/parseJWT.js";
+import { SOCKET_URL } from "../config/config.js";
 
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Swap";
@@ -10,7 +11,7 @@ pageName.textContent = "Swap";
 const jwt = Cookies.get("JWT");
 const { id: userId } = parseJWT(jwt);
 
-const socket = io("wss://localhost:8080");
+const socket = io(SOCKET_URL);
 socket.on("connect", () => {
   console.log("browser client connect to socket server...");
 });
@@ -18,13 +19,11 @@ socket.emit("join room", userId);
 socket.on("swapEthToStatus", (txResult) => {
   const { success, token, amount, id } = txResult;
   if (success) {
-    // alert(`buy ${amount} ${token} successfully`);
-
     iziToast.show({
       theme: "dark",
       image: `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`,
       imageWidth: 36,
-      iconUrl: "../images/check-mark.png",
+      iconUrl: "/images/check-mark.png",
       title: `Buy ${token} ${parseFloat(amount).toFixed(2)}`,
       titleSize: 18,
       message: "successfully",
@@ -37,13 +36,11 @@ socket.on("swapEthToStatus", (txResult) => {
       displayMode: 2,
     });
   } else {
-    // alert(`buy ${amount} ${token} unsuccessfully`);
-
     iziToast.show({
       theme: "dark",
       image: `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`,
       imageWidth: 36,
-      iconUrl: `../images/error.png`,
+      iconUrl: `/images/error.png`,
       title: `Buy ${token} ${amount}`,
       titleSize: 18,
       message: "unsuccessfully",
@@ -60,13 +57,11 @@ socket.on("swapEthToStatus", (txResult) => {
 socket.on("swapTokenToStatus", (txResult) => {
   const { success, token, amount, id } = txResult;
   if (success) {
-    // alert(`sell ${amount} ${token} successfully`);
-
     iziToast.show({
       theme: "dark",
       image: `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`,
       imageWidth: 36,
-      iconUrl: "../images/check-mark.png",
+      iconUrl: "/images/check-mark.png",
       title: `Sell ${token} ${parseFloat(amount).toFixed(2)}`,
       titleSize: 18,
       message: "successfully",
@@ -79,13 +74,11 @@ socket.on("swapTokenToStatus", (txResult) => {
       displayMode: 2,
     });
   } else {
-    // alert(`sell ${amount} ${token} unsuccessfully`);
-
     iziToast.show({
       theme: "dark",
       image: `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`,
       imageWidth: 36,
-      iconUrl: `../images/error.png`,
+      iconUrl: `/images/error.png`,
       title: `Sell ${token} ${amount}`,
       titleSize: 18,
       message: "unsuccessfully",
@@ -104,7 +97,6 @@ async function renderSwapTokens() {
   const response = await fetch("/trade/swap/tokens");
   const result = await response.json();
   const fts = result.data;
-  console.log(fts);
   const dropDownMenu = document.querySelector(".dropdown-menu-tokens");
 
   fts.forEach((ft) => {
@@ -167,7 +159,6 @@ function addTokenCurrencySelection() {
       contractAddress.value = contract;
       const currencyHtml = `<img class="currency-logo" src="${logo}"><span>${symbol}</span>`;
       selectedTokenCurrency.innerHTML = currencyHtml;
-      console.log(contractAddress.value);
     });
   });
 }
@@ -201,7 +192,6 @@ function addTokensSelection() {
       cmcId.value = cmc_id;
       const currencyHtml = `<img class="currency-logo" src="${logo}"><span>${symbol}</span>`;
       selectedTokens.innerHTML = currencyHtml;
-      console.log(contractAddress.value);
     });
   });
 }
@@ -298,7 +288,7 @@ function addTokenCurrencyConvert() {
     } else if (results.error) {
       iziToast.show({
         theme: "dark",
-        iconUrl: "../images/error.png",
+        iconUrl: "/images/error.png",
         title: `${results.error.message}`,
         titleSize: 18,
         messageSize: 18,
@@ -350,7 +340,7 @@ function addTokenCurrencyConvert() {
 
       iziToast.show({
         theme: "dark",
-        iconUrl: "../images/error.png",
+        iconUrl: "/images/error.png",
         title: "Select swap tokens",
         titleSize: 18,
         messageSize: 18,
@@ -457,7 +447,7 @@ function addTokensConvert() {
     } else if (results.error) {
       iziToast.show({
         theme: "dark",
-        iconUrl: "../images/error.png",
+        iconUrl: "/images/error.png",
         title: `${results.error.message}`,
         titleSize: 18,
         messageSize: 18,
@@ -509,7 +499,7 @@ function addTokensConvert() {
 
       iziToast.show({
         theme: "dark",
-        iconUrl: "../images/error.png",
+        iconUrl: "/images/error.png",
         title: "Select swap tokens",
         titleSize: 18,
         messageSize: 18,
@@ -615,7 +605,7 @@ function addSwapFunction() {
     ) {
       iziToast.show({
         theme: "dark",
-        iconUrl: "../images/error.png",
+        iconUrl: "/images/error.png",
         title: "Select swap tokens",
         titleSize: 18,
         messageSize: 18,
@@ -636,7 +626,7 @@ function addSwapFunction() {
     ) {
       iziToast.show({
         theme: "dark",
-        iconUrl: "../images/error.png",
+        iconUrl: "/images/error.png",
         title: "Input swap tokens amount",
         titleSize: 18,
         messageSize: 18,
@@ -667,8 +657,6 @@ function addSwapFunction() {
       .querySelector(".tokens-form")
       .querySelector(".cmc-id").value;
 
-    console.log(tokenCmcId);
-
     const currencyInContainer = document.querySelector(
       ".container-currency-in"
     );
@@ -691,15 +679,12 @@ function addSwapFunction() {
           tokenCmcId,
         }),
       });
-
       const result = await response.json();
 
       if (result.txSending) {
-        // modalDialogContent.textContent = `Send transaction successfully`;
-
         iziToast.show({
           theme: "dark",
-          iconUrl: "../images/check-mark.png",
+          iconUrl: "/images/check-mark.png",
           title: "Send transaction",
           titleSize: 18,
           message: "successfully",
@@ -712,13 +697,11 @@ function addSwapFunction() {
           displayMode: 2,
         });
       } else {
-        // modalDialogContent.textContent = `Send transaction unsuccessfully`;
-
         console.log(result.error);
 
         iziToast.show({
           theme: "dark",
-          iconUrl: "../images/error.png",
+          iconUrl: "/images/error.png",
           title: "Send transaction",
           titleSize: 18,
           message: "unsuccessfully",
@@ -731,11 +714,8 @@ function addSwapFunction() {
           displayMode: 2,
         });
       }
-
-      // triggerBtn.click();
     } else {
       console.log("sell", tokenSymbol, tokenAddress, tokenCmcId);
-
       const response = await fetch("/trade/swap/sell", {
         method: "POST",
         headers: {
@@ -752,11 +732,9 @@ function addSwapFunction() {
       const result = await response.json();
 
       if (result.txSending) {
-        // modalDialogContent.textContent = `Send transaction successfully`;
-
         iziToast.show({
           theme: "dark",
-          iconUrl: "../images/check-mark.png",
+          iconUrl: "/images/check-mark.png",
           title: "Send transaction",
           titleSize: 18,
           message: "successfully",
@@ -769,13 +747,11 @@ function addSwapFunction() {
           displayMode: 2,
         });
       } else {
-        // modalDialogContent.textContent = `Send transaction unsuccessfully`;
-
         console.log(result.error);
 
         iziToast.show({
           theme: "dark",
-          iconUrl: "../images/error.png",
+          iconUrl: "/images/error.png",
           title: "Send transaction",
           titleSize: 18,
           message: "unsuccessfully",
@@ -788,8 +764,6 @@ function addSwapFunction() {
           displayMode: 2,
         });
       }
-
-      // triggerBtn.click();
     }
   });
 }

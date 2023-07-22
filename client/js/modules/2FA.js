@@ -12,7 +12,7 @@ continueBtn.addEventListener("click", async () => {
       .querySelector(".message");
     console.log(result.error.message);
 
-    imgQRcode.setAttribute("src", "../../images/error.png");
+    imgQRcode.setAttribute("src", "/images/error.png");
     imgQRcode.style.width = "96px";
     imgQRcode.style.height = "96px";
     message.textContent = result.error.message;

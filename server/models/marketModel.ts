@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 import dbPool from "./dbPool.js";
-import { OkPacket, RowDataPacket, FieldPacket } from "mysql2";
+import { RowDataPacket, FieldPacket } from "mysql2";
 
 dotenv.config();
 
@@ -46,8 +46,21 @@ type FTList = {
   market_cap: number;
 };
 
-// 1027,3717,4943,825,3408,8104,7278,5692,7083,6758
-export async function fetchFTList(ft_ids: number[]) {
+export async function selectCmcIdsFT() {
+  const results: [RowDataPacket[], FieldPacket[]] = await dbPool.query(`
+    SELECT cmc_id FROM fts
+  `);
+
+  const CmcIdsArr: number[] = [];
+
+  results[0].forEach((FT) => {
+    CmcIdsArr.push(FT.cmc_id);
+  });
+
+  return CmcIdsArr;
+}
+
+export async function fetchQuoteFT(ft_ids: number[]) {
   try {
     const ftIdsConcat = ft_ids.join(",");
     const response = await fetch(
@@ -93,26 +106,10 @@ export async function fetchFTList(ft_ids: number[]) {
       }
     }
 
-    // fts.forEach((element) => {
-    //   ftIds.push(element.id);
-    //   const ft = {
-    //     id: element.id,
-    //     name: element.name,
-    //     symbol: element.symbol,
-    //     price: element.quote[`USD`].price,
-    //     logo: "",
-    //     volume_24h: element.quote[`USD`].volume_24h,
-    //     percent_change_24h: element.quote[`USD`].percent_change_24h,
-    //     percent_change_7d: element.quote[`USD`].percent_change_7d,
-    //     percent_change_30d: element.quote[`USD`].percent_change_30d,
-    //     market_cap: element.quote[`USD`].market_cap,
-    //   };
-    //   ftList[`${element.id}`] = ft;
-    // });
-
     return { ftIds, ftList };
   } catch (error) {
     console.log(error);
+
     return { ftIds: [], ftList: {} };
   }
 }
@@ -163,9 +160,11 @@ export async function removeFavoriteFT(user_id: number, cmc_id: number) {
     `,
       [user_id, cmc_id]
     );
+
     return true;
   } catch (error) {
     console.log(error);
+
     return false;
   }
 }
@@ -189,6 +188,7 @@ export async function getFavoriteListFT(user_id: number) {
     return ftTracingIds;
   } catch (error) {
     console.log(error);
+
     return false;
   }
 }

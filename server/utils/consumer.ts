@@ -9,11 +9,12 @@ import {
 import { decrypt } from "./createWallet.js";
 import dotenv from "dotenv";
 import { io } from "socket.io-client";
+import { SOCKET_URL } from "../config/config.js";
 
 dotenv.config();
 
 // connect socket
-const socket = io("wss://localhost:8080", {
+const socket = io(SOCKET_URL, {
   rejectUnauthorized: false,
 });
 

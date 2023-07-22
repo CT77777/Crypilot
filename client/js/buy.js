@@ -3,6 +3,7 @@ import * as retrieveKey from "./modules/retrieveKey.js";
 import * as secondFA from "./modules/2FA.js";
 import * as logIn from "./modules/logIn.js";
 import { parseJWT } from "./modules/parseJWT.js";
+import { SOCKET_URL } from "../config/config.js";
 
 const pageName = document.querySelector(".page-name");
 pageName.textContent = "Buy";
@@ -10,7 +11,7 @@ pageName.textContent = "Buy";
 const jwt = Cookies.get("JWT");
 const { id: userId } = parseJWT(jwt);
 
-const socket = io("wss://localhost:8080");
+const socket = io(SOCKET_URL);
 socket.on("connect", () => {
   console.log("browser client connect to socket server...");
 });
@@ -22,7 +23,7 @@ socket.on("buyEthStatus", (txResult) => {
       theme: "dark",
       image: `https://s2.coinmarketcap.com/static/img/coins/64x64/${1027}.png`,
       imageWidth: 36,
-      iconUrl: "../images/check-mark.png",
+      iconUrl: "/images/check-mark.png",
       title: `Buy ${token} ${parseFloat(amount).toFixed(2)}`,
       titleSize: 18,
       message: "successfully",
@@ -39,7 +40,7 @@ socket.on("buyEthStatus", (txResult) => {
       theme: "dark",
       image: `https://s2.coinmarketcap.com/static/img/coins/64x64/${1027}.png`,
       imageWidth: 36,
-      iconUrl: `../images/error.png`,
+      iconUrl: `/images/error.png`,
       title: `Buy ${token} ${amount}`,
       titleSize: 18,
       message: "unsuccessfully",
@@ -206,7 +207,7 @@ function addFiatInputEvent() {
 
       iziToast.show({
         theme: "dark",
-        iconUrl: "../images/error.png",
+        iconUrl: "/images/error.png",
         title: "Select fiat currency and crypto",
         titleSize: 18,
         messageSize: 18,
@@ -313,7 +314,7 @@ function addTokenInputEvent() {
 
       iziToast.show({
         theme: "dark",
-        iconUrl: "../images/error.png",
+        iconUrl: "/images/error.png",
         title: "Select fiat currency and crypto",
         titleSize: 18,
         messageSize: 18,

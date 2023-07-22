@@ -17,12 +17,6 @@ export function createWallet() {
   // get public address derived from public key
   const publicAddress = wallet.getAddressString();
 
-  console.log({
-    private_key: privateKey,
-    public_key: publicKey,
-    public_address: publicAddress,
-  });
-
   return { privateKey, publicAddress };
 }
 
@@ -32,15 +26,11 @@ export function encrypt(private_key: string) {
   const hash = CryptoJS.SHA3(secretPhrase, { outputLength: 256 });
   const hashHex = hash.toString(CryptoJS.enc.Hex);
 
-  console.log("hash: ", hashHex);
-
   const privateKey = private_key;
   const secretKey = hashHex;
 
   // AES encrypt private key
   const encrypted = CryptoJS.AES.encrypt(privateKey, secretKey).toString();
-
-  console.log("encrypted data: ", encrypted);
 
   return encrypted;
 }

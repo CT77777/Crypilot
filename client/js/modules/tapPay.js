@@ -13,7 +13,7 @@ preBuyBtn.addEventListener("click", () => {
   if (selectedFiatCurrency === null) {
     iziToast.show({
       theme: "dark",
-      iconUrl: "../images/error.png",
+      iconUrl: "/images/error.png",
       title: "Please select fiat currency",
       titleSize: 18,
       messageSize: 18,
@@ -119,7 +119,7 @@ async function buyEth(prime) {
     console.log(result.error);
     iziToast.show({
       theme: "dark",
-      iconUrl: "../images/error.png",
+      iconUrl: "/images/error.png",
       title: "Send transaction",
       titleSize: 18,
       message: "unsuccessfully",
@@ -277,47 +277,3 @@ const submitButton = document.querySelector(".btn-confirm-buy");
 submitButton.addEventListener("click", async (event) => {
   onSubmit(event);
 });
-
-// const iframe = document.querySelector("iframe");
-// console.log(iframe);
-
-// const iframeContentDocument =
-//   iframe.contentWindow.document || iframe.contentDocument;
-// console.log(iframeContentDocument);
-
-// console.log(iframe.innerHTML);
-
-// const element = iframeContentDocument.getElementById("card-number-form");
-// console.log(element);
-
-// element.style.backgroundColor = "red";
-
-// iframe.onload = function () {
-//   const iframeContentDocument =
-//     iframe.contentDocument || iframe.contentWindow.document;
-//   // Now you can access the DOM elements within the iframe
-//   const element = iframeContentDocument.getElementById("card-number-form");
-
-//   console.log(element);
-//   element.style.backgroundColor = "red";
-// };
-
-// function iframe() {
-//   const iframe = document.querySelector("iframe");
-//   console.log(iframe);
-
-//   const iframeContentDocument =
-//     iframe.contentDocument || iframe.contentWindow.document;
-//   console.log(iframeContentDocument);
-
-//   const cssLink = document.createElement("link");
-//   cssLink.href = "/css/dist/iframe.css";
-//   cssLink.rel = "stylesheet";
-//   cssLink.type = "text/css";
-
-//   iframeContentDocument.head.appendChild(cssLink);
-// }
-
-// setTimeout(() => {
-//   iframe();
-// }, 5000);

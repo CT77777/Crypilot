@@ -1,39 +1,40 @@
 import { Request, Response } from "express";
 import { startChatWithGPT, continueChatWithGPT } from "../utils/gpt.js";
-import { JWTPayload } from "jose";
 
-interface RequestWithPayload extends Request {
-  payload: JWTPayload;
-}
+export async function startChat(req: Request, res: Response) {
+  const { id: user_id } = res.locals.payload;
+  const { symbol } = req.body;
 
-export async function startChat(req: RequestWithPayload, res: Response) {
   try {
-    const { id: user_id } = req.payload;
-    const { symbol } = req.body;
-
     const message = await startChatWithGPT(symbol, user_id as number);
 
-    res.json({ message });
+    res.status(200).json({ message });
   } catch (error) {
     console.log(error);
-    res.json({ message: "error", error: (error as Error).message });
+
+    res
+      .status(500)
+      .json({ error: { message: "start chatting with GPT failed" } });
   }
 }
 
-export async function continueChat(req: RequestWithPayload, res: Response) {
-  try {
-    const { id: user_id } = req.payload;
+export async function continueChat(req: Request, res: Response) {
+  const { id: user_id } = res.locals.payload;
+  const { inputText } = req.body;
 
-    const { inputText } = req.body;
+  try {
     const inputMessage = {
       role: "user",
       content: inputText,
     };
     const message = await continueChatWithGPT(inputMessage, user_id as number);
 
-    res.json({ message });
+    res.status(200).json({ message });
   } catch (error) {
     console.log(error);
-    res.json({ message: "error", error: (error as Error).message });
+
+    res
+      .status(500)
+      .json({ error: { message: "continue chatting with GPT failed" } });
   }
 }
