@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <%- include("modules/head") %>
+        <link rel="stylesheet" href="/css/dist/home.css">
+        <link rel="stylesheet" href="/node_modules/izitoast/dist/css/iziToast.min.css">
+</head>
+
+<body>
+    <!-- BS icons image -->
+    <%- include("modules/icons") %>
+
+        <!-- BS layout -->
+        <div class="d-flex flex-nowrap">
+
+            <!-- BS sidebar-->
+            <%- include("modules/sidebarGuest") %>
+
+                <!-- BS vertical divider-->
+                <%- include("modules/verticalDivider") %>
+
+                    <div class="content-container">
+
+                        <!-- BS header-->
+                        <%- include("modules/headerGuest") %>
+
+                            <!-- personal main -->
+                            <div class="container container-main">
+                                <main class="">
+                                    <div>
+                                        <div class="fs-1 fw-bold">The Web3 Wallet</div>
+                                        <div class="fs-5 fw-lighter ">Pilot every web3 beginner</div>
+                                        <a href="/user" class="btn btn-lg btn-light border-white bg-white"
+                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop-login">Log in to
+                                            start</a>
+                                    </div>
+                                    <img src="/images/wallet_new_large.png">
+                                </main>
+                            </div>
+
+                            <!-- BS footer-->
+                            <%- include("modules/footer") %>
+
+                    </div>
+
+        </div>
+
+        <!-- BS sign-up modal -->
+        <%- include("modules/signUpModal.ejs") %>
+
+            <!-- BS login modal -->
+            <%- include("modules/logInModal.ejs") %>
+
+                <!-- BS maintenance modal -->
+                <%- include("modules/maintenanceModal.ejs") %>
+
+                    <!-- BS v5.3 CDN JS-->
+                    <%- include("modules/bsJsCDN.ejs") %>
+
+                        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                        <script src="/node_modules/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
+                        <script type="module" src="/js/home.js"></script>
+</body>
+
+</html>

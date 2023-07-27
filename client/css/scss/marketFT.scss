@@ -1,0 +1,108 @@
+@import "./modules/universal.scss";
+@import "./modules/framework.scss";
+@import "./modules/sideBar.scss";
+@import "./modules/verticalDivider.scss";
+@import "./modules/contentContainer.scss";
+@import "./modules/header.scss";
+@import "./modules/footer.scss";
+@import "./modules/RWD.scss";
+@import "./modules/retrieveKey.scss";
+@import "./modules/2FA.scss";
+@import "./modules/logIn.scss";
+
+.container-main {
+  display: flex;
+  justify-content: center;
+
+  .spinner-container-market {
+    .spinner-market {
+      display: none;
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .table-responsive {
+    margin-top: 25px;
+    margin-bottom: auto;
+
+    table {
+      margin-bottom: 0;
+
+      .market-lists-title *,
+      .market-lists * {
+        background-color: transparent;
+      }
+
+      .tracing {
+        font-weight: bold;
+      }
+
+      th,
+      td {
+        text-align: center;
+      }
+
+      .logo {
+        width: 32px;
+        height: 32px;
+      }
+
+      .favorite {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+      }
+
+      .intro-btn {
+        border-radius: 10px;
+        height: 30px;
+        text-align: center;
+        background-color: #ffc107;
+      }
+    }
+  }
+}
+
+.modal-gpt {
+  .modal-body-gpt {
+    display: flex;
+
+    .image-container {
+      display: flex;
+      flex-direction: column;
+      margin-right: 10px;
+      height: 100%;
+
+      img {
+        align-self: flex-start;
+        width: 36px;
+        height: 36px;
+      }
+    }
+  }
+
+  .modal-body-gpt-continue {
+    display: flex;
+
+    .image-container {
+      display: flex;
+      flex-direction: column;
+      margin-right: 10px;
+      height: 100%;
+
+      img {
+        align-self: flex-start;
+        width: 36px;
+        height: 36px;
+      }
+    }
+  }
+}

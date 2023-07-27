@@ -1,0 +1,46 @@
+<!-- Modal Retrieve-1 -->
+<div class="modal fade" id="staticBackdrop-retrieve-1" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img class="img-danger" src="/images/danger.png">
+                <span>Retrieve your private key <br> Delete all data of this account</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Retrieve-2 -->
+<div class="modal fade" id="staticBackdrop-retrieve-2" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+                <button type="button" class="btn-close-right-top btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img class="img-danger" src="/images/key.png">
+                <span class="private-key"></span>
+                <span class="warning">Don't share private key with others</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-close-bottom" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Button trigger Retrieve-2 modal -->
+<button type="button" class="btn btn-primary btn-trigger-retrieve-2" data-bs-toggle="modal"
+    data-bs-target="#staticBackdrop-retrieve-2" style="display: none;">
+</button>

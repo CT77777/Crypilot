@@ -1,0 +1,71 @@
+@import "./modules/universal.scss";
+@import "./modules/framework.scss";
+@import "./modules/sideBar.scss";
+@import "./modules/verticalDivider.scss";
+@import "./modules/contentContainer.scss";
+@import "./modules/header.scss";
+@import "./modules/footer.scss";
+@import "./modules/RWD.scss";
+@import "./modules/retrieveKey.scss";
+@import "./modules/2FA.scss";
+@import "./modules/logIn.scss";
+
+.container-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .spinner-container-piechart {
+    width: 700px;
+    .spinner-piechart {
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+
+  .pie-chart {
+    display: none;
+    align-items: center;
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin-right: 250px;
+
+    span {
+      color: aliceblue;
+    }
+
+    .avatar {
+      width: 210px;
+      height: 210px;
+      margin: 20px 0;
+    }
+
+    .eth {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .eth-image {
+        width: 72px;
+        height: 72px;
+        margin-bottom: 10px;
+      }
+    }
+
+    .spinner-eth {
+      margin-top: 50px;
+    }
+
+    .eth-balance {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}

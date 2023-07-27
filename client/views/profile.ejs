@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <%- include("modules/head") %>
+        <link rel="stylesheet" href="/css/dist/profile.css">
+        <link rel="stylesheet" href="/node_modules/izitoast/dist/css/iziToast.min.css">
+        <script src="https://cdn.plot.ly/plotly-2.24.1.min.js" charset="utf-8"></script>
+</head>
+
+<body>
+    <!-- BS icons image -->
+    <%- include("modules/icons") %>
+
+        <!-- BS layout -->
+        <div class="d-flex flex-nowrap">
+
+            <!-- BS sidebar-->
+            <%- include("modules/sidebarUser") %>
+
+                <!-- BS vertical divider-->
+                <%- include("modules/verticalDivider") %>
+
+                    <div class="content-container">
+
+                        <!-- BS header-->
+                        <%- include("modules/headerUser") %>
+
+                            <!-- personal main -->
+                            <div class="container container-main">
+                                <div class="spinner-container-piechart text-center">
+                                    <div class="spinner-grow spinner-piechart" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <div class="pie-chart"></div>
+                                <main class="">
+                                    <img class="avatar" src=<%=picture %> >
+                                    <div class="eth">
+                                        <img class="eth-image" src="/images/ethereum.png">
+                                    </div>
+                                    <div class="spinner-grow spinner-eth" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <div class="eth-balance">
+                                        <span class="fs-1 eth-balance-count">
+                                            <%=userEthBalance %> ETH
+                                        </span>
+                                        <span class="fs-5 eth-balance-value">
+                                            $<%=(userEthBalance*1900).toFixed(2) %> USD
+                                        </span>
+                                    </div>
+                                </main>
+                            </div>
+
+                            <!-- BS footer-->
+                            <%- include("modules/footer") %>
+
+                    </div>
+
+        </div>
+
+        <!-- BS login modal -->
+        <%- include("modules/logInModal.ejs") %>
+
+            <!-- BS maintenance modal -->
+            <%- include("modules/maintenanceModal.ejs") %>
+
+                <!-- BS retrieve private key modal -->
+                <%- include("modules/retrieveKeyModal.ejs") %>
+
+                    <!-- BS 2FA modal -->
+                    <%- include("modules/set2FAModal.ejs") %>
+
+                        <!-- BS v5.3 CDN JS-->
+                        <%- include("modules/bsJsCDN.ejs") %>
+
+                            <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+                            <script src="/node_modules/izitoast/dist/js/iziToast.min.js"
+                                type="text/javascript"></script>
+                            <script type="module" src="/js/profile.js"></script>
+</body>
+
+</html>

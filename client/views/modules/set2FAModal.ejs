@@ -1,0 +1,47 @@
+<!-- Modal 2FA-1 -->
+<div class="modal fade modal-2fa-1" id="staticBackdrop-2fa-1" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <a href="https://apps.apple.com/us/app/google-authenticator/id388497605" target="_blank"><img class=""
+                        src="/images/google_authenticator.png"></a>
+                <span> <a href="https://apps.apple.com/us/app/google-authenticator/id388497605" target="_blank">Google
+                        Authenticator</a> <br> Please download it on your mobile first</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-continue">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Button trigger 2FA-2 modal -->
+<button type="button" class="btn btn-primary btn-trigger-2fa-2" data-bs-toggle="modal"
+    data-bs-target="#staticBackdrop-2fa-2" style="display: none;">
+</button>
+
+<!-- Modal 2FA-2 -->
+<div class="modal fade modal-2fa-2" id="staticBackdrop-2fa-2" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+                <button type="button" class="btn-close-right-top btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img class="img-qrcode" src="/images/key.png">
+                <span class="message">Please scan this QR code <br> by your Google Authenticator</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-close-bottom" data-bs-dismiss="modal">Done</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary sidebar" style="width: 280px;">
+    <%- include("sidebarNav") %>
+
+        <!-- user -->
+        <div class="dropdown dropdown-user">
+            <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <img src=<%=picture %> width="32" height="32" class="rounded-circle me-2">
+                <strong class="sidebar-username">
+                    <%=name %>
+                </strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow">
+                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop-login">Log
+                        in another account <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#login-another"></use>
+                        </svg></a></li>
+                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop-2fa-1">Set 2FA
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#2fa"></use>
+                        </svg></a></li>
+                <li>
+                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop-retrieve-1">Retrieve
+                        private key <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#key"></use>
+                        </svg></a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item sidebar-logout">Log out <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#logout"></use>
+                        </svg></a></li>
+            </ul>
+        </div>
+</div>

@@ -1,0 +1,36 @@
+@import "./modules/universal.scss";
+@import "./modules/framework.scss";
+@import "./modules/sideBar.scss";
+@import "./modules/verticalDivider.scss";
+@import "./modules/contentContainer.scss";
+@import "./modules/header.scss";
+@import "./modules/footer.scss";
+@import "./modules/RWD.scss";
+@import "./modules/logIn.scss";
+
+.container-main {
+  main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    a {
+      background: linear-gradient(270deg, #ffda8f, #ffc107) !important;
+      background-color: #ffc107 !important;
+      border-color: #ffc107 !important;
+      margin-top: 40px;
+      border-radius: 9999px;
+      width: 210px;
+      height: 48px;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    img {
+      width: 320px;
+      height: 320px;
+      margin-left: 30px;
+    }
+  }
+}
