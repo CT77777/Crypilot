@@ -2,12 +2,12 @@ import { ethers } from "ethers";
 import dbPool from "./dbPool.js";
 import { RowDataPacket, FieldPacket } from "mysql2";
 import dotenv from "dotenv";
-import QuoterV2 from "@uniswap/v3-periphery/artifacts/contracts/lens/QuoterV2.sol/QuoterV2.json" assert { type: "json" };
 import {
   RPC_URL,
   token_address,
   uniswap_address,
   contract_ABI,
+  QuoterV2,
 } from "../config/config.js";
 dotenv.config();
 

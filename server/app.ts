@@ -46,11 +46,13 @@ socket.on("connect_error", function (err) {
 });
 
 // connect Redis
-redisClient.connect();
+await redisClient.connect();
 
 // connect RabbitMQ
-assertQueues(channel);
+await assertQueues(channel);
 
-app.listen(port, () => {
+export const server = app.listen(port, () => {
   console.log("Server is listening on port:3000...");
 });
+
+export default app;
