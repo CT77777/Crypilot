@@ -17,13 +17,25 @@ A web3 wallet, integrating custodian, quotation, and trading features to make it
 
 <img src="./client/images/login.png" width="500" height="250">
 
-#### 3. Profile page, check percent of assets and ETH balance.
+#### 3. Profile page, check the percentage of assets and ETH balance.
 
 <img src="./client/images/profile.png" width="500" height="250">
 
-#### 4. Set the 2FA for assets security.
+#### 4. Set the 2FA for assets security
 
 <img src="./client/images/2fa-1.png" width="500" height="250">
+
+#### download [[Google Authenticator]](https://apps.apple.com/us/app/google-authenticator/id388497605)
+
+<img src="./client/images/2fa-2.png" width="500" height="250">
+
+#### scan QR code by Google Authenticator
+
+<img src="./client/images/2fa-3.png" width="500" height="250">
+
+#### login next time, you have to give security code to verified
+
+<img src="./client/images/2fa-4.png" width="500" height="250">
 
 #### 5. Market page, get instant price of cryptos and add the interesting crypto into tracing list. Furthermore, click the chat button, obtain crypto information from ChatGPT.
 
