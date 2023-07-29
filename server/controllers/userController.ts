@@ -24,7 +24,7 @@ import { generateSecret, generateQRcode, verifyToken } from "../utils/2FA.js";
 export async function register(req: Request, res: Response) {
   try {
     const { email, password, username } = req.body;
-    const picture = "https://cdn-icons-png.flaticon.com/128/6774/6774978.png";
+    const picture = "/images/hacker.png";
     const provider = "native";
     const userInfo = await searchUserByEmail(email);
 
@@ -58,8 +58,8 @@ export async function register(req: Request, res: Response) {
         false
       );
       res.cookie("JWT", jwt, { maxAge: 2 * 60 * 60 * 1000 });
-      // res.cookie("user_id", user_id);
-      res.status(200).redirect(`/user/profile?email=${email}`);
+
+      res.redirect(302, `/user/profile?email=${email}`);
 
       return;
     } else {
@@ -287,9 +287,7 @@ export async function retrievePrivateKey(req: Request, res: Response) {
 // render user profile page
 export async function renderUserProfilePage(req: Request, res: Response) {
   const { name, picture, public_address } = res.locals.payload;
-
   const userEthBalance = await getUserEthBalance(public_address as string);
-
   const data = {
     title: `Profile`,
     name: name,
@@ -297,6 +295,5 @@ export async function renderUserProfilePage(req: Request, res: Response) {
     public_address: public_address,
     userEthBalance: parseFloat(userEthBalance).toFixed(2),
   };
-
   res.status(200).render("profile", data);
 }
