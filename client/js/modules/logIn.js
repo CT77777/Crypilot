@@ -1,3 +1,7 @@
+// set default account
+document.querySelector(".email-login").value = "appworks@gmail.com";
+document.querySelector(".password-login").value = "123";
+
 const logInBtn = document.querySelector(".btn-login");
 
 logInBtn.addEventListener("click", async () => {
@@ -48,7 +52,7 @@ logInBtn.addEventListener("click", async () => {
   }
 });
 
-//-------------
+// 2fa input logic
 
 const boxInputs = document.querySelectorAll(".input-2fa-wrapper-box");
 
@@ -95,7 +99,7 @@ boxInputs.forEach((boxInput, index) => {
   });
 });
 
-//-------------
+// 2fa verified
 
 const secondFAVerifyBtn = document.querySelector(".btn-2fa-verify");
 

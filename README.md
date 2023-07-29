@@ -1,10 +1,10 @@
-# <div style="display: flex; align-items: center;"><img src="./client/images/logo_sidebar.png" width="40" height="40">Crypilot</div>
+# <div><img src="./client/images/logo_sidebar.png" width="60" height="60" style="vertical-align: middle;">CRYPILOT [[Website]](https://ctceth.com/)</div>
 
 A web3 wallet, integrating custodian, quotation, and trading features to make it easier for web3 beginners to experience Blockchain.
 
 ## 👨🏻‍💻 User Flow
 
-### Testing Account
+#### Testing Account
 
 - email: appworks@gmail.com
 - password: 123
@@ -17,7 +17,7 @@ A web3 wallet, integrating custodian, quotation, and trading features to make it
 
 <img src="./client/images/login.png" width="500" height="250">
 
-#### 3. Profile page, check percent of assests and ETH balance.
+#### 3. Profile page, check percent of assets and ETH balance.
 
 <img src="./client/images/profile.png" width="500" height="250">
 
@@ -37,6 +37,13 @@ A web3 wallet, integrating custodian, quotation, and trading features to make it
 #### 7. Buy page, buy ETH by fiat currency through credit card.
 
 <img src="./client/images/buy-1.png" width="500" height="250">
+
+#### Testing Credit Card
+
+- Credit Card Number: 4242 4242 4242 4242
+- Valid Date: 09/23
+- Security Number: 123
+
 <img src="./client/images/buy-2.png" width="500" height="250">
 
 #### 8. Swap page, buy or sell crypto on-chain through Uniswap V3.
