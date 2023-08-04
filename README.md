@@ -2,6 +2,14 @@
 
 A web3 wallet, integrating custodian, quotation, and trading features to make it easier for web3 beginners to experience Blockchain.
 
+## Table of Contents
+
+- [👨🏻‍💻 User Flow](#👨🏻‍💻-user-flow)
+- [💻 Tech Stack](#💻-tech-stack)
+- [⚙️ Architecture](#⚙️-system-architecture--buy--swap-flow)
+- [🗄️ DB Schema](#🗄️-db-schema)
+- [🔗 Contacts](#🔗-links)
+
 ## 👨🏻‍💻 User Flow
 
 #### Testing Account
@@ -74,17 +82,44 @@ A web3 wallet, integrating custodian, quotation, and trading features to make it
 
 ## 💻 Tech Stack
 
-**Client:** JavaScript, HTML, CSS, Bootstrap
+### Back-End:
 
-**Server:** Node, Express, MySQL, Redis, Socket.IO, RabbitMQ
+![Node](https://img.shields.io/badge/Node-white?logo=nodedotjs)
+![Express](https://img.shields.io/badge/Express-white?logo=express&logoColor=%23000000)
+![TypeScript](https://img.shields.io/badge/TypeScript-white?logo=typescript)
+![MySQL](https://img.shields.io/badge/MySQL-white?logo=mysql)
+![Redis](https://img.shields.io/badge/Redis-white?logo=redis)
+![Socket.IO](https://img.shields.io/badge/Socket.IO-white?logo=socketdotio&logoColor=%23010101)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-white?logo=rabbitmq)
 
-**Blockchain:** Solidity, Hardhat
+### Blockchain:
 
-## ⚙️ Swap System Architecture
+![Solidity](https://img.shields.io/badge/Solidity-white?logo=solidity&logoColor=%23363636)
+![Hardhat](https://img.shields.io/badge/Hardhat-white)
 
-![alt text](./client/images/swap-architecture.png)
+### Cloud Service(AWS):
 
-## 🔗 Links
+![EC2](https://img.shields.io/badge/EC2-white?logo=amazonec2)
+![RDS](https://img.shields.io/badge/RDS-white?logo=amazonrds)
+![ElastiCache](https://img.shields.io/badge/ElastiCache-white)
+
+### Front-End:
+
+![JavaScript](https://img.shields.io/badge/JavaScript-white?logo=javascript)
+![HTML](https://img.shields.io/badge/HTML-white?logo=html5)
+![SCSS](https://img.shields.io/badge/SCSS-white?logo=sass)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-white?logo=bootstrap)
+![Plotly.js](https://img.shields.io/badge/Plotly.js-white?logo=plotly&logoColor=%233F4F75)
+
+## ⚙️ System Architecture & Buy / Swap Flow
+
+![Architecture](./client/images/architecture.png)
+
+## 🗄️ DB Schema
+
+![Schema](./client/images/DB-schema.png)
+
+## 🔗 Contacts
 
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/chien-tsun-chan-31a75518b/)
 [![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/CT_Chan7)
