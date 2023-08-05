@@ -4,13 +4,13 @@ A web3 wallet, integrating custodian, quotation, and trading features to make it
 
 ## Table of Contents
 
-- [👨🏻‍💻 User Flow](#👨🏻‍💻-user-flow)
-- [💻 Tech Stack](#💻-tech-stack)
-- [⚙️ Architecture](#⚙️-system-architecture--buy--swap-flow)
-- [🗄️ DB Schema](#🗄️-db-schema)
-- [🔗 Contacts](#🔗-links)
+- [👨🏻‍💻 User Flow](#user-flow)
+- [💻 Tech Stack](#tech-stack)
+- [⚙️ Architecture](#system-architecture)
+- [🗄️ DB Schema](#db-schema)
+- [🔗 Contacts](#contacts)
 
-## 👨🏻‍💻 User Flow
+## User Flow
 
 #### Testing Account
 
@@ -80,7 +80,7 @@ A web3 wallet, integrating custodian, quotation, and trading features to make it
 <img src="./client/images/retrieve-2.png" width="500" height="250">
 <img src="./client/images/retrieve-3.png" width="500" height="250">
 
-## 💻 Tech Stack
+## Tech Stack
 
 ### Back-End:
 
@@ -111,15 +111,21 @@ A web3 wallet, integrating custodian, quotation, and trading features to make it
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-white?logo=bootstrap)
 ![Plotly.js](https://img.shields.io/badge/Plotly.js-white?logo=plotly&logoColor=%233F4F75)
 
-## ⚙️ System Architecture & Buy / Swap Flow
+## System Architecture
 
-![Architecture](./client/images/architecture.png)
+### Buy / Swap Flow
 
-## 🗄️ DB Schema
+![Architecture-trade](./client/images/architecture-trade.png)
+
+### OpenAI / Quotation / Tracing Flow
+
+![Architecture-others](./client/images/architecture-others.png)
+
+## DB Schema
 
 ![Schema](./client/images/DB-schema.png)
 
-## 🔗 Contacts
+## Contacts
 
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/chien-tsun-chan-31a75518b/)
 [![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/CT_Chan7)
